@@ -1,38 +1,122 @@
-.App {
-  text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.home {
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff;
+  overflow: hidden;
+  position: relative;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.labels {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 60px;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  z-index: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.paper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 280px;
+  height: 395px;
+  background-image: url('./paper.jpg');
+  background-size: cover;
+  cursor: grab;
+  border-radius: 2px;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.4);
+  z-index: 1;
+  user-select: none;
+}
+
+.paper:active {
+  cursor: grabbing;
+}
+
+
+.clear-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: transparent;
+  border: 1px solid rgba(11, 0, 0, 0.3);
+  color: rgba(255,255,255,0.6);
+  padding: 10px 20px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-transform: lowercase;
+  z-index: 9999;
+}
+
+.clear-btn:hover, .scatter-btn:hover {
+  border-color: white;
+  color: rgb(45, 20, 20);
+}
+
+.scatter-btn {
+  position: fixed;
+  top: 5;
+  left: 10;
+  background: transparent;
+  border: 1px solid rgba(11, 0, 0, 0.3);
+  color: rgba(255,255,255,0.6);
+  padding: 10px 20px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-transform: lowercase;
+  z-index: 9999;
+}
+
+.page {
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-family: sans-serif;
 }
 
-.App-link {
-  color: #61dafb;
+.back-btn {
+  position: fixed;
+  top: 32px;
+  left: 32px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: rgba(0, 0, 0, 0.6);
+  padding: 10px 20px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  z-index: 9999;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.back-btn:hover {
+  border-color: white;
+  color: rgb(0, 0, 0);
+}
+
+.labels span {
+  cursor: pointer;
+}
+
+.labels span:hover {
+  color: rgb(0, 0, 0);
 }
