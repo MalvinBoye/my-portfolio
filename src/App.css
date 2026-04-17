@@ -7,86 +7,179 @@
 .home {
   width: 100vw;
   height: 100vh;
-  background: #ffffff;
   overflow: hidden;
   position: relative;
-}
-
-.labels {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  gap: 60px;
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 13px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  font-family: sans-serif;
-  z-index: 0;
+  transition: background 0.8s ease;
 }
 
 .paper {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 280px;
-  height: 395px;
+  width: 400px;
+  height: 557px;
   background-image: url('./paper.jpg');
   background-size: cover;
-  cursor: grab;
   border-radius: 2px;
   box-shadow: 2px 4px 12px rgba(0,0,0,0.4);
-  z-index: 1;
   user-select: none;
+  pointer-events: none;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.paper:active {
-  cursor: grabbing;
-}
-
-
-.clear-btn {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  background: transparent;
-  border: 1px solid rgba(11, 0, 0, 0.3);
-  color: rgba(255,255,255,0.6);
-  padding: 10px 20px;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-  text-transform: lowercase;
-  z-index: 9999;
-}
-
-.clear-btn:hover, .scatter-btn:hover {
-  border-color: white;
-  color: rgb(45, 20, 20);
-}
-
-.scatter-btn {
-  position: fixed;
-  top: 5;
-  left: 10;
-  background: transparent;
-  border: 1px solid rgba(11, 0, 0, 0.3);
-  color: rgba(255,255,255,0.6);
-  padding: 10px 20px;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-  text-transform: lowercase;
-  z-index: 9999;
-}
-
-.page {
+/* Phase 2 styles */
+.hi-intro {
   width: 100vw;
   height: 100vh;
   background: #ffffff;
-  color: rgb(0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3vh 4vw;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Top labels */
+.top-labels {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  color: #111;
+  z-index: 3;
+}
+
+/* Main text block */
+.main-text {
+  position: absolute;
+  top: 50%;
+  left: 4vw;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+
+.hi-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 10vw;
+  font-weight: 200;
+  color: #111;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  animation: fadeSlideIn 0.9s ease forwards;
+}
+
+.m-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 13vw;
+  font-weight: 200;
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  animation: fadeSlideIn 0.9s ease 0.3s forwards;
+  opacity: 0;
+  letter-spacing: -0.02em;
+}
+
+.m-green {
+  color: #39ff14;
+  font-size: 18vw;
+  font-weight: 200;
+  line-height: 0.85;
+  font-family: 'Playfair Display', serif;
+}
+
+.m-rest {
+  color: #111;
+  position: relative;
+}
+
+.caret {
+  display: inline-block;
+  color: #60b1d1;
+  font-weight: 700;
+  margin-left: 2px;
+  transition: opacity 0.1s;
+}
+
+/* Bottom labels */
+.bottom-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  color: #111;
+  z-index: 3;
+}
+
+.label-name {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  color: #111;
+}
+
+.label-circee {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  color: #111;
+  font-style: italic;
+}
+
+/* Immersive side button */
+.immersive-btn {
+  position: fixed;
+  right: -28px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  background: transparent;
+  border: 1px solid #111;
+  color: #111;
+  padding: 12px 28px;
+  font-size: 10px;
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  animation: fadeIn 1s ease forwards;
+}
+
+.immersive-btn:hover {
+  background: #111;
+  color: #ffffff;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+/* Section pages */
+.page {
+  width: 100vw;
+  height: 100vh;
+  background: #1a1a1a;
+  color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,7 +193,7 @@
   left: 32px;
   background: transparent;
   border: 1px solid rgba(255,255,255,0.3);
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255,255,255,0.6);
   padding: 10px 20px;
   font-size: 12px;
   letter-spacing: 0.1em;
@@ -110,13 +203,403 @@
 
 .back-btn:hover {
   border-color: white;
-  color: rgb(0, 0, 0);
+  color: white;
+}/* Phase 3 */
+.phase3 {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3vh 4vw;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.8s ease forwards;
 }
 
-.labels span {
+.phase3-top-labels {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 3;
+}
+
+.label-name-dark {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.5);
+}
+
+.phase3-main {
+  position: absolute;
+  top: 50%;
+  left: 4vw;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+
+.hi-text-dark {
+  font-family: 'Playfair Display', serif;
+  font-size: 13vw;
+  font-weight: 400;
+  color: white;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.m-text-dark {
+  font-family: 'Playfair Display', serif;
+  font-size: 13vw;
+  font-weight: 400;
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  letter-spacing: -0.02em;
+}
+
+.m-rest-dark {
+  color: white;
+  font-family: 'Playfair Display', serif;
+  font-size: 13vw;
+  font-weight: 400;
+}
+
+/* Floating nav */
+.nav-float {
+  position: absolute;
+  z-index: 4;
+}
+
+.nav-label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: #4a9eff;
+}
+
+/* Bio texts */
+.bio-english {
+  position: absolute;
+  top: 38%;
+  right: 10vw;
+  width: 22vw;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.05em;
+}
+
+.bio-korean {
+  position: absolute;
+  bottom: 12%;
+  left: 4vw;
+  width: 30vw;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.05em;
+}
+
+.phase3-bottom-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 3;
+}
+
+.label-circee-dark {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+}
+
+/* Transition Screen */
+.transition-screen {
+  width: 100vw;
+  height: 100vh;
+  background: #1a237e;
+  display: flex;
+  position: relative;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.transition-top-left {
+  position: absolute;
+  top: 3vh;
+  left: 4vw;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.15em;
+}
+
+.transition-top-right {
+  position: absolute;
+  top: 3vh;
+  right: 4vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.15em;
+}
+
+.transition-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.transition-cross {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.cross-h {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: white;
+  transform: translateY(-50%);
+  animation: drawH 0.6s ease forwards;
+  transform-origin: left center;
+}
+
+.cross-v {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: white;
+  transform: translateX(-50%);
+  animation: drawV 0.6s ease 0.3s forwards;
+  transform-origin: center top;
+  opacity: 0;
+}
+
+.transition-bottom-left {
+  position: absolute;
+  bottom: 3vh;
+  left: 4vw;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.15em;
+}
+
+.transition-bottom-right {
+  position: absolute;
+  bottom: 3vh;
+  right: 4vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.15em;
+}
+
+/* Phase 4 */
+.phase4 {
+  width: 100vw;
+  height: 100vh;
+  background: #1a237e;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3vh 4vw;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.phase4-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.15em;
+}
+
+.p4-counter {
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 2px 8px;
+}
+
+.p4-name {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.15em;
+}
+
+.phase4-main {
+  position: absolute;
+  top: 50%;
+  left: 4vw;
+  transform: translateY(-50%);
+}
+
+.p4-hi {
+  font-family: 'Playfair Display', serif;
+  font-size: 13vw;
+  font-weight: 400;
+  color: white;
+  line-height: 1;
+}
+
+.p4-m-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.p4-m-green {
+  font-family: 'Playfair Display', serif;
+  font-size: 18vw;
+  font-weight: 400;
+  color: #39ff14;
+  line-height: 0.85;
+}
+
+/* Nav boxes with draw animation */
+.p4-nav-box {
+  border: 1px solid transparent;
+  padding: 4px 16px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.p4-nav-box.drawn {
+  border-color: rgba(255,255,255,0.6);
+  animation: drawBorder 0.6s ease forwards;
+}
+
+.p4-nav-box:hover {
+  border-color: white;
+  background: rgba(255,255,255,0.05);
+}
+
+.p4-nav-box-2 {
+  margin-top: 16px;
+  display: inline-flex;
+}
+
+.p4-box-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 13vw;
+  font-weight: 400;
+  color: white;
+  line-height: 1;
+}
+
+.p4-box-label {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.phase4-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.15em;
+}
+
+.p4-layer {
+  font-style: italic;
+}
+
+.p4-bottom-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.p4-small-btn {
+  width: 40px;
+  height: 18px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.immersive-btn-dark {
+  position: fixed;
+  right: -28px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.6);
+  padding: 12px 28px;
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
-.labels span:hover {
-  color: rgb(0, 0, 0);
+.immersive-btn-dark:hover {
+  border-color: white;
+  color: white;
+}
+
+@keyframes drawH {
+  from { transform: translateY(-50%) scaleX(0); }
+  to { transform: translateY(-50%) scaleX(1); }
+}
+
+@keyframes drawV {
+  from { transform: translateX(-50%) scaleY(0); opacity: 1; }
+  to { transform: translateX(-50%) scaleY(1); opacity: 1; }
+}
+
+@keyframes drawBorder {
+  from { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); }
+  to { box-shadow: none; }
+}
+.scroll-btn {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: transparent;
+  border: none;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: lowercase;
+  cursor: pointer;
+  animation: fadeIn 1s ease 0.5s forwards;
+  opacity: 0;
 }

@@ -1,0 +1,282 @@
+.scroll-page {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+}
+
+/* V to A */
+.vta-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #FFF8E7;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 8vh;
+  padding-left: 7vw;
+  z-index: 100;
+}
+
+.vta-hi {
+  font-family: 'Playfair Display', serif;
+  font-size: 13vw;
+  font-weight: 400;
+  color: #111;
+  line-height: 1;
+}
+
+.vta-name-row {
+  display: flex;
+  align-items: baseline;
+  position: relative;
+  font-family: 'Playfair Display', serif;
+  font-size: 13vw;
+  font-weight: 400;
+  color: #111;
+  line-height: 1;
+}
+
+.vta-m-green {
+  color: #39ff14;
+  font-size: 18vw;
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  line-height: 0.85;
+}
+
+.vta-v {
+  color: #111;
+  font-family: 'Playfair Display', serif;
+}
+
+.vta-a {
+  color: #39ff14;
+  font-family: 'Playfair Display', serif;
+  font-size: 18vw;
+}
+
+.vta-static {
+  color: #111;
+  font-family: 'Playfair Display', serif;
+}
+
+/* ScrollSmoother */
+#smooth-wrapper {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  scrollbar-width: none;
+}
+#smooth-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+#smooth-content {
+  width: 100%;
+}
+
+/* Role sections — tall enough for scroll animations */
+.role-section {
+  width: 100vw;
+  height: 400vh;
+  position: relative;
+  padding: 8vh 7vw;
+  overflow: hidden;
+}
+
+/* Sticky title */
+.role-title-block {
+  position: sticky;
+  top: 8vh;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.role-a-letter {
+  font-family: 'Playfair Display', serif;
+  font-size: 18vw;
+  font-weight: 400;
+  color: #39ff14;
+  line-height: 0.85;
+}
+
+.role-words {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-word {
+  font-family: 'Playfair Display', serif;
+  font-size: 13vw;
+  font-weight: 400;
+  color: white;
+  line-height: 0.95;
+  display: inline-block;
+  transform-origin: center center;
+}
+
+/* Cards zone — centered, layered */
+/* Cards zone */
+.cards-zone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.card-scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Top nav bar */
+.card-nav {
+  position: absolute;
+  top: 3vh;
+  left: 4vw;
+  right: 4vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0;
+  z-index: 20;
+}
+
+.card-nav-title {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: lowercase;
+}
+
+.card-nav-tags {
+  display: flex;
+  gap: 16px;
+}
+
+.card-nav-tag {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: lowercase;
+}
+
+/* Card row with brackets */
+.card-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3vw;
+  width: 100%;
+}
+
+/* Brackets */
+.card-bracket {
+  font-family: 'Playfair Display', serif;
+  font-size: 7vw;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1;
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+/* The card — pure image, no borders */
+.project-card-float {
+  width: 75vw;
+  height: 55vh;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.25);
+  cursor: pointer;
+  position: relative;
+  pointer-events: all;
+}
+
+.project-card-float:hover .card-img {
+  transform: scale(1.03);
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img-placeholder span {
+  font-family: 'Playfair Display', serif;
+  font-size: 8vw;
+  color: rgba(255, 255, 255, 0.15);
+  font-weight: 400;
+}
+
+/* Bottom indicators */
+.card-bottom {
+  position: absolute;
+  bottom: 3vh;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.15em;
+}
+
+.card-index {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+
+/* Bottom labels */
+.role-bottom-labels {
+  position: absolute;
+  bottom: 3vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.3);
+  z-index: 20;
+}
