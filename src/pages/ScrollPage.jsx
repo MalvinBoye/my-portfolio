@@ -209,7 +209,7 @@ function ProjectOverlay({ project, onClose }) {
           {project.link && (
             <div className="overlay-section">
               <p className="overlay-label">live</p>
-              
+              <a
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
