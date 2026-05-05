@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './App.css';
-import ScrollPage from './pages/ScrollPage';
-import Creative from './pages/Creative';
-import Technical from './pages/Technical';
+import ProjectsPage from './pages/ProjectsPage';
 
 // ─── AUDIO ───────────────────────────────────────────────────────────────────
 function createTypeSound() {
@@ -15,8 +13,8 @@ function createTypeSound() {
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.type = 'square';
-    osc.frequency.setValueAtTime(900 + Math.random() * 200, ctx.currentTime);
-    gain.gain.setValueAtTime(0.015, ctx.currentTime);
+    osc.frequency.setValueAtTime(800 + Math.random() * 250, ctx.currentTime);
+    gain.gain.setValueAtTime(0.014, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + 0.03);
@@ -24,7 +22,7 @@ function createTypeSound() {
 }
 
 // ─── TYPED TEXT ──────────────────────────────────────────────────────────────
-function TypedText({ text, delay = 0, className = '', onDone, speed = 60 }) {
+function TypedText({ text, delay = 0, className = '', onDone, speed = 65 }) {
   const [displayed, setDisplayed] = useState('');
   const [caretVisible, setCaretVisible] = useState(true);
   const [done, setDone] = useState(false);
@@ -38,23 +36,23 @@ function TypedText({ text, delay = 0, className = '', onDone, speed = 60 }) {
   useEffect(() => {
     if (!started) return;
     let i = 0;
-    const interval = setInterval(() => {
+    const iv = setInterval(() => {
       setDisplayed(text.slice(0, i + 1));
       createTypeSound();
       i++;
       if (i >= text.length) {
-        clearInterval(interval);
+        clearInterval(iv);
         setDone(true);
         if (onDone) onDone();
       }
     }, speed);
-    return () => clearInterval(interval);
+    return () => clearInterval(iv);
   }, [started, text, speed]);
 
   useEffect(() => {
     if (done) return;
-    const blink = setInterval(() => setCaretVisible(v => !v), 530);
-    return () => clearInterval(blink);
+    const b = setInterval(() => setCaretVisible(v => !v), 530);
+    return () => clearInterval(b);
   }, [done]);
 
   return (
@@ -65,69 +63,63 @@ function TypedText({ text, delay = 0, className = '', onDone, speed = 60 }) {
   );
 }
 
-// ─── PHASE 1 — SCATTERED FRAGMENTS ───────────────────────────────────────────
+// ─── PHASE 1 — FRAGMENTS ─────────────────────────────────────────────────────
 const FRAGMENTS = [
-  { text: '28.6°N, 77.2°E', x: '7%',  y: '11%', r: -2,  font: 'mono',   size: '10px', w: 400 },
-  { text: 'Malvin Mallock Boye',        x: '58%', y: '7%',  r: 1,   font: 'serif',  size: '13px', w: 300 },
-  { text: 'American University · DC',   x: '72%', y: '19%', r: -1,  font: 'mono',   size: '10px', w: 400 },
-  { text: 'B.S. Computer Science',      x: '4%',  y: '31%', r: 2,   font: 'mono',   size: '10px', w: 400 },
-  { text: '2024 — 2026',                x: '80%', y: '44%', r: -3,  font: 'mono',   size: '11px', w: 700 },
-  { text: 'Design',                     x: '12%', y: '52%', r: 1,   font: 'serif',  size: '52px', w: 400 },
-  { text: 'Engineer',                   x: '14%', y: '67%', r: 1,   font: 'serif',  size: '52px', w: 300 },
-  { text: 'Accra, Ghana',               x: '68%', y: '61%', r: -1,  font: 'mono',   size: '10px', w: 400 },
-  { text: '(202) 899-0644',             x: '38%', y: '73%', r: 2,   font: 'mono',   size: '10px', w: 400 },
-  { text: 'UI/UX',                      x: '6%',  y: '82%', r: -2,  font: 'serif',  size: '40px', w: 400 },
-  { text: 'Designer',                   x: '6%',  y: '90%', r: -1,  font: 'serif',  size: '40px', w: 300 },
-  { text: 'mb8198a@american.edu',       x: '52%', y: '87%', r: 1,   font: 'mono',   size: '10px', w: 400 },
-  { text: 'React · GSAP · Figma',       x: '23%', y: '21%', r: -1,  font: 'mono',   size: '10px', w: 400 },
-  { text: 'Artist',                     x: '85%', y: '29%', r: 3,   font: 'serif',  size: '44px', w: 400 },
-  { text: 'Washington DC',              x: '42%', y: '39%', r: -2,  font: 'mono',   size: '10px', w: 400 },
-  { text: '38.9°N, 77.0°W',            x: '18%', y: '93%', r: 1,   font: 'mono',   size: '10px', w: 400 },
-  { text: 'Creative Systems',           x: '62%', y: '94%', r: -1,  font: 'serif',  size: '14px', w: 300 },
-  { text: 'IB Diploma · 5.0/7.0',      x: '48%', y: '16%', r: 2,   font: 'mono',   size: '10px', w: 400 },
-  { text: 'Motion Design',             x: '78%', y: '80%', r: -2,  font: 'serif',  size: '16px', w: 300 },
-  { text: '↓',                          x: '50%', y: '50%', r: 0,   font: 'serif',  size: '80px', w: 100 },
+  { text: '28.6°N 77.2°E',           x: '7%',  y: '10%', r: -2, font: 'mono',  size: '10px', w: 400 },
+  { text: 'Malvin Mallock Boye',      x: '56%', y: '7%',  r: 1,  font: 'serif', size: '13px', w: 300 },
+  { text: 'American University · DC', x: '70%', y: '18%', r: -1, font: 'mono',  size: '10px', w: 400 },
+  { text: 'B.S. Computer Science',    x: '4%',  y: '30%', r: 2,  font: 'mono',  size: '10px', w: 400 },
+  { text: '2024 — 2026',              x: '79%', y: '43%', r: -3, font: 'mono',  size: '11px', w: 700 },
+  { text: 'Design',                   x: '11%', y: '50%', r: 1,  font: 'serif', size: '54px', w: 400 },
+  { text: 'Engineer',                 x: '13%', y: '65%', r: 1,  font: 'serif', size: '54px', w: 300 },
+  { text: 'Accra, Ghana',             x: '67%', y: '60%', r: -1, font: 'mono',  size: '10px', w: 400 },
+  { text: '(202) 899-0644',           x: '37%', y: '71%', r: 2,  font: 'mono',  size: '10px', w: 400 },
+  { text: 'UI/UX',                    x: '5%',  y: '80%', r: -2, font: 'serif', size: '42px', w: 400 },
+  { text: 'Designer',                 x: '5%',  y: '89%', r: -1, font: 'serif', size: '42px', w: 300 },
+  { text: 'mb8198a@american.edu',     x: '50%', y: '85%', r: 1,  font: 'mono',  size: '10px', w: 400 },
+  { text: 'React · GSAP · Figma',     x: '22%', y: '20%', r: -1, font: 'mono',  size: '10px', w: 400 },
+  { text: 'Artist',                   x: '84%', y: '28%', r: 3,  font: 'serif', size: '46px', w: 400 },
+  { text: 'Washington DC',            x: '41%', y: '38%', r: -2, font: 'mono',  size: '10px', w: 400 },
+  { text: '38.9°N 77.0°W',           x: '17%', y: '92%', r: 1,  font: 'mono',  size: '10px', w: 400 },
+  { text: 'Creative Systems',         x: '61%', y: '93%', r: -1, font: 'serif', size: '14px', w: 300 },
+  { text: 'IB Diploma · 5.0/7.0',    x: '47%', y: '15%', r: 2,  font: 'mono',  size: '10px', w: 400 },
+  { text: 'Motion Design',            x: '77%', y: '79%', r: -2, font: 'serif', size: '16px', w: 300 },
+  { text: '↓',                        x: '50%', y: '47%', r: 0,  font: 'serif', size: '72px', w: 100 },
 ];
 
 function Phase1({ onComplete }) {
   const containerRef = useRef(null);
   const fragRefs = useRef([]);
-  const hasClicked = useRef(false);
+  const clicked = useRef(false);
 
   useEffect(() => {
     fragRefs.current.forEach((el, i) => {
       if (!el) return;
       gsap.fromTo(el,
-        { opacity: 0, y: 8 },
-        { opacity: 1, y: 0, duration: 0.5, delay: i * 0.06, ease: 'power2.out' }
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.55, delay: i * 0.055, ease: 'power2.out' }
       );
     });
   }, []);
 
   function handleClick() {
-    if (hasClicked.current) return;
-    hasClicked.current = true;
+    if (clicked.current) return;
+    clicked.current = true;
     const tl = gsap.timeline({ onComplete });
     fragRefs.current.forEach((el, i) => {
       if (!el) return;
       const angle = (i / FRAGMENTS.length) * Math.PI * 2;
       tl.to(el, {
-        x: Math.cos(angle) * window.innerWidth * 0.6,
-        y: Math.sin(angle) * window.innerHeight * 0.6,
-        opacity: 0,
-        scale: 0,
-        duration: 0.6,
-        ease: 'power3.in',
-        delay: i * 0.015,
+        x: Math.cos(angle) * window.innerWidth * 0.65,
+        y: Math.sin(angle) * window.innerHeight * 0.65,
+        opacity: 0, scale: 0,
+        duration: 0.55, ease: 'power3.in', delay: i * 0.012,
       }, 0);
     });
-    tl.to(containerRef.current, { opacity: 0, duration: 0.3 }, 0.5);
+    tl.to(containerRef.current, { opacity: 0, duration: 0.3 }, 0.45);
   }
 
-  const fontMap = {
-    mono: "'Space Mono', monospace",
-    serif: "'Playfair Display', serif",
-  };
+  const fontMap = { mono: "'Space Mono', monospace", serif: "'Playfair Display', serif" };
 
   return (
     <div ref={containerRef} className="phase1" onClick={handleClick}>
@@ -170,27 +162,23 @@ function HiIntro({ onNavigate }) {
   const caretRef = useRef(null);
   const stage = NAME_STAGES[nameIndex];
 
-  // Background color transition
   useEffect(() => {
     if (!bgRef.current) return;
     gsap.to(bgRef.current, { backgroundColor: stage.bg, duration: 0.5, ease: 'power2.inOut' });
-  }, [nameIndex]);
+  }, [nameIndex, stage.bg]);
 
-  // Caret blink
   useEffect(() => {
     const b = setInterval(() => setCaretVisible(v => !v), 530);
     return () => clearInterval(b);
   }, []);
 
-  // Scroll → scroll journey
   useEffect(() => {
     if (!settled) return;
-    function onWheel() { window.location.href = '/scroll'; }
+    function onWheel() { onNavigate('/projects'); }
     window.addEventListener('wheel', onWheel, { once: true });
     return () => window.removeEventListener('wheel', onWheel);
-  }, [settled]);
+  }, [settled, onNavigate]);
 
-  // Typing cycle
   useEffect(() => {
     const name = stage.suffix;
     let i = 0;
@@ -217,7 +205,7 @@ function HiIntro({ onNavigate }) {
       }
     }, 95);
     return () => clearInterval(typing);
-  }, [nameIndex]);
+  }, [nameIndex, stage.suffix]);
 
   function triggerPhase3() {
     if (showPhase3) return;
@@ -229,17 +217,14 @@ function HiIntro({ onNavigate }) {
 
   if (showPhase3) return <Phase3 onNavigate={onNavigate} />;
 
-  const sub = stage.fg === '#ffffff' ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.3)';
+  const sub = stage.fg === '#ffffff' ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.28)';
 
   return (
     <div ref={bgRef} className="hi-intro" style={{ background: stage.bg }}>
-      {/* Top */}
       <div className="p2-top">
         <span style={{ color: sub }}>Malvin</span>
         <span style={{ color: sub }}>Boye</span>
       </div>
-
-      {/* Main */}
       <div className="p2-main">
         <div className="p2-hi" style={{ color: stage.fg }}>Hi</div>
         <div className="p2-m-row">
@@ -259,15 +244,11 @@ function HiIntro({ onNavigate }) {
           </span>
         </div>
       </div>
-
-      {/* Bottom */}
       <div className="p2-bottom">
         <span style={{ color: sub, fontStyle: 'italic' }}>Circée</span>
         <span style={{ color: sub }}>Malvin</span>
         <span style={{ color: sub }}>Boye</span>
       </div>
-
-      {/* Enter button */}
       {settled && (
         <button
           className="enter-btn"
@@ -281,7 +262,7 @@ function HiIntro({ onNavigate }) {
   );
 }
 
-// ─── PHASE 3 — BLACK CINEMATIC ────────────────────────────────────────────────
+// ─── PHASE 3 — BLACK ─────────────────────────────────────────────────────────
 function Phase3({ onNavigate }) {
   const [showPhase4, setShowPhase4] = useState(false);
   const containerRef = useRef(null);
@@ -311,21 +292,17 @@ function Phase3({ onNavigate }) {
   }
 
   const navItems = [
-    { label: 'youtube', top: '22%', left: '38%', delay: 300 },
-    { label: 'artist',  top: '31%', left: '32%', delay: 700 },
-    { label: 'vlogger', top: '41%', left: '35%', delay: 1100 },
-    { label: 'creator', top: '27%', left: '48%', delay: 1500 },
+    { label: 'youtube',  top: '22%', left: '38%', delay: 300 },
+    { label: 'artist',   top: '31%', left: '32%', delay: 700 },
+    { label: 'vlogger',  top: '41%', left: '35%', delay: 1100 },
+    { label: 'creator',  top: '27%', left: '48%', delay: 1500 },
   ];
 
   if (showPhase4) return <Phase4 onNavigate={onNavigate} />;
 
   return (
     <div ref={containerRef} className="phase3">
-      <div className="p3-top">
-        <span>Malvin</span>
-        <span>Boye</span>
-      </div>
-
+      <div className="p3-top"><span>Malvin</span><span>Boye</span></div>
       <div className="p3-main">
         <div className="p3-hi">Hi</div>
         <div className="p3-m-row">
@@ -337,35 +314,28 @@ function Phase3({ onNavigate }) {
           </span>
         </div>
       </div>
-
       {navItems.map((item, i) => (
         <div key={i} className="nav-float" style={{ top: item.top, left: item.left }}>
           <TypedText text={item.label} delay={item.delay} className="nav-label" onDone={onItemDone} />
         </div>
       ))}
-
       <div className="bio-en">
         <TypedText
           text="trying his best to do everything creative wise. whether that is through words, photos, film, language_"
-          delay={900}
-          speed={40}
+          delay={900} speed={38}
         />
       </div>
-
       <div className="bio-kr">
         <TypedText
           text="글, 사진, 영상, 그리고 언어를 통해 자신만의 창작 세계를 만들어가는 중입니다"
-          delay={1400}
-          speed={55}
+          delay={1400} speed={55}
         />
       </div>
-
       <div className="p3-bottom">
         <span style={{ fontStyle: 'italic' }}>Circée</span>
         <span>Malvin</span>
         <span>Boye</span>
       </div>
-
       {allLoaded && (
         <button className="enter-btn-dark" onClick={triggerPhase4}>enter_</button>
       )}
@@ -380,14 +350,17 @@ function TransitionScreen({ onDone }) {
     gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1, duration: 0.4 });
     const t = setTimeout(() => gsap.to(ref.current, { opacity: 0, duration: 0.4, onComplete: onDone }), 2000);
     return () => clearTimeout(t);
-  }, []);
+  }, [onDone]);
 
   return (
     <div ref={ref} className="transition-screen">
       <div className="tr-tl"><span>設計者</span><span>Malvin Boye</span></div>
       <div className="tr-tr"><span>演出</span><span>Circée</span></div>
       <div className="tr-center">
-        <div className="tr-cross"><div className="cross-h" /><div className="cross-v" /></div>
+        <div className="tr-cross">
+          <div className="cross-h" />
+          <div className="cross-v" />
+        </div>
       </div>
       <div className="tr-bl"><span>制作</span><span>Washington DC</span></div>
       <div className="tr-br"><span>2024—2026</span><span>maehlo.com</span></div>
@@ -395,7 +368,7 @@ function TransitionScreen({ onDone }) {
   );
 }
 
-// ─── PHASE 4 — NAVIGATION ─────────────────────────────────────────────────────
+// ─── PHASE 4 — NAVIGATION ────────────────────────────────────────────────────
 function Phase4({ onNavigate }) {
   const [showTr, setShowTr] = useState(false);
   const [dest, setDest] = useState(null);
@@ -423,25 +396,26 @@ function Phase4({ onNavigate }) {
         <span className="p4-counter">01_</span>
         <span className="p4-name">Malvin Boye</span>
       </div>
-
       <div className="p4-main">
         <div className="p4-hi">Hi</div>
         <div className="p4-m-row">
           <span className="p4-m">M</span>
-          <div className={`p4-box ${b1 ? 'drawn' : ''}`} onClick={() => go('/creative')}>
+          <div className={`p4-box ${b1 ? 'drawn' : ''}`} onClick={() => go('/projects?filter=creative')}>
             <span className="p4-box-text">allock</span>
             <span className="p4-box-label">Creative Work_</span>
           </div>
         </div>
-        <div className={`p4-box p4-box-2 ${b2 ? 'drawn' : ''}`} onClick={() => go('/technical')}>
+        <div className={`p4-box p4-box-2 ${b2 ? 'drawn' : ''}`} onClick={() => go('/projects?filter=technical')}>
           <span className="p4-box-text">Technical</span>
           <span className="p4-box-label">SWE + Web Dev_</span>
         </div>
       </div>
-
       <div className="p4-bottom">
         <span className="p4-layer">layer_01</span>
-        <div className="p4-dots"><div className="p4-dot" /><div className="p4-dot" /></div>
+        <div className="p4-dots">
+          <div className="p4-dot" />
+          <div className="p4-dot" />
+        </div>
         <span className="p4-name">Malvin Boye</span>
       </div>
     </div>
@@ -460,35 +434,13 @@ function Home() {
   );
 }
 
-// ─── LANDING PAGES ────────────────────────────────────────────────────────────
-function PageShell({ title, sub }) {
-  const navigate = useNavigate();
-  return (
-    <div className="page-shell">
-      <button className="back-btn" onClick={() => navigate('/')}>← back_</button>
-      <div className="page-title">{title}</div>
-      <div className="page-sub">{sub}</div>
-    </div>
-  );
-}
-
-function CreativePage() {
-  return <PageShell title="Creative Work_" sub="UX/UI Design · Art Direction · Creative Systems" />;
-}
-
-function TechnicalPage() {
-  return <PageShell title="Technical_" sub="Software Engineering · Web Development · Systems" />;
-}
-
 // ─── APP ──────────────────────────────────────────────────────────────────────
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/creative" element={<CreativePage />} />
-        <Route path="/technical" element={<TechnicalPage />} />
-        <Route path="/scroll" element={<ScrollPage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
       </Routes>
     </BrowserRouter>
   );
