@@ -241,7 +241,7 @@ function InstagramSection() {
           </a>
         </div>
         <div className="ig-placeholder-hint">
-          Drop photos into <code>src/images/instagram/ig-1.jpg</code> through <code>ig-12.jpg</code>
+         Still under construction_ <br />
         </div>
       </section>
     );
