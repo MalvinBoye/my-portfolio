@@ -198,6 +198,145 @@ function CursorMedia({ src, videoId, visible }) {
     </div>
   );
 }
+// likkle lightbox component for viewing images in a larger format with next/prev navigation and thumbnail strip
+function Lightbox({ images, startIndex, title, onClose }) {
+  const [index, setIndex] = useState(startIndex);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+    function onKey(e) {
+      if (e.key === 'Escape') handleClose();
+      if (e.key === 'ArrowRight') setIndex(i => Math.min(i + 1, images.length - 1));
+      if (e.key === 'ArrowLeft')  setIndex(i => Math.max(i - 1, 0));
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  function handleClose() {
+    gsap.to(ref.current, { opacity: 0, duration: 0.2, ease: 'power2.in', onComplete: onClose });
+  }
+
+  return (
+    <div ref={ref} className="lightbox" onClick={handleClose}>
+      {/* Close */}
+      <button className="lightbox-close" onClick={handleClose}>✕ esc_</button>
+
+      {/* Counter */}
+      <div className="lightbox-counter">
+        {String(index + 1).padStart(2,'0')} / {String(images.length).padStart(2,'0')}
+      </div>
+
+      {/* Image — stop propagation so clicking image doesn't close */}
+      <div className="lightbox-img-wrap" onClick={e => e.stopPropagation()}>
+        <img src={images[index]} alt={`${title} ${index + 1}`} className="lightbox-img" />
+      </div>
+
+      {/* Prev / Next */}
+      {index > 0 && (
+        <button className="lightbox-nav lightbox-prev"
+          onClick={e => { e.stopPropagation(); setIndex(i => i - 1); }}>
+          ←
+        </button>
+      )}
+      {index < images.length - 1 && (
+        <button className="lightbox-nav lightbox-next"
+          onClick={e => { e.stopPropagation(); setIndex(i => i + 1); }}>
+          →
+        </button>
+      )}
+
+      {/* Thumbnail strip at bottom */}
+      {images.length > 1 && (
+        <div className="lightbox-thumbs" onClick={e => e.stopPropagation()}>
+          {images.map((src, i) => (
+            <button key={i}
+              className={`lightbox-thumb ${i === index ? 'active' : ''}`}
+              onClick={() => setIndex(i)}>
+              <img src={src} alt={`${i + 1}`} />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// image viewer
+function ImageViewer({ images, title, id }) {
+  const [active, setActive] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxStart, setLightboxStart] = useState(0);
+  const mainRef = useRef(null);
+
+  function goTo(index) {
+    if (!mainRef.current || index === active) return;
+    const dir = index > active ? -20 : 20;
+    gsap.to(mainRef.current, {
+      opacity: 0, x: -dir, duration: 0.12, ease: 'power2.in',
+      onComplete: () => {
+        setActive(index);
+        gsap.fromTo(mainRef.current,
+          { opacity: 0, x: dir },
+          { opacity: 1, x: 0, duration: 0.18, ease: 'power2.out' }
+        );
+      }
+    });
+  }
+
+  function openLightbox(i) {
+    setLightboxStart(i);
+    setLightboxOpen(true);
+  }
+
+  if (!images || images.length === 0) {
+    return (
+      <div className="img-empty">
+        <span className="img-empty-num">{id}</span>
+        <span className="img-empty-title">{title}</span>
+        <span className="img-empty-hint">images coming soon_</span>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {lightboxOpen && (
+        <Lightbox
+          images={images}
+          startIndex={lightboxStart}
+          title={title}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
+
+      <div className="img-viewer">
+        <div ref={mainRef} className="img-viewer-main"
+          onClick={() => openLightbox(active)}
+          style={{ cursor: 'zoom-in' }}>
+          <img src={images[active]} alt={`${title} ${active + 1}`} className="img-viewer-img" />
+          <div className="img-viewer-counter">
+            {String(active + 1).padStart(2, '0')} / {String(images.length).padStart(2, '0')}
+          </div>
+          <div className="img-viewer-expand">⤢ expand_</div>
+        </div>
+        {images.length > 1 && (
+          <div className="img-thumbs">
+            {images.map((src, i) => (
+              <button key={i}
+                className={`img-thumb ${i === active ? 'active' : ''}`}
+                onClick={() => goTo(i)}>
+                <img src={src} alt={`${title} ${i + 1}`} />
+                <div className="img-thumb-bar" />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
 
 // project detail
 function ProjectDetail({ project, onClose }) {
@@ -268,11 +407,7 @@ function ProjectDetail({ project, onClose }) {
         <div className="detail-content">
           {/* Image placeholder */}
           <div className="detail-img-area">
-            <div className="detail-img-placeholder">
-              <span className="detail-img-num">{project.id}</span>
-              <span className="detail-img-title">{project.title}</span>
-              <span className="detail-img-hint">add images to src/images/ to display here</span>
-            </div>
+            <ImageViewer images={project.images || []} title={project.title} id={project.id} />
           </div>
 
           <div className="detail-text">
@@ -297,7 +432,7 @@ function ProjectDetail({ project, onClose }) {
   );
 }
 
-// youtube overlay 
+// youtube overlay
 function YouTubeOverlay({ onClose }) {
   const ref = useRef(null);
   const [active, setActive] = useState(null);
@@ -401,7 +536,7 @@ function YouTubeOverlay({ onClose }) {
   );
 }
 
-// projects page component that lists projects and allows filtering, with a cursor-following preview and a youtube overlay
+// projects page
 export default function ProjectsPage() {
   const navigate = useNavigate();
   const { transitionTo, Curtain } = usePageTransition();

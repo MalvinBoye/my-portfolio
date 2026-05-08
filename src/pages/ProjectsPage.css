@@ -367,3 +367,136 @@
 .yt-footer { display: flex; justify-content: space-between; padding: 2vh 5vw; border-top: 1px solid var(--border); font-size: 9px; letter-spacing: 0.18em; color: var(--sub); flex-shrink: 0; }
 .yt-footer-link { color: var(--black); border-bottom: 1px solid rgba(0,0,0,0.15); padding-bottom: 1px; transition: opacity 0.2s; }
 .yt-footer-link:hover { opacity: 0.5; }
+
+
+.img-viewer {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+}
+
+.img-viewer-main {
+  flex: 1; position: relative; overflow: hidden;
+}
+
+.img-viewer-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+.img-viewer-counter {
+  position: absolute; bottom: 12px; right: 14px;
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.15em; color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.35); padding: 3px 8px;
+}
+
+.img-thumbs {
+  display: flex; gap: 2px;
+  height: 56px; flex-shrink: 0;
+  border-top: 1px solid var(--border);
+}
+
+.img-thumb {
+  flex: 1; padding: 0; border: none;
+  background: none; cursor: pointer;
+  overflow: hidden; position: relative;
+  transition: flex 0.3s ease;
+}
+.img-thumb:hover, .img-thumb.active { flex: 2; }
+.img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.img-thumb-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 2px; background: var(--black);
+  width: 0; transition: width 0.25s ease;
+}
+.img-thumb.active .img-thumb-bar { width: 100%; }
+
+.img-empty {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px;
+  background: rgba(0,0,0,0.02);
+}
+.img-empty-num { font-size: 9px; letter-spacing: 0.2em; color: rgba(0,0,0,0.15); }
+.img-empty-title { font-family: var(--serif); font-size: 3.5vw; color: rgba(0,0,0,0.08); }
+.img-empty-hint { font-size: 9px; letter-spacing: 0.16em; color: rgba(0,0,0,0.18); }
+
+
+.lightbox {
+  position: fixed; inset: 0;
+  background: rgba(10,10,10,0.96);
+  z-index: 9000;
+  display: flex; align-items: center; justify-content: center;
+  cursor: zoom-out;
+}
+
+.lightbox-img-wrap {
+  max-width: 88vw; max-height: 80vh;
+  display: flex; align-items: center; justify-content: center;
+  cursor: default;
+}
+
+.lightbox-img {
+  max-width: 100%; max-height: 80vh;
+  object-fit: contain; display: block;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+}
+
+.lightbox-close {
+  position: absolute; top: 24px; right: 28px;
+  background: none; border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.5); padding: 8px 16px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+  cursor: pointer; transition: all 0.2s; z-index: 10;
+}
+.lightbox-close:hover { border-color: #fff; color: #fff; }
+
+.lightbox-counter {
+  position: absolute; top: 30px; left: 28px;
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.2em; color: rgba(255,255,255,0.35);
+}
+
+.lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: none; border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+  width: 52px; height: 52px;
+  font-size: 1.2rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; z-index: 10;
+}
+.lightbox-nav:hover { border-color: #fff; color: #fff; }
+.lightbox-prev { left: 28px; }
+.lightbox-next { right: 28px; }
+
+.lightbox-thumbs {
+  position: absolute; bottom: 24px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 6px;
+  cursor: default;
+}
+
+.lightbox-thumb {
+  width: 56px; height: 38px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: none; cursor: pointer; padding: 0;
+  overflow: hidden; transition: border-color 0.2s, opacity 0.2s;
+  opacity: 0.5;
+}
+.lightbox-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lightbox-thumb.active { border-color: #fff; opacity: 1; }
+.lightbox-thumb:hover { opacity: 0.85; }
+
+/* Expand hint on hover */
+.img-viewer-expand {
+  position: absolute; bottom: 12px; left: 14px;
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.14em; color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.35); padding: 3px 8px;
+  opacity: 0; transition: opacity 0.2s;
+}
+.img-viewer-main:hover .img-viewer-expand { opacity: 1; }
+
+
