@@ -8,7 +8,7 @@ import ProjectsPage from './pages/ProjectsPage';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ─── SIGNATURE INTRO ──────────────────────────────────────────────────────────
+// signature intro components 
 // SVG path for cursive "maehlo" — hand-drawn style paths
 function SignatureIntro({ onComplete }) {
   const containerRef = useRef(null);
@@ -71,7 +71,7 @@ function SignatureIntro({ onComplete }) {
         />
         {/* e */}
         <path
-          d="M 175 90 C 180 80 195 72 208 80 C 218 86 220 100 214 110 C 207 120 192 120 183 112 C 176 106 174 95 178 88 C 182 80 195 75 208 82"
+          d="M 180 100 C 185 85 210 85 212 100 C 212 112 195 118 185 110 C 178 104 182 270 12 86 L 212 96 174 95 178 88 C 182 80 195 75 208 82"
           stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
         />
         {/* h */}
@@ -100,7 +100,7 @@ function SignatureIntro({ onComplete }) {
   );
 }
 
-// ─── APP ──────────────────────────────────────────────────────────────────────
+// app
 function AppContent() {
   const [showSig, setShowSig] = useState(true);
 
