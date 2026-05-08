@@ -2,6 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './ProjectsPage.css';
+//Images
+import manageable1 from '../images/manageable-1.png';
+import manageable2 from '../images/manageable-2.png';
+import manageable3 from '../images/manageable-3.png';
+import dormdrop1 from '../images/dormdrop-1.png';
+import dormdrop2 from '../images/dormdrop-2.png';
+import dormdrop3 from '../images/dormdrop-3.png';
+import connect1 from '../images/connect-1.png';
+
 
 // page transition
 function usePageTransition() {
@@ -37,14 +46,6 @@ function usePageTransition() {
   return { transitionTo, Curtain };
 }
 
-//Images
-import manageable1 from '../images/manageable-1.png';
-import manageable2 from '../images/manageable-2.png';
-import manageable3 from '../images/manageable-3.png';
-import dormdrop1 from '../images/dormdrop-1.png';
-import dormdrop2 from '../images/dormdrop-2.png';
-import dormdrop3 from '../images/dormdrop-3.png';
-import connect1 from '../images/connect-1.png';
 
 //my projects data hard coded for now 
 const PROJECTS = [
