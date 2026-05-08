@@ -37,6 +37,16 @@ function usePageTransition() {
   return { transitionTo, Curtain };
 }
 
+//Images
+import manageable1 from '../images/manageable-1.png';
+import manageable2 from '../images/manageable-2.png';
+import manageable3 from '../images/manageable-3.png';
+import dormdrop1 from '../images/dormdrop-1.png';
+import dormdrop2 from '../images/dormdrop-2.png';
+import dormdrop3 from '../images/dormdrop-3.png';
+import connect1 from '../images/connect-1.png';
+import { image } from 'motion/react-client';
+
 //my projects data hard coded for now 
 const PROJECTS = [
   {
@@ -55,7 +65,7 @@ const PROJECTS = [
       'Lock-In Mode adopted as primary focus tool — distraction-free with progress tracking',
     ],
     tools: ['React', 'Node.js', 'Canvas API', 'Flask', 'JavaScript', 'Figma', 'Motion Design'],
-    link: null, img: null,
+    link: null, img: null, images: [manageable1, manageable2, manageable3],
   },
   {
     id: '002', title: 'DormDrop',
@@ -73,7 +83,7 @@ const PROJECTS = [
       'Responsive layout works across all devices without a native app',
     ],
     tools: ['React', 'Node.js', 'Figma', 'Git', 'REST API', 'Authentication'],
-    link: null, img: null,
+    link: null, img: null, images: [dormdrop1, dormdrop2, dormdrop3],
   },
   {
     id: '003', title: 'Connect',
@@ -91,7 +101,7 @@ const PROJECTS = [
       '409KB bundle · Vercel CI/CD · Zero TypeScript errors throughout',
     ],
     tools: ['React 18', 'TypeScript', 'Supabase', 'PostgreSQL', 'Vite', 'Vercel', 'Figma'],
-    link: 'https://connect-app-rho.vercel.app/', img: null,
+    link: 'https://connect-app-rho.vercel.app/', img: null, images: [connect1],
   },
   {
     id: '004', title: 'EV Mart POS',

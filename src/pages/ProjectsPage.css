@@ -9,7 +9,7 @@
   --courier: 'Courier Prime', monospace;
 }
 
-/* ─── CURSOR ─────────────────────────────────────────────── */
+/* cursor*/
 .cursor-media {
   position: fixed; width: 320px; height: 210px;
   pointer-events: none; z-index: 9000;
@@ -19,7 +19,7 @@
 .cursor-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .cursor-placeholder { width: 100%; height: 100%; background: rgba(0,0,0,0.03); border: 1px solid var(--border); }
 
-/* ─── PAGE ───────────────────────────────────────────────── */
+/* page */
 .proj-page {
   width: 100vw; min-height: 100vh;
   background: #fff; font-family: var(--mono);
@@ -27,7 +27,7 @@
   overflow-x: hidden;
 }
 
-/* ─── HEADER ─────────────────────────────────────────────── */
+/* header */
 .proj-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 3vh 5vw 2.5vh;
@@ -66,8 +66,8 @@
 
 .proj-count { font-size: 9px; letter-spacing: 0.18em; color: var(--sub); }
 
-/* ─── BIG LABEL ──────────────────────────────────────────── */
-/* Jasmine-style massive typographic label */
+/* big label*/
+/*massive typographic label */
 .proj-big-label {
   display: flex; flex-direction: column;
   padding: 4vh 5vw 2vh;
@@ -89,7 +89,7 @@
   -webkit-text-stroke: 1.5px var(--black);
 }
 
-/* ─── DRAMATIC LIST ──────────────────────────────────────── */
+/* dramatic list */
 .proj-list {
   list-style: none; flex: 1;
   display: flex; flex-direction: column;
@@ -184,7 +184,7 @@
 }
 .proj-row.hovered .proj-row-sweep { width: 100%; }
 
-/* ─── FOOTER ─────────────────────────────────────────────── */
+/*footer */
 .proj-footer {
   display: flex; justify-content: space-between;
   padding: 2.5vh 5vw;
@@ -193,7 +193,7 @@
   flex-shrink: 0;
 }
 
-/* ─── PROJECT DETAIL ─────────────────────────────────────── */
+/* project detail */
 .detail {
   position: fixed; top: 0; left: 0;
   width: 100vw; height: 100vh;
@@ -287,7 +287,7 @@
 
 .detail-footer { display: flex; justify-content: space-between; padding: 2vh 5vw; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; color: var(--sub); flex-shrink: 0; }
 
-/* ─── YOUTUBE OVERLAY ────────────────────────────────────── */
+/*youtube overlay*/
 .yt-overlay {
   position: fixed; top: 0; left: 0;
   width: 100vw; height: 100vh;
