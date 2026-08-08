@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './ProjectsPage.css';
 //Images
@@ -65,7 +65,7 @@ const PROJECTS = [
       'Lock-In Mode adopted as primary focus tool — distraction-free with progress tracking',
     ],
     tools: ['React', 'Node.js', 'Canvas API', 'Flask', 'JavaScript', 'Figma', 'Motion Design'],
-    link: null, img: null, images: [manageable1, manageable2, manageable3],
+    link: null, caseStudy: '/case-study/maable', img: null, images: [manageable1, manageable2, manageable3],
   },
   {
     id: '002', title: 'DormDrop',
@@ -389,6 +389,12 @@ function ProjectDetail({ project, onClose }) {
             <div className="detail-field">
               <div className="detail-field-label">live_</div>
               <a href={project.link} target="_blank" rel="noopener noreferrer" className="detail-live">view live ↗</a>
+            </div>
+          )}
+          {project.caseStudy && (
+            <div className="detail-field">
+              <div className="detail-field-label">case study_</div>
+              <Link to={project.caseStudy} className="detail-live">read full case study →</Link>
             </div>
           )}
           <div className="detail-rule" />

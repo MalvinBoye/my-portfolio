@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './App.css';
 import MainSite from './pages/MainSite';
 import ProjectsPage from './pages/ProjectsPage';
+import MaableCaseStudy from './pages/MaableCaseStudy';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -111,6 +112,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<MainSite />} />
           <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/case-study/maable" element={<MaableCaseStudy />} />
         </Routes>
       )}
     </>
