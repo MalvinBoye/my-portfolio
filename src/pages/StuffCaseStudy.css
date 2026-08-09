@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Caveat:wght@400;600&display=swap');
+
+.stuff-case {
+  scroll-behavior: smooth;
+}
+.stuff-case ::selection {
+  background: rgba(182, 130, 53, .25);
+}
+.stuff-case a.stuff-link {
+  color: #8a6224;
+  text-decoration: none;
+}
+.stuff-case a.stuff-link:hover {
+  color: #b68235;
+}

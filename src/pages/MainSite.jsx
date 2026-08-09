@@ -1,12 +1,14 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './MainSite.css';
+import { css, GRAIN } from '../utils/cssString';
+import bagJala from '../images/bag-jala.png';
+import manageable1 from '../images/manageable-1.png';
+import dormdrop1 from '../images/dormdrop-1.png';
+import connect1 from '../images/connect-1.png';
 
-gsap.registerPlugin(ScrollTrigger);
-
-// supabase
+// supabase — same backend/table the poster board has always used, so notes
+// left by visitors on the previous design survive this redesign.
 const SB_URL = 'https://xhqrmuqhpdbuaepkizxl.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhocXJtdXFocGRidWFlcGtpenhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMjEwOTMsImV4cCI6MjA5MzY5NzA5M30.jIppdRIHFPB4I59PxhZWF4Kg-yqtptvejuFl9NNyfas';
 
@@ -25,56 +27,12 @@ async function dbFetch(path, options = {}) {
   return text ? JSON.parse(text) : null;
 }
 
-// audio feedback for typing
-function typeClick() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const g = ctx.createGain();
-    osc.connect(g); g.connect(ctx.destination);
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(700 + Math.random() * 200, ctx.currentTime);
-    g.gain.setValueAtTime(0.012, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
-    osc.start(); osc.stop(ctx.currentTime + 0.03);
-  } catch (e) {}
+function prefersReducedMotion() {
+  return typeof window !== 'undefined' && window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-// mechanical page transition using a sliding curtain effect
-function usePageTransition() {
-  const curtainRef = useRef(null);
-
-  useEffect(() => {
-    if (curtainRef.current) {
-      gsap.fromTo(curtainRef.current,
-        { x: '0%' },
-        { x: '100%', duration: 0.7, ease: 'power3.inOut' }
-      );
-    }
-  }, []);
-
-  function transitionTo(callback) {
-    if (!curtainRef.current) { callback(); return; }
-    gsap.fromTo(curtainRef.current,
-      { x: '-100%' },
-      { x: '0%', duration: 0.55, ease: 'power3.inOut', onComplete: callback }
-    );
-  }
-
-  const Curtain = () => (
-    <div ref={curtainRef} style={{
-      position: 'fixed', top: 0, left: 0,
-      width: '100vw', height: '100vh',
-      background: '#111', zIndex: 9999,
-      transform: 'translateX(-100%)',
-      pointerEvents: 'none',
-    }} />
-  );
-
-  return { transitionTo, Curtain };
-}
-
-// live clock
+// live clock — HH:MM:SS, 24h, America/New_York
 function LiveClock() {
   const [time, setTime] = useState('');
   useEffect(() => {
@@ -91,585 +49,361 @@ function LiveClock() {
   return <span>{time}</span>;
 }
 
-// scroll reveal hook using GSAP
-function useReveal(ref, options = {}) {
-  useEffect(() => {
-    if (!ref.current) return;
-    gsap.fromTo(ref.current,
-      { opacity: 0, y: options.y ?? 40 },
-      {
-        opacity: 1, y: 0,
-        duration: options.duration ?? 0.8,
-        ease: options.ease ?? 'power2.out',
-        scrollTrigger: {
-          trigger: ref.current,
-          start: options.start ?? 'top 82%',
-          toggleActions: 'play none none none',
-        }
-      }
-    );
-  }, []);
-}
+// marquee — duplicated list, CSS transform loop, paused under reduced motion
+const MARQUEE_ITEMS = ['Drawing', 'Poetry', 'Music', 'Piano', 'Drums', 'Film', 'Videography', 'Cinematography', 'Languages', 'Korean Cinema', 'Architecture', 'Motion Design'];
 
-// marguee component for interests section
-function Marquee({ items, dark }) {
+function Marquee() {
+  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
   return (
-    <div className={`marquee-wrap ${dark ? 'marquee-dark' : ''}`}>
-      <div className="marquee-track">
-        {[...items, ...items].map((item, i) => (
-          <span key={i} className="marquee-item">
-            {item}<span className="marquee-dot">·</span>
-          </span>
+    <div className="ms-marquee">
+      <div className="ms-marquee-track">
+        {items.map((t, i) => (
+          <span key={i} className="ms-marquee-item">{t}<span className="ms-marquee-dot">·</span></span>
         ))}
       </div>
     </div>
   );
 }
 
-// typewriter hero component with user interaction to trigger the poster board
+// typewriter hero name — Malvin → Mallock → Maelo
 const NAMES = ['Malvin', 'Mallock', 'Maelo'];
 
-function TypewriterHero({ onPosterTrigger }) {
-  const [nameIndex, setNameIndex] = useState(0);
-  const [displayed, setDisplayed] = useState('');
-  const [caretVisible, setCaretVisible] = useState(true);
-  const [userTyping, setUserTyping] = useState(false);
-  const [userText, setUserText] = useState('');
-  const [settled, setSettled] = useState(false);
-  const animRef = useRef(null);
-  const deleteRef = useRef(null);
-  const heroRef = useRef(null);
-
-  // Hero entrance
-  useEffect(() => {
-    if (!heroRef.current) return;
-    gsap.fromTo(heroRef.current,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out', delay: 0.1 }
-    );
-  }, []);
+function useTypewriter() {
+  const [typed, setTyped] = useState(() => prefersReducedMotion() ? NAMES[NAMES.length - 1] : '');
+  const nameIndex = useRef(0);
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
-    const b = setInterval(() => setCaretVisible(v => !v), 530);
-    return () => clearInterval(b);
-  }, []);
+    if (prefersReducedMotion()) return;
 
-  useEffect(() => {
-    function onKey(e) {
-      if (e.metaKey || e.ctrlKey || e.altKey || e.key === 'Escape' || e.key === 'Tab') return;
-      if (!userTyping) {
-        clearInterval(animRef.current);
-        clearInterval(deleteRef.current);
-        setUserTyping(true);
-        setDisplayed('');
-        setSettled(false);
+    function step(i = 0, deleting = false) {
+      const name = NAMES[nameIndex.current];
+      if (!deleting && i <= name.length) {
+        setTyped(name.slice(0, i));
+        timeoutRef.current = setTimeout(() => step(i + 1, false), 95);
+      } else if (!deleting) {
+        timeoutRef.current = setTimeout(() => step(name.length, true), 1400);
+      } else if (i > 0) {
+        setTyped(name.slice(0, i - 1));
+        timeoutRef.current = setTimeout(() => step(i - 1, true), 52);
+      } else {
+        nameIndex.current = (nameIndex.current + 1) % NAMES.length;
+        step(0, false);
       }
-      if (e.key === 'Backspace') { setUserText(p => p.slice(0, -1)); return; }
-      if (e.key === 'Enter') {
-        if (userText.toLowerCase().trim() === 'poster') onPosterTrigger();
-        else setSettled(true);
-        return;
-      }
-      if (e.key.length === 1) { typeClick(); setUserText(p => p + e.key); }
     }
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [userTyping, userText, onPosterTrigger]);
+    step(0, false);
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
 
-  useEffect(() => {
-    if (userTyping) setDisplayed(userText);
-  }, [userText, userTyping]);
-
-  useEffect(() => {
-    if (userTyping) return;
-    const name = NAMES[nameIndex];
-    let i = 0; setDisplayed('');
-    animRef.current = setInterval(() => {
-      setDisplayed(name.slice(0, i + 1));
-      typeClick(); i++;
-      if (i >= name.length) {
-        clearInterval(animRef.current);
-        if (nameIndex < NAMES.length - 1) {
-          setTimeout(() => {
-            let d = name.length;
-            deleteRef.current = setInterval(() => {
-              setDisplayed(name.slice(0, d - 1));
-              typeClick(); d--;
-              if (d <= 0) { clearInterval(deleteRef.current); setNameIndex(n => n + 1); }
-            }, 55);
-          }, 1100);
-        } else setSettled(true);
-      }
-    }, 95);
-    return () => { clearInterval(animRef.current); clearInterval(deleteRef.current); };
-  }, [nameIndex, userTyping]);
-
-  return (
-    <section className="hero-section">
-      <div ref={heroRef} className="hero-inner" style={{ opacity: 0 }}>
-        <div className="hero-greeting">
-          <span className="hero-hi">Hi, I'm </span>
-          <span className="hero-name-type">
-            {displayed}
-            <span className="hero-caret" style={{ opacity: caretVisible ? 1 : 0 }}>_</span>
-          </span>
-          <span className="hero-boye"> Boye</span>
-        </div>
-        {(userTyping || settled) && (
-          <div className="hero-hint">
-            {userTyping
-              ? "— type freely · type 'poster' + enter for something_"
-              : '— click anywhere and type something_'
-            }
-          </div>
-        )}
-        <div className="hero-sub">
-          <span className="hero-tag">Design Engineer</span>
-          <span className="hero-tag">Artist</span>
-          <span className="hero-tag">Creative</span>
-        </div>
-      </div>
-      <div className="hero-scroll-hint">scroll_</div>
-    </section>
-  );
+  return typed;
 }
 
-//sticky note board
-const EASTER_EGGS = [
-  { id: 'eg-gh', type: 'sticker', content: '🇬🇭', label: 'Ghana', x: 8,  y: 12, rotation: -8,  size: 'lg' },
-  { id: 'eg-kr', type: 'sticker', content: '🇰🇷', label: '한국',   x: 82, y: 8,  rotation: 6,   size: 'lg' },
-  { id: 'eg-gb', type: 'sticker', content: '🇬🇧', label: 'UK',     x: 55, y: 72, rotation: -4,  size: 'md' },
-  { id: 'eg-us', type: 'sticker', content: '🇺🇸', label: 'DC',     x: 18, y: 68, rotation: 5,   size: 'md' },
-  { id: 'eg-n1', type: 'prewritten', content: "if you found this\nyou're curious enough\n— that's good", x: 72, y: 35, rotation: -6, bg: '#F5F2EC' },
-  { id: 'eg-n2', type: 'prewritten', content: 'Tema → DC\nquite the journey',                           x: 35, y: 15, rotation: 3,  bg: '#fff'    },
-  { id: 'eg-n3', type: 'prewritten', content: '글씨를 쓰다\n그림을 그리다\n음악을 만들다',               x: 6,  y: 38, rotation: -3, bg: '#fff'    },
+// poster board — four decorative seed notes (client-only, matches the
+// handoff's SEED array) plus live public notes backed by Supabase.
+const SEED_NOTES = [
+  { id: 'n1', content: "if you found this\nyou're curious enough\n— that's good", author: 'maelo', x: 62, y: 18, r: -6 },
+  { id: 'n2', content: 'Tema → DC\nquite the journey', author: 'maelo', x: 20, y: 12, r: 3 },
+  { id: 'n3', content: '글씨를 쓰다\n그림을 그리다\n음악을 만들다', author: 'maelo', x: 8, y: 52, r: -3 },
+  { id: 'n4', content: 'embarrassment is an\nunderexplored emotion', author: 'unknown', x: 44, y: 58, r: 5 },
 ];
 
-function StickyNote({ note, onDragEnd }) {
+function PosterNote({ id, content, author, x, y, r, onDragEnd }) {
   const ref = useRef(null);
-  const drag = useRef(null);
 
   function onMouseDown(e) {
     e.preventDefault();
-    drag.current = { startX: e.clientX, startY: e.clientY, origX: note.x, origY: note.y };
-    ref.current.style.zIndex = 1000;
-
-    function onMove(e) {
-      if (!drag.current) return;
-      const dx = ((e.clientX - drag.current.startX) / window.innerWidth) * 100;
-      const dy = ((e.clientY - drag.current.startY) / window.innerHeight) * 100;
-      ref.current.style.left = Math.max(0, Math.min(88, drag.current.origX + dx)) + '%';
-      ref.current.style.top  = Math.max(0, Math.min(82, drag.current.origY + dy)) + '%';
+    const box = ref.current.parentElement.getBoundingClientRect();
+    ref.current.style.zIndex = 50;
+    function move(ev) {
+      const nx = Math.max(0, Math.min(84, ((ev.clientX - box.left) / box.width) * 100 - 6));
+      const ny = Math.max(0, Math.min(76, ((ev.clientY - box.top) / box.height) * 100 - 4));
+      ref.current.style.left = nx + '%';
+      ref.current.style.top = ny + '%';
+      ref.current._pending = { x: nx, y: ny };
     }
-    function onUp(e) {
-      if (!drag.current) return;
-      const dx = ((e.clientX - drag.current.startX) / window.innerWidth) * 100;
-      const dy = ((e.clientY - drag.current.startY) / window.innerHeight) * 100;
-      onDragEnd(note.id,
-        Math.max(0, Math.min(88, drag.current.origX + dx)),
-        Math.max(0, Math.min(82, drag.current.origY + dy))
-      );
-      ref.current.style.zIndex = 10;
-      drag.current = null;
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onUp);
+    function up() {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+      if (ref.current._pending) onDragEnd(id, ref.current._pending.x, ref.current._pending.y);
     }
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
   }
 
-  if (note.type === 'sticker') {
-    return (
-      <div ref={ref} className={`sticker sticker-${note.size}`}
-        style={{ left: note.x + '%', top: note.y + '%', transform: `rotate(${note.rotation}deg)` }}
-        onMouseDown={onMouseDown}>
-        <span className="sticker-flag">{note.content}</span>
-        <span className="sticker-label">{note.label}</span>
-      </div>
-    );
-  }
   return (
-    <div ref={ref}
-      className={`sticky-note ${note.type === 'prewritten' ? 'prewritten' : ''}`}
-      style={{ left: note.x + '%', top: note.y + '%', transform: `rotate(${note.rotation || 0}deg)`, background: note.bg || '#fff' }}
-      onMouseDown={onMouseDown}>
-      <div className="note-content">{note.content}</div>
-      {note.author && <div className="note-author">— {note.author}</div>}
+    <div ref={ref} onMouseDown={onMouseDown}
+      style={{ position: 'absolute', left: x + '%', top: y + '%', transform: `rotate(${r}deg)`, width: 210, padding: 16, background: '#f7f5ef', borderRadius: 2, boxShadow: '0 6px 18px rgba(0,0,0,.4)', cursor: 'grab', userSelect: 'none' }}>
+      <div style={{ font: "400 21px/1.35 'Caveat',cursive", color: '#201f1d', whiteSpace: 'pre-line' }}>{content}</div>
+      <div style={{ font: '400 11px/1 ui-monospace,Menlo,monospace', letterSpacing: '.1em', color: 'rgba(32,31,29,.45)', paddingTop: 8 }}>— {author}</div>
     </div>
   );
 }
 
-function StickyBoard({ onClose }) {
-  const boardRef = useRef(null);
+function PosterBoard({ onClose }) {
+  const [seedPos, setSeedPos] = useState({});
   const [notes, setNotes] = useState([]);
-  const [eggPos, setEggPos] = useState({});
-  const [showForm, setShowForm] = useState(false);
-  const [msg, setMsg] = useState('');
-  const [name, setName] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [draft, setDraft] = useState('');
+  const [who, setWho] = useState('');
   const [posting, setPosting] = useState(false);
-  const [err, setErr] = useState(null);
 
   useEffect(() => {
-    gsap.fromTo(boardRef.current,
-      { x: '100%' },
-      { x: '0%', duration: 0.6, ease: 'power3.out' }
-    );
-    function onKey(e) { if (e.key === 'Escape') handleClose(); }
-    window.addEventListener('keydown', onKey);
-    loadNotes();
-    return () => window.removeEventListener('keydown', onKey);
+    (async () => {
+      try {
+        const data = await dbFetch('notes?select=*&order=created_at.asc');
+        setNotes(data || []);
+      } catch { /* board still shows the seed notes */ }
+    })();
   }, []);
 
-  async function loadNotes() {
-    try {
-      setLoading(true);
-      const data = await dbFetch('notes?select=*&order=created_at.asc');
-      setNotes(data || []);
-    } catch { setErr('could not load notes_'); }
-    finally { setLoading(false); }
+  function seedDragEnd(id, x, y) {
+    setSeedPos(p => ({ ...p, [id]: { x, y } }));
   }
 
-  function handleClose() {
-    gsap.to(boardRef.current, { x: '100%', duration: 0.5, ease: 'power3.in', onComplete: onClose });
+  async function liveDragEnd(id, x, y) {
+    setNotes(p => p.map(n => n.id === id ? { ...n, x, y } : n));
+    try { await dbFetch(`notes?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ x, y }) }); } catch { /* best effort */ }
   }
 
   async function addNote() {
-    if (!msg.trim() || !name.trim()) return;
+    const content = draft.trim();
+    if (!content || posting) return;
     setPosting(true);
     try {
       const note = {
-        content: msg.trim(), author: name.trim(),
-        x: 20 + Math.random() * 45, y: 20 + Math.random() * 45,
-        rotation: Math.random() * 16 - 8,
-        bg: Math.random() > 0.5 ? '#ffffff' : '#F5F2EC',
+        content, author: who.trim() || 'anon',
+        x: 24 + Math.random() * 42, y: 20 + Math.random() * 42,
+        rotation: Math.random() * 12 - 6,
       };
       const res = await dbFetch('notes', { method: 'POST', body: JSON.stringify(note) });
       if (res) setNotes(p => [...p, Array.isArray(res) ? res[0] : res]);
-      setMsg(''); setName(''); setShowForm(false);
-    } catch { setErr('could not post — try again_'); }
+      setDraft(''); setWho('');
+    } catch { /* leave draft in place so the visitor can retry */ }
     finally { setPosting(false); }
   }
 
-  async function handleDragEnd(id, x, y) {
-    if (EASTER_EGGS.find(e => e.id === id)) {
-      setEggPos(p => ({ ...p, [id]: { x, y } }));
-      return;
-    }
-    setNotes(p => p.map(n => n.id === id ? { ...n, x, y } : n));
-    try { await dbFetch(`notes?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ x, y }) }); } catch {}
-  }
-
-  const eggs = EASTER_EGGS.map(e => ({ ...e, ...(eggPos[e.id] || {}) }));
-
   return (
-    <div ref={boardRef} className="board-overlay" style={{ transform: 'translateX(100%)' }}>
-      <div className="board-header">
-        <div className="board-header-left">
-          <span className="board-title">poster_board</span>
-          <span className="board-sub">a public wall · leave something behind</span>
-        </div>
-        <div className="board-header-right">
-          <span className="board-count">{notes.length} notes_</span>
-          <button className="board-add-btn" onClick={() => setShowForm(s => !s)}>
-            {showForm ? '× cancel_' : '+ add note_'}
-          </button>
-          <button className="board-close" onClick={handleClose}>✕ esc_</button>
-        </div>
+    <div className="ms-board">
+      <div className="ms-board-header">
+        <span className="ms-board-title">POSTER_BOARD — A PUBLIC WALL · LEAVE SOMETHING BEHIND</span>
+        <span className="ms-board-close" onClick={onClose}>✕ ESC_</span>
       </div>
-
-      {showForm && (
-        <div className="board-form">
-          <div className="board-form-inner">
-            {err && <div className="board-error">{err}</div>}
-            <textarea className="board-form-msg" placeholder="say something..."
-              value={msg} onChange={e => setMsg(e.target.value)} maxLength={200} autoFocus rows={4} />
-            <div className="board-form-bottom">
-              <input className="board-form-name" placeholder="your name_"
-                value={name} onChange={e => setName(e.target.value)} maxLength={40}
-                onKeyDown={e => e.key === 'Enter' && addNote()} />
-              <button className="board-form-submit" onClick={addNote}
-                disabled={!msg.trim() || !name.trim() || posting}>
-                {posting ? 'posting...' : 'post it_ →'}
-              </button>
-            </div>
-            <div className="board-form-hint">visible to everyone · drag to place after posting</div>
-          </div>
-        </div>
-      )}
-
-      <div className="board-canvas">
-        <div className="board-grid" />
-        {loading && <div className="board-loading">loading notes_</div>}
-        {eggs.map(n => <StickyNote key={n.id} note={n} onDragEnd={handleDragEnd} />)}
-        {notes.map(n => <StickyNote key={n.id} note={n} onDragEnd={handleDragEnd} />)}
-        <div className="board-corner board-corner-tl">maehlo · poster board</div>
-        <div className="board-corner board-corner-tr">drag to rearrange_</div>
-        <div className="board-corner board-corner-bl">38.9°N 77.0°W</div>
-        <div className="board-corner board-corner-br">Tema → DC</div>
+      <div className="ms-board-canvas">
+        {SEED_NOTES.map(n => (
+          <PosterNote key={n.id} {...{ ...n, ...(seedPos[n.id] || {}) }} onDragEnd={seedDragEnd} />
+        ))}
+        {notes.map(n => (
+          <PosterNote key={n.id} id={n.id} content={n.content} author={n.author} x={n.x} y={n.y} r={n.rotation} onDragEnd={liveDragEnd} />
+        ))}
+        <div className="ms-board-corner">TEMA → DC · DRAG TO REARRANGE_</div>
       </div>
-
-      <div className="board-footer">
-        <span>shared public board · supabase_</span>
-        <span>malvinboye@gmail.com</span>
-        <span>esc to close_</span>
+      <div className="ms-board-footer">
+        <input className="ms-board-input" value={draft} onChange={e => setDraft(e.target.value)}
+          placeholder="say something…" maxLength={200} onKeyDown={e => e.key === 'Enter' && addNote()} />
+        <input className="ms-board-name" value={who} onChange={e => setWho(e.target.value)}
+          placeholder="your name_" maxLength={40} onKeyDown={e => e.key === 'Enter' && addNote()} />
+        <button className="ms-board-pin" onClick={addNote} disabled={!draft.trim() || posting}>
+          {posting ? 'pinning…' : 'PIN IT_ →'}
+        </button>
       </div>
     </div>
   );
 }
 
-//cursor media that follows the mouse and shows project images on hover
-function CursorMedia({ img, visible }) {
-  const ref = useRef(null);
-  const mouse = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-  const pos   = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-  const raf   = useRef(null);
-
-  useEffect(() => {
-    function onMove(e) { mouse.current = { x: e.clientX, y: e.clientY }; }
-    window.addEventListener('mousemove', onMove);
-    return () => window.removeEventListener('mousemove', onMove);
-  }, []);
-
-  useEffect(() => {
-    function loop() {
-      pos.current.x += (mouse.current.x - pos.current.x) * 0.1;
-      pos.current.y += (mouse.current.y - pos.current.y) * 0.1;
-      if (ref.current) {
-        ref.current.style.left = pos.current.x + 'px';
-        ref.current.style.top  = pos.current.y + 'px';
-      }
-      raf.current = requestAnimationFrame(loop);
-    }
-    raf.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf.current);
-  }, []);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    gsap.to(ref.current, { opacity: visible ? 1 : 0, scale: visible ? 1 : 0.88, duration: visible ? 0.3 : 0.18 });
-  }, [visible]);
-
-  return (
-    <div ref={ref} className="cursor-media">
-      {img ? <img src={img} alt="" className="cursor-media-img" /> : <div className="cursor-media-placeholder" />}
-    </div>
-  );
-}
-
-// featured projects list on the main page
-const FEATURED = [
-  { id: '001', title: 'Manageable', category: 'Design Engineering · Product', year: '2025', img: null },
-  { id: '002', title: 'DormDrop',   category: 'UI/UX · Frontend',             year: '2024', img: null },
-  { id: '003', title: 'Connect',    category: 'Full-Stack · Ethical Design',  year: '2026', img: null },
-  { id: '004', title: 'EV Mart POS',category: 'UX Research · Systems',        year: '2022', img: null },
-  { id: '005', title: 'Kase',       category: 'AI · Language · UX',           year: '2024', img: null },
+// selected work
+const WORK = [
+  { id: '001', title: 'Stuff', cat: 'ADHD grocery app · research → UI → the whole file', year: '2026', href: '/work/stuff', img: bagJala, cap: 'a grocery app for a brain that wanders' },
+  { id: '002', title: 'Maable', cat: 'Design Engineering · Product · live', year: '2026', href: '/work/maable', img: manageable1, cap: 'productivity that pays you back' },
+  { id: '003', title: 'DormDrop', cat: 'UI/UX · Frontend', year: '2024', href: '/projects', img: dormdrop1, cap: 'campus delivery, minus the chaos' },
+  { id: '004', title: 'Connect', cat: 'Full-Stack · Ethical Design', year: '2026', href: '/projects', img: connect1, cap: 'social, with a conscience' },
+  { id: '005', title: 'EV Mart POS', cat: 'UX Research · Systems', year: '2022', href: '/projects', img: null, cap: 'a till that cashiers stopped cursing at' },
+  { id: '006', title: 'Kase', cat: 'AI · Language · UX', year: '2024', href: '/projects', img: null, cap: 'language practice that talks back' },
 ];
 
-function FeaturedProjects({ onNavigate }) {
-  const [hovered, setHovered] = useState(null);
-  const headerRef = useRef(null);
-  useReveal(headerRef, { y: 24, duration: 0.6 });
+const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)");
+const kickerDark = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:#b68235");
 
-  const hoveredProject = FEATURED.find(p => p.id === hovered);
-
-  return (
-    <section className="featured-section">
-      <CursorMedia img={hoveredProject?.img} visible={!!hovered} />
-
-      <div className="featured-header" ref={headerRef} style={{ opacity: 0 }}>
-        <span className="featured-label">selected work_</span>
-        <button className="featured-all" onClick={onNavigate}>view all →</button>
-      </div>
-
-      <ul className="featured-list">
-        {FEATURED.map((p, i) => {
-          const rowRef = useRef(null);
-          useEffect(() => {
-            if (!rowRef.current) return;
-            gsap.fromTo(rowRef.current,
-              { opacity: 0, x: -18 },
-              { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out',
-                scrollTrigger: { trigger: rowRef.current, start: 'top 88%' } }
-            );
-          }, []);
-          return (
-            <li key={p.id} ref={rowRef}
-              className={`featured-row ${hovered === p.id ? 'hovered' : ''}`}
-              style={{ opacity: 0 }}
-              onMouseEnter={() => setHovered(p.id)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={onNavigate}>
-              <span className="f-id">{p.id}</span>
-              <span className="f-title">{p.title}</span>
-              <span className="f-category">{p.category}</span>
-              <span className="f-year">{p.year}</span>
-              <span className="f-arrow">→</span>
-              <div className="f-line" />
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}
-
-// main site component that brings everything together
 export default function MainSite() {
-  const navigate = useNavigate();
-  const [showBoard, setShowBoard] = useState(false);
-  const { transitionTo, Curtain } = usePageTransition();
+  const [boardOpen, setBoardOpen] = useState(false);
+  const [hoverId, setHoverId] = useState(null);
+  const typed = useTypewriter();
+  const keysRef = useRef('');
 
-  const handlePosterTrigger = useCallback(() => setShowBoard(true), []);
-  function goToProjects() { transitionTo(() => navigate('/projects')); }
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'Escape') { setBoardOpen(false); return; }
+      if (e.key && e.key.length === 1) {
+        keysRef.current = (keysRef.current + e.key.toLowerCase()).slice(-6);
+        if (keysRef.current === 'poster') setBoardOpen(true);
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
-  // Section refs for scroll reveal
-  const statementRef  = useRef(null);
-  const originRef     = useRef(null);
-  const bioRef        = useRef(null);
-  const interestsRef  = useRef(null);
-  const langRef       = useRef(null);
-  const quoteRef      = useRef(null);
-  const ytRef         = useRef(null);
-  const contactRef    = useRef(null);
-
-  useReveal(statementRef,  { y: 50, duration: 1 });
-  useReveal(originRef,     { y: 30 });
-  useReveal(bioRef,        { y: 30, duration: 0.9 });
-  useReveal(interestsRef,  { y: 40 });
-  useReveal(langRef,       { y: 30 });
-  useReveal(quoteRef,      { y: 60, duration: 1.1 });
-  useReveal(ytRef,         { y: 30 });
-  useReveal(contactRef,    { y: 40 });
+  const hovered = WORK.find(p => p.id === hoverId);
 
   return (
-    <div className="main-site">
-      <Curtain />
-      {showBoard && <StickyBoard onClose={() => setShowBoard(false)} />}
+    <div className="main-site" style={{ position: 'relative', minHeight: '100vh', background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply' }}>
 
       {/* TOP BAR */}
-      <header className="top-bar">
-        <div className="top-bar-left">
-          <span className="top-dot">●</span>
-          <span>Washington, DC</span>
-          <span><LiveClock /></span>
-          <span className="top-coords">38.9°N 77.0°W</span>
+      <div className="ms-topbar">
+        <div className="ms-topbar-left">
+          <span style={{ color: '#c8402c' }}>●</span><span>WASHINGTON, DC</span><span><LiveClock /></span>
+          <span className="ms-topbar-coords">38.9°N 77.0°W</span>
         </div>
-        <nav className="top-nav">
-          <button onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>about_</button>
-          <button onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}>work_</button>
-          <button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>contact_</button>
-        </nav>
-      </header>
+        <div className="ms-topbar-right">
+          <a href="#about">about_</a><a href="#work">work_</a><a href="#contact">contact_</a>
+        </div>
+      </div>
 
       {/* HERO */}
-      <TypewriterHero onPosterTrigger={handlePosterTrigger} />
-
-      {/* STATEMENT */}
-      <section className="statement-section" id="about">
-        <div ref={statementRef} className="statement-text" style={{ opacity: 0 }}>
-          <span className="statement-line">Life.</span>
-          <span className="statement-line">People.</span>
-          <span className="statement-line">Art.</span>
+      <section style={css("min-height:100vh;display:grid;grid-template-columns:1fr;align-content:center;gap:0;padding:120px 7vw 60px;position:relative")}>
+        <div style={css("display:flex;align-items:baseline;gap:14px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.22em;color:rgba(32,31,29,.5);text-transform:uppercase")}>
+          <span>Session #01</span><span style={{ flex: 1, height: 1, background: 'rgba(32,31,29,.2)' }}></span><span>see you space cowboy…</span>
         </div>
-        <p className="statement-sub">— me and my interest in a nutshell</p>
+        <h1 style={css("margin:26px 0 0;font:300 clamp(58px,10.5vw,148px)/.92 'Cormorant Garamond',serif;letter-spacing:-.015em")}>
+          <span style={css("display:block;font:400 clamp(16px,1.6vw,20px)/1 'Lora',serif;letter-spacing:.02em;color:rgba(32,31,29,.6);margin-bottom:14px")}>Hi, I'm</span>
+          <span>{typed}</span><span className="ms-caret">_</span>
+          <span style={{ display: 'block', color: 'rgba(32,31,29,.42)' }}>Boye</span>
+        </h1>
+        <div style={css("display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:34px")}>
+          <span style={css("font:400 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border:1px solid rgba(32,31,29,.28);border-radius:4px")}>Design Engineer</span>
+          <span style={css("font:400 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border:1px solid rgba(32,31,29,.28);border-radius:4px")}>Artist</span>
+          <span style={css("font:400 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border:1px solid rgba(32,31,29,.28);border-radius:4px")}>Creative</span>
+          <span style={css("font:400 22px/1 'Caveat',cursive;color:#8a6224;margin-left:6px")}>…and whatever this week demands</span>
+        </div>
+        <div className="ms-poster-prompt" onClick={() => setBoardOpen(true)}
+          style={css("cursor:pointer;margin-top:46px;display:inline-flex;align-items:center;gap:10px;font:400 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;color:rgba(32,31,29,.55);width:fit-content")}>
+          <span>type "poster" anywhere, or click here</span><span>→</span>
+        </div>
+        <div style={css("position:absolute;left:7vw;bottom:34px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.4)")}>SCROLL_</div>
+      </section>
+
+      {/* LIFE PEOPLE ART */}
+      <section id="about" style={css("border-top:1px solid rgba(32,31,29,.14);padding:96px 7vw;display:grid;grid-template-columns:minmax(0,1fr);gap:12px")}>
+        <div style={css("display:flex;flex-wrap:wrap;align-items:baseline;gap:clamp(20px,5vw,72px);font:300 clamp(52px,9vw,124px)/1 'Cormorant Garamond',serif")}>
+          <span>Life.</span><span>People.</span><span style={{ color: '#c8402c' }}>Art.</span>
+        </div>
+        <p style={css("margin:8px 0 0;font:400 24px/1.3 'Caveat',cursive;color:rgba(32,31,29,.6)")}>— me and my interests in a nutshell</p>
       </section>
 
       {/* ORIGIN */}
-      <section className="origin-section">
-        <div ref={originRef} className="origin-inner" style={{ opacity: 0 }}>
-          <div className="origin-label">origin_</div>
-          <div className="origin-text">
-            <span className="origin-place">Tema, Ghana</span>
-            <span className="origin-arrow">→</span>
-            <span className="origin-place">Washington DC</span>
-          </div>
-          <p className="origin-sub">Raised in different places. Tema would always be home.</p>
+      <section style={css("position:relative;background:#14130f;color:#efece4;padding:88px 7vw;overflow:hidden")}>
+        <div style={css("position:absolute;right:4vw;top:-24px;font:300 260px/1 'Cormorant Garamond',serif;color:rgba(182,130,53,.14);font-variant-numeric:tabular-nums;pointer-events:none")}>01</div>
+        <div style={{ position: 'relative', ...kickerDark }}>ORIGIN_</div>
+        <div style={css("position:relative;display:flex;flex-wrap:wrap;align-items:baseline;gap:22px;margin-top:20px;font:300 clamp(38px,6.4vw,86px)/1.05 'Cormorant Garamond',serif")}>
+          <span>Tema, Ghana</span><span style={{ color: '#b68235' }}>→</span><span>Washington DC</span>
         </div>
+        <p style={css("max-width:52ch;margin:24px 0 0;font:400 17px/1.7 'Lora',serif;color:rgba(239,236,228,.72)")}>Raised in a few different places. Tema would always be home.</p>
       </section>
 
-      {/* BIO */}
-      <section className="bio-section">
-        <div ref={bioRef} className="bio-inner" style={{ opacity: 0 }}>
-          <div className="bio-num">01_</div>
-          <div className="bio-content">
-            <p className="bio-text">Someone who loves people, loves new experiences, and loves being put outside of his comfort zone to get to know even smallest spec of knowledge.</p>
-            <p className="bio-text">I love to call myself a creative....started drawing around age three and got into playing a couple instruments around that time. Art is just something that has been with me from the beginning.</p>
-            <p className="bio-text">Now building things that sit at the edge of design and engineering. Making work that feels like something rather than just functioning.</p>
+      {/* THE PERSON */}
+      <section style={css("padding:96px 7vw;border-bottom:1px solid rgba(32,31,29,.14)")}>
+        <div className="ms-person-grid">
+          <div className="ms-person-label" style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)")}>02_ THE PERSON</div>
+          <div style={css("display:grid;gap:22px;max-width:62ch")}>
+            <p style={css("margin:0;font:400 clamp(19px,2vw,23px)/1.65 'Lora',serif;text-align:justify;text-wrap:pretty")}>Someone who loves people, loves new experiences, and loves being put outside his comfort zone for the smallest speck of knowledge.</p>
+            <p style={css("margin:0;font:400 17px/1.75 'Lora',serif;text-align:justify;color:rgba(32,31,29,.82);text-wrap:pretty")}>I call myself a creative and I have the receipts: started drawing around age three, picked up a couple of instruments not long after. Art has been sitting next to me the whole time, occasionally paying rent.</p>
+            <p style={css("margin:0;font:400 17px/1.75 'Lora',serif;text-align:justify;color:rgba(32,31,29,.82);text-wrap:pretty")}>Now I build things at the edge of design and engineering — work that feels like something rather than merely functioning. Research, interface, motion, and the odd hand-drawn asset when a stock icon would be a lie.</p>
+            <div style={css("display:flex;gap:14px;align-items:flex-start;padding-top:6px")}>
+              <span style={{ flex: 'none', width: 34, height: 1, background: '#b68235', marginTop: 16 }}></span>
+              <span style={css("font:400 23px/1.35 'Caveat',cursive;color:#8a6224")}>the drawings on this site are mine. so are the typos, probably.</span>
+            </div>
           </div>
         </div>
       </section>
 
       {/* MARQUEE */}
-      <div ref={interestsRef} style={{ opacity: 0 }}>
-        <Marquee dark items={['Drawing','Poetry','Music','Piano','Drums','Film','Videography','Cinematography','Languages','Korean Cinema','Architecture','Motion Design']} />
-      </div>
+      <Marquee />
 
-      {/* LANGUAGE */}
-      <section className="lang-section">
-        <div ref={langRef} className="lang-inner" style={{ opacity: 0 }}>
-          <div className="lang-label">languages_</div>
-          <div className="lang-list">
-            <div className="lang-item">
-              <span className="lang-name">English</span>
-              <span className="lang-note">native</span>
-            </div>
-            <div className="lang-item">
-              <span className="lang-name">한국어</span>
-              <span className="lang-note">fluent(conversational) — self-taught through cinema</span>
-            </div>
-            <div className="lang-item">
-              <span className="lang-name">Spanish, French</span>
-              <span className="lang-note">fluency---- yeah still in progress on these ones</span>
-            </div>
-          </div>
-          <p className="lang-story">Funny enough took french basically my entire life, but cant speak it to save my life</p>
+      {/* SELECTED WORK */}
+      <section id="work" style={css("padding:96px 7vw 40px")}>
+        <div style={css("display:flex;align-items:baseline;justify-content:space-between;gap:20px;border-bottom:1px solid rgba(32,31,29,.2);padding-bottom:14px")}>
+          <span style={kicker}>SELECTED WORK_</span>
+          <span style={css("font:400 20px/1 'Caveat',cursive;color:rgba(32,31,29,.5)")}>hover for a peek</span>
         </div>
+        <div style={{ display: 'grid' }}>
+          {WORK.map(p => (
+            <Link key={p.id} to={p.href}
+              onMouseEnter={() => setHoverId(p.id)} onMouseLeave={() => setHoverId(null)}
+              className="ms-work-row">
+              <span className="ms-work-id">{p.id}</span>
+              <span className="ms-work-title">{p.title}</span>
+              <span className="ms-work-cat">{p.cat}</span>
+              <span className="ms-work-year">{p.year}</span>
+              <span className="ms-work-arrow">→</span>
+            </Link>
+          ))}
+        </div>
+        <p style={css("margin:18px 0 0;font:400 21px/1.4 'Caveat',cursive;color:rgba(32,31,29,.55)")}>Stuff has the whole working file attached — research, screens, dead ends and all. Maable is live, go break it.</p>
+      </section>
+
+      {/* LANGUAGES */}
+      <section style={css("background:#14130f;color:#efece4;padding:92px 7vw;display:grid;gap:34px")}>
+        <div style={kickerDark}>LANGUAGES_</div>
+        <div style={{ display: 'grid', gap: 0 }}>
+          <div className="ms-lang-row">
+            <span style={css("font:300 clamp(30px,4vw,52px)/1 'Cormorant Garamond',serif")}>English</span>
+            <span style={css("font:400 15px/1.4 'Lora',serif;color:rgba(239,236,228,.6)")}>native</span>
+          </div>
+          <div className="ms-lang-row">
+            <span style={css("font:300 clamp(30px,4vw,52px)/1 'Cormorant Garamond',serif")}>한국어</span>
+            <span style={css("font:400 15px/1.4 'Lora',serif;color:rgba(239,236,228,.6)")}>conversational — self-taught through cinema</span>
+          </div>
+          <div className="ms-lang-row" style={{ borderBottom: 'none' }}>
+            <span style={css("font:300 clamp(30px,4vw,52px)/1 'Cormorant Garamond',serif")}>Spanish, French</span>
+            <span style={css("font:400 15px/1.4 'Lora',serif;color:rgba(239,236,228,.6)")}>in progress, indefinitely</span>
+          </div>
+        </div>
+        <p style={css("margin:0;font:400 24px/1.4 'Caveat',cursive;color:#b68235")}>took French basically my entire life and still can't speak it to save my life.</p>
       </section>
 
       {/* QUOTE */}
-      <section className="quote-section">
-        <div ref={quoteRef} className="quote-inner" style={{ opacity: 0 }}>
-          <div className="quote-mark">"</div>
-          <p className="quote-text">Embarrassment is an underexplored emotion.</p>
-          <div className="quote-attr">—unknown(my favourite quote)</div>
-        </div>
+      <section style={css("padding:110px 7vw;display:grid;justify-items:center;text-align:center;gap:14px")}>
+        <div style={css("font:300 92px/1 'Cormorant Garamond',serif;color:#b68235")}>&ldquo;</div>
+        <p style={css("margin:0;max-width:20ch;font:300 clamp(36px,5.4vw,72px)/1.12 'Cormorant Garamond',serif;text-wrap:balance")}>Embarrassment is an underexplored emotion.</p>
+        <div style={css("font:400 13px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(32,31,29,.5)")}>— UNKNOWN (MY FAVOURITE)</div>
       </section>
 
       {/* YOUTUBE */}
-      <section className="yt-section">
-        <div ref={ytRef} className="yt-inner" style={{ opacity: 0 }}>
-          <div className="yt-label">youtube_</div>
-          <div className="yt-content">
-            <p className="yt-desc">A public gallery. Life and progress documented with a twist. Everything is spoken in a language I recently found myself immersed in.</p>
-            <a href="https://youtube.com/@maehlo" target="_blank" rel="noopener noreferrer" className="yt-link">youtube.com/@maehlo ↗</a>
+      <section style={css("padding:0 7vw 96px")}>
+        <div className="ms-yt-card">
+          <div style={{ display: 'grid', gap: 12 }}>
+            <span style={kicker}>YOUTUBE_</span>
+            <p style={css("margin:0;font:400 17px/1.7 'Lora',serif;color:rgba(32,31,29,.82);max-width:46ch;text-wrap:pretty")}>A public gallery. Life and progress documented with a twist — spoken entirely in a language I recently threw myself into.</p>
           </div>
+          <a href="https://youtube.com/@maehlo" target="_blank" rel="noopener noreferrer"
+            style={css("justify-self:start;font:300 clamp(28px,3.6vw,44px)/1 'Cormorant Garamond',serif;border-bottom:1px solid #b68235;padding-bottom:6px")}>youtube.com/@maehlo ↗</a>
         </div>
-      </section>
-
-      {/* WORK */}
-      <section id="work" className="work-section">
-        <FeaturedProjects onNavigate={goToProjects} />
       </section>
 
       {/* CONTACT */}
-      <section id="contact" className="contact-section">
-        <div ref={contactRef} className="contact-inner" style={{ opacity: 0 }}>
-          <div className="contact-label">let's talk_</div>
-          <a href="mailto:malvinboye@gmail.com" className="contact-email">malvinboye@gmail.com</a>
-          <div className="contact-links">
-            <a href="https://youtube.com/@maehlo" target="_blank" rel="noopener noreferrer">YouTube ↗</a>
-            <a href="https://instagram.com/pseudo.sq" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
-            <a href="https://github.com/MalvinBoye" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-          </div>
-          <p className="contact-note">Open to internships, collaborations, and interesting problems. Based in Washington DC.</p>
+      <section id="contact" style={css("background:#14130f;color:#efece4;padding:100px 7vw 34px;display:grid;gap:26px")}>
+        <div style={kickerDark}>LET'S TALK_</div>
+        <a href="mailto:malvinboye@gmail.com" className="ms-email"
+          style={css("font:300 clamp(34px,6.6vw,92px)/1 'Cormorant Garamond',serif;color:#efece4;border-bottom:1px solid rgba(182,130,53,.6);padding-bottom:10px;justify-self:start")}>malvinboye@gmail.com</a>
+        <div style={css("display:flex;flex-wrap:wrap;gap:26px;font:400 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em")}>
+          <a href="https://youtube.com/@maehlo" target="_blank" rel="noopener noreferrer" className="ms-social">YOUTUBE ↗</a>
+          <a href="https://instagram.com/pseudo.sq" target="_blank" rel="noopener noreferrer" className="ms-social">INSTAGRAM ↗</a>
+          <a href="https://github.com/MalvinBoye" target="_blank" rel="noopener noreferrer" className="ms-social">GITHUB ↗</a>
         </div>
-        <div className="contact-footer">
-          <span>Malvin Boye © 2026</span>
-          <span>Circée · maehlo.com</span>
-          <span>38.9°N 77.0°W</span>
+        <p style={css("margin:0;max-width:54ch;font:400 16px/1.7 'Lora',serif;color:rgba(239,236,228,.66)")}>Open to internships, collaborations, and problems that don't have an obvious shape yet. Based in Washington DC.</p>
+        <div style={css("display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;border-top:1px solid rgba(239,236,228,.18);padding-top:18px;margin-top:40px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:rgba(239,236,228,.45)")}>
+          <span>MALVIN BOYE © 2026</span><span>SEE YOU SPACE COWBOY…</span><span>MAEHLO.COM</span>
         </div>
       </section>
+
+      {/* HOVER PREVIEW */}
+      {hovered && hovered.img && (
+        <div className="ms-hover-preview">
+          <div style={{ display: 'block', width: 300, height: 200, background: `#e6e2d8 url(${hovered.img}) center/cover no-repeat`, filter: 'sepia(.14)' }}></div>
+          <div style={css("font:400 19px/1.2 'Caveat',cursive;color:rgba(32,31,29,.6);padding-top:8px")}>{hovered.cap}</div>
+        </div>
+      )}
+
+      {/* POSTER BOARD */}
+      {boardOpen && <PosterBoard onClose={() => setBoardOpen(false)} />}
+
     </div>
   );
 }

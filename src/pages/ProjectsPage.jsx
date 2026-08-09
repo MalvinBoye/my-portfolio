@@ -65,7 +65,7 @@ const PROJECTS = [
       'Lock-In Mode adopted as primary focus tool — distraction-free with progress tracking',
     ],
     tools: ['React', 'Node.js', 'Canvas API', 'Flask', 'JavaScript', 'Figma', 'Motion Design'],
-    link: null, caseStudy: '/case-study/maable', img: null, images: [manageable1, manageable2, manageable3],
+    link: null, caseStudy: '/work/maable', img: null, images: [manageable1, manageable2, manageable3],
   },
   {
     id: '002', title: 'DormDrop',
