@@ -7,6 +7,8 @@ import MainSite from './pages/MainSite';
 import MaableCaseStudy from './pages/MaableCaseStudy';
 import StuffCaseStudy from './pages/StuffCaseStudy';
 import EvMartCaseStudy from './pages/EvMartCaseStudy';
+import DormDropCaseStudy from './pages/DormDropCaseStudy';
+import ConnectCaseStudy from './pages/ConnectCaseStudy';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -115,6 +117,8 @@ function AppContent() {
           <Route path="/work/stuff" element={<StuffCaseStudy />} />
           <Route path="/work/maable" element={<MaableCaseStudy />} />
           <Route path="/work/ev-mart" element={<EvMartCaseStudy />} />
+          <Route path="/work/dormdrop" element={<DormDropCaseStudy />} />
+          <Route path="/work/connect" element={<ConnectCaseStudy />} />
         </Routes>
       )}
     </>

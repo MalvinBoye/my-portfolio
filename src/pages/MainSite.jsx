@@ -213,8 +213,8 @@ function PosterBoard({ onClose }) {
 const WORK = [
   { id: '001', title: 'Stuff', cat: 'ADHD grocery app · research → UI → the whole file', year: '2026', href: '/work/stuff', img: bagJala, cap: 'a grocery app for a brain that wanders' },
   { id: '002', title: 'Maable', cat: 'Design Engineering · Product · live', year: '2026', href: '/work/maable', img: maableDashboard, cap: 'productivity that pays you back' },
-  { id: '003', title: 'DormDrop', cat: 'UI/UX · Frontend', year: '2024', href: null, img: dormdrop1, cap: 'campus delivery, minus the chaos' },
-  { id: '004', title: 'Connect', cat: 'Full-Stack · Ethical Design', year: '2026', href: null, img: connect1, cap: 'social, with a conscience' },
+  { id: '003', title: 'DormDrop', cat: 'UI/UX · Frontend', year: '2024', href: '/work/dormdrop', img: dormdrop1, cap: 'campus delivery, minus the chaos' },
+  { id: '004', title: 'Connect', cat: 'Full-Stack · Ethical Design', year: '2026', href: '/work/connect', img: connect1, cap: 'social, with a conscience' },
   { id: '005', title: 'EV Mart POS', cat: 'UX Research · Systems', year: '2022', href: '/work/ev-mart', img: null, cap: 'a till that cashiers stopped cursing at' },
 ];
 
