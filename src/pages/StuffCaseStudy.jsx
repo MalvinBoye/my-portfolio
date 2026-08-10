@@ -70,7 +70,7 @@ export default function StuffCaseStudy() {
             </div>
           ))}
         </div>
-        <p style={css("margin:0;font:400 25px/1.4 'Caveat',cursive;color:#b68235;max-width:44ch")}>so: make it feel like a scrap of paper, give it a cat with opinions, and pay people for finishing.</p>
+        <p style={css("margin:0;font:400 25px/1.4 'Caveat',cursive;color:#b68235;max-width:44ch")}>so the fix: make it feel like a scrap of paper, give it a cat with opinions, and actually pay people for finishing.</p>
       </section>
 
       {/* THE LANGUAGE */}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './MainSite.css';
 import { css, GRAIN } from '../utils/cssString';
 import bagJala from '../images/bag-jala.png';
-import manageable1 from '../images/manageable-1.png';
+import maableDashboard from '../images/maable-dashboard.png';
 import dormdrop1 from '../images/dormdrop-1.png';
 import connect1 from '../images/connect-1.png';
 
@@ -212,11 +212,10 @@ function PosterBoard({ onClose }) {
 // selected work
 const WORK = [
   { id: '001', title: 'Stuff', cat: 'ADHD grocery app · research → UI → the whole file', year: '2026', href: '/work/stuff', img: bagJala, cap: 'a grocery app for a brain that wanders' },
-  { id: '002', title: 'Maable', cat: 'Design Engineering · Product · live', year: '2026', href: '/work/maable', img: manageable1, cap: 'productivity that pays you back' },
-  { id: '003', title: 'DormDrop', cat: 'UI/UX · Frontend', year: '2024', href: '/projects', img: dormdrop1, cap: 'campus delivery, minus the chaos' },
-  { id: '004', title: 'Connect', cat: 'Full-Stack · Ethical Design', year: '2026', href: '/projects', img: connect1, cap: 'social, with a conscience' },
-  { id: '005', title: 'EV Mart POS', cat: 'UX Research · Systems', year: '2022', href: '/projects', img: null, cap: 'a till that cashiers stopped cursing at' },
-  { id: '006', title: 'Kase', cat: 'AI · Language · UX', year: '2024', href: '/projects', img: null, cap: 'language practice that talks back' },
+  { id: '002', title: 'Maable', cat: 'Design Engineering · Product · live', year: '2026', href: '/work/maable', img: maableDashboard, cap: 'productivity that pays you back' },
+  { id: '003', title: 'DormDrop', cat: 'UI/UX · Frontend', year: '2024', href: null, img: dormdrop1, cap: 'campus delivery, minus the chaos' },
+  { id: '004', title: 'Connect', cat: 'Full-Stack · Ethical Design', year: '2026', href: null, img: connect1, cap: 'social, with a conscience' },
+  { id: '005', title: 'EV Mart POS', cat: 'UX Research · Systems', year: '2022', href: '/work/ev-mart', img: null, cap: 'a till that cashiers stopped cursing at' },
 ];
 
 const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)");
@@ -303,11 +302,11 @@ export default function MainSite() {
           <div className="ms-person-label" style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)")}>02_ THE PERSON</div>
           <div style={css("display:grid;gap:22px;max-width:62ch")}>
             <p style={css("margin:0;font:400 clamp(19px,2vw,23px)/1.65 'Lora',serif;text-align:justify;text-wrap:pretty")}>Someone who loves people, loves new experiences, and loves being put outside his comfort zone for the smallest speck of knowledge.</p>
-            <p style={css("margin:0;font:400 17px/1.75 'Lora',serif;text-align:justify;color:rgba(32,31,29,.82);text-wrap:pretty")}>I call myself a creative and I have the receipts: started drawing around age three, picked up a couple of instruments not long after. Art has been sitting next to me the whole time, occasionally paying rent.</p>
+            <p style={css("margin:0;font:400 17px/1.75 'Lora',serif;text-align:justify;color:rgba(32,31,29,.82);text-wrap:pretty")}>I call myself a creative and I have the receipts: started drawing around age three, picked up a couple of instruments not long after. Art has been sitting next to me the whole time, occasionally earning its keep.</p>
             <p style={css("margin:0;font:400 17px/1.75 'Lora',serif;text-align:justify;color:rgba(32,31,29,.82);text-wrap:pretty")}>Now I build things at the edge of design and engineering — work that feels like something rather than merely functioning. Research, interface, motion, and the odd hand-drawn asset when a stock icon would be a lie.</p>
             <div style={css("display:flex;gap:14px;align-items:flex-start;padding-top:6px")}>
               <span style={{ flex: 'none', width: 34, height: 1, background: '#b68235', marginTop: 16 }}></span>
-              <span style={css("font:400 23px/1.35 'Caveat',cursive;color:#8a6224")}>the drawings on this site are mine. so are the typos, probably.</span>
+              <span style={css("font:400 23px/1.35 'Caveat',cursive;color:#8a6224")}>the drawings on this site are mine. so, likely, are the typos.</span>
             </div>
           </div>
         </div>
@@ -323,19 +322,27 @@ export default function MainSite() {
           <span style={css("font:400 20px/1 'Caveat',cursive;color:rgba(32,31,29,.5)")}>hover for a peek</span>
         </div>
         <div style={{ display: 'grid' }}>
-          {WORK.map(p => (
-            <Link key={p.id} to={p.href}
-              onMouseEnter={() => setHoverId(p.id)} onMouseLeave={() => setHoverId(null)}
-              className="ms-work-row">
-              <span className="ms-work-id">{p.id}</span>
-              <span className="ms-work-title">{p.title}</span>
-              <span className="ms-work-cat">{p.cat}</span>
-              <span className="ms-work-year">{p.year}</span>
-              <span className="ms-work-arrow">→</span>
-            </Link>
-          ))}
+          {WORK.map(p => {
+            const rowProps = {
+              onMouseEnter: () => setHoverId(p.id),
+              onMouseLeave: () => setHoverId(null),
+              className: `ms-work-row${p.href ? '' : ' ms-work-row-stub'}`,
+            };
+            const inner = (
+              <>
+                <span className="ms-work-id">{p.id}</span>
+                <span className="ms-work-title">{p.title}</span>
+                <span className="ms-work-cat">{p.cat}</span>
+                <span className="ms-work-year">{p.year}</span>
+                <span className="ms-work-arrow">{p.href ? '→' : '·'}</span>
+              </>
+            );
+            return p.href
+              ? <Link key={p.id} to={p.href} {...rowProps}>{inner}</Link>
+              : <div key={p.id} {...rowProps}>{inner}</div>;
+          })}
         </div>
-        <p style={css("margin:18px 0 0;font:400 21px/1.4 'Caveat',cursive;color:rgba(32,31,29,.55)")}>Stuff has the whole working file attached — research, screens, dead ends and all. Maable is live, go break it.</p>
+        <p style={css("margin:18px 0 0;font:400 21px/1.4 'Caveat',cursive;color:rgba(32,31,29,.55)")}>Stuff has the whole working file attached — research, screens, dead ends and all. Maable is live; go put it to the test.</p>
       </section>
 
       {/* LANGUAGES */}
@@ -355,7 +362,7 @@ export default function MainSite() {
             <span style={css("font:400 15px/1.4 'Lora',serif;color:rgba(239,236,228,.6)")}>in progress, indefinitely</span>
           </div>
         </div>
-        <p style={css("margin:0;font:400 24px/1.4 'Caveat',cursive;color:#b68235")}>took French basically my entire life and still can't speak it to save my life.</p>
+        <p style={css("margin:0;font:400 24px/1.4 'Caveat',cursive;color:#b68235")}>took French for most of my life and still can't speak it to save my life.</p>
       </section>
 
       {/* QUOTE */}

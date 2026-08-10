@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './MaableCaseStudy.css';
 import { css, GRAIN } from '../utils/cssString';
-import manageable1 from '../images/manageable-1.png';
-import maableNotes from '../images/maable-notes.png';
-import maableRevision from '../images/maable-revision.png';
+import maableDashboard from '../images/maable-dashboard.png';
+import maableBoard from '../images/maable-board.png';
+import maableMenu from '../images/maable-menu.png';
+import maableCompanion from '../images/maable-companion.png';
 
 const decisions = [
   {
@@ -76,18 +77,22 @@ export default function MaableCaseStudy() {
 
       {/* SCREENS */}
       <section style={css("padding:0 7vw 70px")}>
-        <div style={plate}><img src={manageable1} alt="Maable dashboard" style={css("display:block;width:100%;border-radius:2px")} /></div>
+        <div style={plate}><img src={maableDashboard} alt="Maable dashboard" style={css("display:block;width:100%;border-radius:2px")} /></div>
         <p style={css("margin:12px 0 0;font:400 21px/1.35 'Caveat',cursive;color:rgba(32,31,29,.6)")}>
           formerly &ldquo;Manageable&rdquo; — shorter name, same promise, fewer syllables to type at 2am
         </p>
-        <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(22px,3.5vw,44px);margin-top:44px")}>
+        <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(22px,3.5vw,44px);margin-top:44px")}>
           <div style={css("display:grid;gap:12px")}>
-            <div style={plate}><img src={maableNotes} alt="Maable notes shelf" style={css("display:block;width:100%;border-radius:2px")} /></div>
-            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.62)")}>notes as a shelf of covers — you find the one you want by remembering what it looked like, not what you called it</span>
+            <div style={plate}><img src={maableBoard} alt="Maable moodboard" style={css("display:block;width:100%;border-radius:2px")} /></div>
+            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.62)")}>the moodboard — a corkboard for photos and word clips, because not everything worth keeping is a task</span>
           </div>
           <div style={css("display:grid;gap:12px")}>
-            <div style={plate}><img src={maableRevision} alt="Maable revision mode" style={css("display:block;width:100%;border-radius:2px")} /></div>
-            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.62)")}>revision mode turns any note into flashcards — the word count is the only nag in the product</span>
+            <div style={plate}><img src={maableMenu} alt="Maable navigation menu" style={css("display:block;width:100%;border-radius:2px")} /></div>
+            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.62)")}>the whole app in one menu — ten-plus tools sorted into explore, grow and connect</span>
+          </div>
+          <div style={css("display:grid;gap:12px")}>
+            <div style={plate}><img src={maableCompanion} alt="Maable companion chat" style={css("display:block;width:100%;border-radius:2px")} /></div>
+            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.62)")}>the companion — two bars and a curve for a face, and a chat box that actually starts your timer</span>
           </div>
         </div>
       </section>
@@ -110,7 +115,7 @@ export default function MaableCaseStudy() {
             <p style={css("margin:0;font:400 17px/1.65 'Lora',serif;color:rgba(239,236,228,.82)")}>Nothing in these apps is on your side. No object in the interface notices you, misses you, or has an opinion about your week.</p>
           </div>
         </div>
-        <p style={css("margin:0;font:400 25px/1.4 'Caveat',cursive;color:#b68235;max-width:48ch")}>so: one surface for everything, XP on the way out instead of guilt, and a companion that visibly cares whether you show up.</p>
+        <p style={css("margin:0;font:400 25px/1.4 'Caveat',cursive;color:#b68235;max-width:48ch")}>so the approach: one surface for everything, XP on the way out instead of guilt, and a companion that visibly cares whether you show up.</p>
       </section>
 
       {/* DECISIONS HEADER */}
