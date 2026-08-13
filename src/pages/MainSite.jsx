@@ -493,8 +493,8 @@ function PosterBoard({ onClose }) {
 const WORK = [
   { title: 'Stuff', kicker: "a grocery app for a brain that wanders", studio: 'Personal — research → UI', cat: "Lists don't fail ADHD people because they're badly organised. They fail because opening one feels like being told off. Kraft paper, a cat with opinions, and a currency you earn by finishing.", year: '2026', href: '/work/stuff', kraft: true, cta: 'READ THE CASE STUDY ↗' },
   { title: 'Maable', kicker: 'productivity that pays you back', studio: 'Personal — design engineering', cat: 'Ten tools on one surface, XP as the exhaust of real work rather than a separate game, and a companion whose mood tracks your week. Live on the web.', year: '2026', href: '/work/maable', img: maableDashboard, cta: 'READ THE CASE STUDY ↗' },
-  { title: 'DormDrop', kicker: 'campus delivery, minus the chaos', studio: 'Personal — UI/UX, frontend', cat: 'Ordering built around dorm reality: shared drop points, tiny windows between classes, and roommates who never split the bill.', year: '2024', img: dormdrop1 },
-  { title: 'Connect', kicker: 'social, with a conscience', studio: 'Personal — full-stack', cat: 'A social product designed around what it costs the person using it — attention, comparison, time — rather than what it extracts from them.', year: '2026' },
+  { title: 'DormDrop', kicker: 'campus delivery, minus the chaos', studio: 'Personal — UI/UX, frontend', cat: 'Ordering built around dorm reality: shared drop points, tiny windows between classes, and roommates who never split the bill.', year: '2024', href: '/work/dormdrop', img: dormdrop1, cta: 'READ THE CASE STUDY ↗' },
+  { title: 'Connect', kicker: 'social, with a conscience', studio: 'Personal — full-stack', cat: 'A social product designed around what it costs the person using it — attention, comparison, time — rather than what it extracts from them.', year: '2026', href: '/work/connect', cta: 'READ THE CASE STUDY ↗' },
 ];
 
 // derived per-item palette/layout — a kraft-paper treatment for the one item
