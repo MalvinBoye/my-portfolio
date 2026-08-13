@@ -1,8 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Caveat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400&family=Caveat:wght@400;600&display=swap');
 
+/* overflow-x:hidden lives on html/body, not .main-site — any non-visible
+   overflow on an ancestor becomes the containing block for its sticky
+   descendants, and .main-site is taller than the viewport, which broke
+   position:sticky for #meTrack/#workTrack's rail stages entirely (they'd
+   scroll away instead of pinning). html/body already are the document's
+   real scroller, so putting it there clips the same horizontal overflow
+   without taking over anyone's sticky math. */
+html, body { overflow-x: hidden; }
 html { scroll-behavior: smooth; }
 
-.main-site { width: 100%; overflow-x: hidden; color: #201f1d; font-family: 'Lora', Georgia, serif; }
+.main-site { width: 100%; color: #201f1d; font-family: 'Lora', Georgia, serif; }
 .main-site ::selection { background: rgba(182, 130, 53, .25); }
 .main-site a { color: #8a6224; text-decoration: none; }
 .main-site a:hover { color: #b68235; }
@@ -13,104 +21,108 @@ html { scroll-behavior: smooth; }
   display: inline-block; width: .5em; color: #c8402c;
   animation: ms-blink 1.06s step-end infinite;
 }
-@media (prefers-reduced-motion: reduce) { .ms-caret { animation: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .ms-caret { animation: none; opacity: 1; }
+}
 
 /* top bar */
 .ms-topbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 60;
-  display: flex; justify-content: space-between; align-items: center; gap: 16px;
-  padding: 12px 28px;
-  background: rgba(239, 236, 228, .86); backdrop-filter: blur(6px);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 70;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+  padding: 20px clamp(20px, 5vw, 64px);
+  font: 400 11px/1 ui-monospace, Menlo, monospace; letter-spacing: .16em;
+  color: rgba(32, 31, 29, .62);
+  background: rgba(239, 236, 228, .88); backdrop-filter: blur(6px);
   border-bottom: 1px solid rgba(32, 31, 29, .14);
-  font: 400 11px/1 ui-monospace, Menlo, monospace; letter-spacing: .08em;
-  color: rgba(32, 31, 29, .66); font-variant-numeric: tabular-nums;
 }
-.ms-topbar-left { display: flex; align-items: center; gap: 16px; }
-.ms-topbar-right { display: flex; align-items: center; gap: 20px; }
-.ms-topbar-coords { opacity: .6; }
+.ms-topbar-right { display: flex; gap: 20px; align-items: baseline; }
 @media (max-width: 640px) {
-  .ms-topbar-coords { display: none; }
+  .ms-topbar span:first-child { display: none; }
 }
 
-/* poster prompt */
-.ms-poster-prompt:hover { color: #c8402c; }
+/* act1 / act2 doodle stage — fixed to the viewport, not sticky. A sticky
+   box always needs one extra viewport-height of scroll to fully release;
+   fixed + opacity avoids that dead scroll entirely (see zoom()/exit() in
+   MainSite.jsx). act1/act2 themselves are just plain scroll-tracking
+   spacers now, not scroll containers. */
+.ms-fixed-stage {
+  position: fixed; inset: 0; overflow: hidden; z-index: 5;
+  display: grid; place-items: center; pointer-events: none;
+}
+.ms-field { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
-/* the person */
-.ms-person-grid {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr);
-  gap: clamp(24px, 6vw, 90px); align-items: start;
-}
-.ms-person-label { position: sticky; top: 70px; }
-@media (max-width: 720px) {
-  .ms-person-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  .ms-person-label { position: static; }
-}
+/* night mode — a full site-wide dark theme, toggled on document.body whenever
+   artMode is on (see Component.applyNight() in the reference script). Every
+   override needs !important because it's fighting the inline `style=` strings
+   the rest of the page is built from. */
+body.night { background: #080807; }
+body.night .main-site { background: #080807 !important; background-image: none !important; }
+body.night .main-site section,
+body.night .main-site header,
+body.night .main-site footer,
+body.night .main-site div,
+body.night .main-site p,
+body.night .main-site span,
+body.night .main-site h1 { border-color: rgba(242, 239, 230, .24) !important; }
+body.night .main-site p,
+body.night .main-site h1,
+body.night .main-site li { color: #f2efe6 !important; }
+body.night .main-site span:not([data-ink]) { color: #e8e4d9; }
+body.night .main-site [data-plate] { background: #16150f !important; }
+body.night .main-site [data-pane],
+body.night .main-site .ms-stage { background: #080807 !important; background-image: none !important; }
+body.night .main-site [data-topbar] { background: rgba(8, 8, 7, .9) !important; background-image: none !important; }
+body.night .main-site a { color: #f2c14e !important; }
+body.night .main-site canvas { background: transparent !important; }
 
-/* marquee */
-.ms-marquee {
-  background: #14130f; color: #efece4; padding: 16px 0; overflow: hidden;
-  white-space: nowrap;
-  border-top: 1px solid rgba(182, 130, 53, .35); border-bottom: 1px solid rgba(182, 130, 53, .35);
-}
-.ms-marquee-track { display: inline-flex; animation: ms-mq 34s linear infinite; will-change: transform; }
-@keyframes ms-mq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .ms-marquee-track { animation-play-state: paused; } }
-.ms-marquee-item {
-  font: 400 15px/1 'Cormorant Garamond', serif; letter-spacing: .18em; text-transform: uppercase;
-  padding: 0 22px; color: rgba(239, 236, 228, .86);
-}
-.ms-marquee-dot { color: #b68235; padding-left: 22px; }
+/* grayscale mode — independent of night mode, toggled by clicking "People."
+   (see the ms-hi2 handler in MainSite.jsx). Forces the topbar to sticky so
+   it scrolls out of the way instead of sitting fixed over a greyed page. */
+body.bw .main-site { filter: grayscale(1); }
+body.bw .ms-topbar { position: sticky !important; }
 
-/* selected work */
-.ms-work-row {
-  display: grid; grid-template-columns: 64px minmax(0, 1.5fr) minmax(0, 1.5fr) 92px 28px;
-  align-items: baseline; gap: 14px; padding: 26px 6px;
-  border-bottom: 1px solid rgba(32, 31, 29, .14);
-  color: #201f1d;
+/* #meTrack's horizontal rail carousel — .ms-stage is a fixed full-viewport
+   plate, its child .ms-rail scrolls sideways via transform (driven
+   imperatively from the rAF loop in MainSite.jsx, not by native scroll).
+   This is position:fixed rather than sticky deliberately: a sticky child of
+   a tall (420vh) tracking div hit the exact same "doesn't reliably pin,
+   leaves a blank scroll-through gap" bug act1/act2's doodle stage had (see
+   .ms-fixed-stage above) — fixed + explicit active-range gating (meActive
+   in MainSite.jsx) sidesteps it the same way. #work doesn't need any of
+   this: its cards are plain stacked position:sticky, one-to-one with their
+   own box, so native sticky just works there. */
+.ms-stage {
+  position: fixed; inset: 0; z-index: 6; overflow: hidden;
+  display: grid; align-content: center;
 }
-.ms-work-row:hover { background: rgba(182, 130, 53, .09); color: #8a6224; }
-.ms-work-row-stub { cursor: default; }
-.ms-work-row-stub:hover { background: rgba(32, 31, 29, .04); color: #201f1d; }
-.ms-work-row-stub .ms-work-arrow { color: rgba(32, 31, 29, .3); }
-.ms-work-id { font: 400 12px/1 ui-monospace, Menlo, monospace; color: rgba(32, 31, 29, .45); font-variant-numeric: tabular-nums; }
-.ms-work-title { font: 300 clamp(28px, 3.4vw, 44px)/1 'Cormorant Garamond', serif; }
-.ms-work-cat { font: 400 14px/1.4 'Lora', serif; color: rgba(32, 31, 29, .6); }
-.ms-work-year { font: 400 12px/1 ui-monospace, Menlo, monospace; color: rgba(32, 31, 29, .5); font-variant-numeric: tabular-nums; }
-.ms-work-arrow { font: 400 18px/1; color: #b68235; }
-@media (max-width: 720px) {
-  .ms-work-row { grid-template-columns: 40px 1fr; }
-  .ms-work-cat, .ms-work-year, .ms-work-arrow { display: none; }
-}
+.ms-rail { display: grid; grid-auto-flow: column; grid-auto-columns: 100vw; gap: 0; will-change: transform; }
+.ms-rail > * { scroll-snap-align: start; }
+.ms-hi1, .ms-hi2, .ms-hi3 { transition: opacity .35s linear; }
 
-/* languages */
-.ms-lang-row {
-  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
-  gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(239, 236, 228, .16);
-}
+/* prefers-reduced-motion fallback for #meTrack — no pin, no pan, everything
+   just stacks and reads top to bottom like a normal page. #work needs no
+   equivalent: its sticky cards aren't scroll-linked animation, just native
+   browser pinning, so they're left as-is regardless of this preference. */
+.ms-stage--static { position: static; height: auto; z-index: auto; }
+.ms-rail--static { grid-auto-flow: row; grid-auto-columns: unset; transform: none !important; gap: clamp(40px, 6vw, 80px) 0; }
 
-/* youtube card */
-.ms-yt-card {
-  border: 1px solid rgba(32, 31, 29, .2); border-radius: 4px;
-  padding: clamp(26px, 4vw, 44px);
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 26px; align-items: center; background: #f7f5ef;
-}
+.ms-art-toggle { color: #c8402c; cursor: pointer; border-bottom: 1px dashed rgba(200, 64, 44, .45); }
 
 /* contact */
-.ms-email:hover { color: #b68235; }
-.ms-social { color: rgba(239, 236, 228, .78); }
-.ms-social:hover { color: #b68235; }
-
-/* hover preview */
-.ms-hover-preview {
-  position: fixed; right: 5vw; bottom: 6vh; z-index: 40; pointer-events: none;
-  border: 1px solid rgba(32, 31, 29, .22); background: #f7f5ef; padding: 12px;
-  border-radius: 4px; box-shadow: 0 8px 26px rgba(45, 43, 43, .22);
+.ms-say {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: clamp(18px, 4vw, 48px); padding: clamp(44px, 7vw, 84px) clamp(20px, 5vw, 64px);
+  border-top: 1px solid rgba(32, 31, 29, .16);
+}
+.ms-footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px;
+  padding: 18px clamp(20px, 5vw, 64px); border-top: 1px solid rgba(32, 31, 29, .16);
+  font: 400 11px/1 ui-monospace, Menlo, monospace; letter-spacing: .14em; color: rgba(32, 31, 29, .42);
 }
 
 /* poster board */
 .ms-board {
-  position: fixed; inset: 0; z-index: 80; background: #14130f; color: #efece4;
+  position: fixed; inset: 0; z-index: 90; background: #14130f; color: #efece4;
   display: flex; flex-direction: column;
 }
 .ms-board-header {
@@ -122,10 +134,6 @@ html { scroll-behavior: smooth; }
 .ms-board-close { cursor: pointer; color: rgba(239, 236, 228, .7); }
 .ms-board-close:hover { color: #c8402c; }
 .ms-board-canvas { flex: 1; position: relative; overflow: hidden; }
-.ms-board-corner {
-  position: absolute; left: 22px; bottom: 18px;
-  font: 400 11px/1 ui-monospace, Menlo, monospace; letter-spacing: .16em; color: rgba(239, 236, 228, .35);
-}
 .ms-board-footer { display: flex; flex-wrap: wrap; gap: 10px; padding: 16px 26px; border-top: 1px solid rgba(239, 236, 228, .16); }
 .ms-board-input, .ms-board-name {
   background: transparent; border: 1px solid rgba(239, 236, 228, .3); border-radius: 4px;

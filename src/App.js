@@ -106,7 +106,7 @@ function SignatureIntro({ onComplete }) {
 
 // app
 function AppContent() {
-  const [showSig, setShowSig] = useState(true);
+  const [showSig, setShowSig] = useState(false);
 
   return (
     <>
