@@ -392,7 +392,7 @@ class MorphField {
 
 // ── poster board — three seed notes (client-only) + live Supabase notes ────
 const SEED_NOTES = [
-  { id: 'n1', content: "if you found this\nyou're curious enough\n— that's good", author: 'maelo', x: 58, y: 20, r: -6 },
+  { id: 'n1', content: "Yo", author: 'maelo', x: 58, y: 20, r: -6 },
   { id: 'n2', content: 'Tema → DC\nquite the journey', author: 'maelo', x: 20, y: 14, r: 3 },
   { id: 'n3', content: 'embarrassment is an\nunderexplored emotion', author: 'unknown', x: 40, y: 56, r: 5 },
 ];
@@ -884,7 +884,7 @@ export default function MainSite() {
                     <div style={css("display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;font:300 clamp(26px,3.2vw,42px)/1.1 'Cormorant Garamond',serif")}>
                       <span>Tema, Ghana</span><span style={{ color: '#b68235' }}>→</span><span>Washington DC</span>
                     </div>
-                    <p style={css("margin:0;font:400 17px/1.7 'Lora',serif;color:rgba(32,31,29,.84);max-width:40ch;text-wrap:pretty")}>Raised in a few different places; Tema would always be home. Drawing since three, a couple of instruments not long after. Art has been sitting next to me the whole time, occasionally paying rent.</p>
+                    <p style={css("margin:0;font:400 17px/1.7 'Lora',serif;color:rgba(32,31,29,.84);max-width:40ch;text-wrap:pretty")}>Raised in a few different places; Tema would always be home. Drawing since three, a couple of instruments not long after. Art would always be a part of me, hence why I started design engineering.</p>
                   </div>
                   <div style={{ display: 'grid', gap: 16 }}>
                     <span style={kicker}>WHAT I ACTUALLY DO</span>
@@ -899,7 +899,7 @@ export default function MainSite() {
                 <div style={{ display: 'grid', gap: 'clamp(14px,2vw,24px)' }}>
                   <div style={css("display:flex;flex-wrap:wrap;align-items:baseline;gap:18px;max-width:74ch")}>
                     <span style={kicker}>PEOPLE I LOOK UP TO</span>
-                    <p style={css("margin:0;font:400 clamp(17px,1.7vw,20px)/1.5 'Lora',serif;color:rgba(32,31,29,.86);text-wrap:pretty")}>I steal from people constantly — let me preface I'm not talking about stealing their work but stealing their nerve.</p>
+                    <p style={css("margin:0;font:400 clamp(17px,1.7vw,20px)/1.5 'Lora',serif;color:rgba(32,31,29,.86);text-wrap:pretty")}>I steal from people constantly — let me preface I'm not talking about stealing their work but their way of thinking .</p>
                   </div>
                   <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(16px,2.6vw,38px)")}>
                     {[
