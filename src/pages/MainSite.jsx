@@ -548,8 +548,6 @@ export default function MainSite() {
   const [reduced] = useState(prefersReducedMotion);
 
   const [artMode, setArtMode] = useState(false);
-  // Grayscale mode — toggled by "People.", independent of artMode/night.
-  const [bwMode, setBwMode] = useState(false);
   const [boardOpen, setBoardOpen] = useState(false);
   const [p1, setP1] = useState(0);
   const [p2, setP2] = useState(0);
@@ -779,13 +777,6 @@ export default function MainSite() {
     return () => { document.body.classList.remove('night'); };
   }, [artMode]);
 
-  // Independent grayscale toggle — "People." flips the whole page to
-  // grayscale and (per the reference) pins the topbar while it's active.
-  useEffect(() => {
-    document.body.classList.toggle('bw', bwMode);
-    return () => { document.body.classList.remove('bw'); };
-  }, [bwMode]);
-
   useEffect(() => {
     let keys = '';
     function onKey(e) {
@@ -867,7 +858,7 @@ export default function MainSite() {
         {(reduced || meActive) && (!artMode ? (
           <section id="me" data-pane className={"ms-stage" + (reduced ? ' ms-stage--static' : '')} style={{ background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply', padding: 'clamp(28px,4.4vh,58px) 0 clamp(10px,1.6vh,26px)', gap: 'clamp(10px,1.6vh,22px)' }}>
             <div style={css("display:flex;flex-wrap:wrap;align-items:baseline;gap:clamp(18px,5vw,64px);padding:0 clamp(20px,5vw,64px);font:300 clamp(36px,6.2vw,88px)/1 'Cormorant Garamond',serif")}>
-              <span className="ms-hi1">Life.</span><span onClick={() => setBwMode(b => !b)} className="ms-hi2" style={css("cursor:pointer;border-bottom:1px dashed rgba(32,31,29,.32)")}>People.</span>
+              <span className="ms-hi1">Life.</span><span className="ms-hi2">People.</span>
               <span onClick={() => setArtMode(true)} className="ms-hi3 ms-art-toggle">Art.</span>
             </div>
 
@@ -904,7 +895,6 @@ export default function MainSite() {
                   <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(16px,2.6vw,38px)")}>
                     {[
                       { name: 'Park Chan-wook', cat: 'FILM', body: "Every frame is composed like it's the only one. Taught me that beauty and discomfort can share a room." },
-                      { name: 'Shinichiro Watanabe', cat: 'ANIMATION', body: 'Cowboy Bebop is why this site looks like this. Tone as a design system: jazz, melancholy, and jokes in the same episode.' },
                       { name: 'Virgil Abloh', cat: 'DESIGN', body: 'The 3% rule, and the permission to be a designer, an engineer and an artist without picking one.' },
                       { name: 'My parents', cat: 'TEMA → DC', body: 'Both strong-willed people who made it this far in life to give me a comfortable one — so that I get to do what I love. Everything else on this page is downstream of that.' },
                     ].map(person => (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './App.css';
@@ -104,6 +104,21 @@ function SignatureIntro({ onComplete }) {
   );
 }
 
+// react-router doesn't reset scroll position on navigation by default — every
+// case-study link would otherwise open wherever the home page scroll (or the
+// previous page) left off, instead of at its own top. Explicit 'instant' is
+// required here, not just the default — MainSite.css sets a global
+// `html { scroll-behavior: smooth }` for its own in-page anchor links, which
+// would otherwise turn this into a visible scroll-past-unrelated-content
+// animation on every navigation instead of landing at the top immediately.
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
+
 // app
 function AppContent() {
   const [showSig, setShowSig] = useState(false);
@@ -128,6 +143,7 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AppContent />
     </BrowserRouter>
   );
