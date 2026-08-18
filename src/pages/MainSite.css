@@ -25,6 +25,25 @@ html { scroll-behavior: smooth; }
   .ms-caret { animation: none; opacity: 1; }
 }
 
+/* scroll hint — a quiet nudge for act1/act2's dead-quiet buffer stretches
+   (see showScrollHint in MainSite.jsx), where there's genuinely nothing
+   else on screen but paper. Fixed to the viewport, fades in/out with the
+   act's own progress rather than popping. */
+@keyframes ms-hint-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+.ms-scroll-hint {
+  position: fixed; left: 50%; bottom: clamp(28px, 5vh, 48px); z-index: 20;
+  transform: translateX(-50%);
+  display: grid; justify-items: center; gap: 6px;
+  pointer-events: none; transition: opacity .5s ease;
+}
+.ms-scroll-hint-chevron {
+  font: 400 20px/1 'Cormorant Garamond', serif; color: #b68235;
+  animation: ms-hint-bob 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ms-scroll-hint-chevron { animation: none; }
+}
+
 /* top bar — no background/blur/border, so it reads as part of the page
    rather than a bar sitting on top of it. */
 .ms-topbar {
@@ -32,7 +51,7 @@ html { scroll-behavior: smooth; }
   display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
   padding: 20px clamp(20px, 5vw, 64px);
   font: 400 11px/1 ui-monospace, Menlo, monospace; letter-spacing: .16em;
-  color: rgba(32, 31, 29, .62);
+  color: rgba(32, 31, 29, .66);
   background: transparent;
 }
 .ms-topbar-right { display: flex; gap: 20px; align-items: baseline; }
@@ -99,7 +118,7 @@ body.night .main-site canvas { background: transparent !important; }
 .ms-stage--static { position: static; height: auto; z-index: auto; }
 .ms-rail--static { grid-auto-flow: row; grid-auto-columns: unset; transform: none !important; gap: clamp(40px, 6vw, 80px) 0; }
 
-.ms-art-toggle { color: #c8402c; cursor: pointer; border-bottom: 1px dashed rgba(200, 64, 44, .45); }
+.ms-art-toggle { color: #b8391f; cursor: pointer; border-bottom: 1px dashed rgba(200, 64, 44, .45); }
 
 /* contact */
 .ms-say {
@@ -110,7 +129,7 @@ body.night .main-site canvas { background: transparent !important; }
 .ms-footer {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px;
   padding: 18px clamp(20px, 5vw, 64px); border-top: 1px solid rgba(32, 31, 29, .16);
-  font: 400 11px/1 ui-monospace, Menlo, monospace; letter-spacing: .14em; color: rgba(32, 31, 29, .42);
+  font: 400 11px/1 ui-monospace, Menlo, monospace; letter-spacing: .14em; color: rgba(32, 31, 29, .66);
 }
 
 /* poster board */

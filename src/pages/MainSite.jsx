@@ -104,7 +104,6 @@ function useTypewriter(words, typeMs, holdMs, deleteMs) {
   return text;
 }
 
-const NAMES = ['Malvin', 'Mallock', 'Maelo'];
 const NOW_LIST = [
   'learning Korean through cinema',
   "drawing things that don't exist yet",
@@ -422,7 +421,7 @@ function PosterNote({ id, content, author, x, y, r, onDragEnd }) {
     <div ref={ref} onMouseDown={onMouseDown}
       style={{ position: 'absolute', left: x + '%', top: y + '%', transform: `rotate(${r}deg)`, width: 210, padding: 16, background: '#f7f5ef', borderRadius: 2, boxShadow: '0 6px 18px rgba(0,0,0,.4)', cursor: 'grab', userSelect: 'none' }}>
       <div style={{ font: "400 21px/1.35 'Caveat',cursive", color: '#201f1d', whiteSpace: 'pre-line' }}>{content}</div>
-      <div style={{ font: '400 11px/1 ui-monospace,Menlo,monospace', letterSpacing: '.1em', color: 'rgba(32,31,29,.45)', paddingTop: 8 }}>— {author}</div>
+      <div style={{ font: '400 11px/1 ui-monospace,Menlo,monospace', letterSpacing: '.1em', color: 'rgba(32,31,29,.66)', paddingTop: 8 }}>— {author}</div>
     </div>
   );
 }
@@ -507,7 +506,7 @@ function workItemStyle(w, i, night) {
   const paper = kraft ? '#c7a878' : (night ? '#0f0e0c' : '#e9e5db');
   const fg = kraft ? '#2b2015' : (onImage ? '#f4f1e8' : (night ? '#f2efe6' : '#201f1d'));
   const soft = kraft ? 'rgba(43,32,21,.78)' : (onImage ? 'rgba(244,241,232,.76)' : (night ? 'rgba(242,239,230,.72)' : 'rgba(32,31,29,.7)'));
-  const gold = kraft ? '#5c3d1b' : (onImage ? '#e9c680' : (night ? '#f2c14e' : '#8a6224'));
+  const gold = kraft ? '#4a3015' : (onImage ? '#e9c680' : (night ? '#f2c14e' : '#8a6224'));
   return {
     live,
     num: '0' + (i + 1),
@@ -537,10 +536,9 @@ function workItemStyle(w, i, night) {
   };
 }
 
-const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.22em;color:rgba(32,31,29,.5)");
+const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.22em;color:rgba(32,31,29,.66)");
 
 export default function MainSite() {
-  const typed = useTypewriter(NAMES, 95, 1800, 52);
   const now = useTypewriter(NOW_LIST, 46, 2400, 22);
   const clock = useClock();
   // Fixed once per mount — doesn't change mid-session, and reused to decide
@@ -809,6 +807,12 @@ export default function MainSite() {
   const revealB = css(`position:fixed;top:50%;left:50%;transform:translate(-50%,calc(-50% + ${(12 - revealBIn * 12).toFixed(1)}px));display:grid;gap:14px;justify-items:center;text-align:center;padding:0 6vw;opacity:${revealBOpacity.toFixed(3)};pointer-events:none;z-index:10`);
   const revealAVisible = revealAOpacity > 0.002;
   const revealBVisible = revealBOpacity > 0.002;
+  // act1/act2 each carry a deliberate dead-quiet buffer after their reveal
+  // fades out (see REVEAL_OUT above) — nothing on screen but paper, there
+  // specifically to absorb real-world scroll timing slop. Without a cue,
+  // that stretch reads as "the page ended" rather than "keep going" — shown
+  // only in that window, not before the reveal has even appeared.
+  const showScrollHint = (p1Full > REVEAL_OUT[1] && p1Full < 0.995) || (p2Full > REVEAL_OUT[1] && p2Full < 0.995);
 
   return (
     <div className="main-site" style={{ background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply' }}>
@@ -828,21 +832,20 @@ export default function MainSite() {
           <canvas id="fieldA" className="ms-field" />
           <div style={heroStyle}>
             <h1 style={css("margin:0;font:300 clamp(52px,8.4vw,124px)/.92 'Cormorant Garamond',serif;letter-spacing:-.02em")}>
-              <span>{typed}</span><span className="ms-caret">_</span>
+              <span>Malvin Mallock Boye</span><span className="ms-caret">_</span>
             </h1>
-            <p style={css("margin:0;max-width:28ch;font:400 clamp(17px,1.7vw,21px)/1.5 'Lora',serif;color:rgba(32,31,29,.75);text-wrap:pretty")}>Designer and design engineer in Washington DC. I make things that feel like something.</p>
+            <p style={css("margin:0;max-width:28ch;font:400 clamp(17px,1.7vw,21px)/1.5 'Lora',serif;color:rgba(32,31,29,.75);text-wrap:pretty")}>TODO: tagline — rewriting this</p>
           </div>
           <div style={cueA}>
-            <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>SCROLL IN_</span>
+            <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>SCROLL IN_</span>
           </div>
         </div>
       </div>
 
       {revealAVisible && (
         <div style={revealA}>
-          <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)")}>01 — WHO YOU'D BE WORKING WITH</span>
+          <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.66)")}>01 — WHO YOU'D BE WORKING WITH</span>
           <span style={css("font:300 clamp(38px,7vw,96px)/1 'Cormorant Garamond',serif")}>a bit about me</span>
-          <span style={css("font:400 20px/1 'Caveat',cursive;color:#8a6224")}>yay...i guess</span>
         </div>
       )}
 
@@ -900,7 +903,7 @@ export default function MainSite() {
                     ].map(person => (
                       <div key={person.name} style={{ display: 'grid', gap: 8 }}>
                         <span style={css("font:300 clamp(22px,2.4vw,32px)/1.05 'Cormorant Garamond',serif")}>{person.name}</span>
-                        <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;color:rgba(32,31,29,.5)")}>{person.cat}</span>
+                        <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;color:rgba(32,31,29,.66)")}>{person.cat}</span>
                         <p style={css("margin:0;font:400 15px/1.6 'Lora',serif;color:rgba(32,31,29,.8);text-wrap:pretty")}>{person.body}</p>
                       </div>
                     ))}
@@ -927,7 +930,7 @@ export default function MainSite() {
                         <div style={{ background: '#f7f5ef', padding: 14, border: '1px solid rgba(32,31,29,.2)', borderRadius: 4 }}>
                           <img src={item.src} alt={item.alt} style={{ display: 'block', width: '100%', height: 'clamp(96px,11vh,150px)', objectFit: item.caption.startsWith('Stuff') ? 'cover' : 'contain', objectPosition: 'top', filter: 'sepia(.12)' }} />
                         </div>
-                        <span style={css("font:400 19px/1.3 'Caveat',cursive;color:rgba(32,31,29,.6)")}>{item.caption}</span>
+                        <span style={css("font:400 19px/1.3 'Caveat',cursive;color:rgba(32,31,29,.66)")}>{item.caption}</span>
                       </div>
                     ))}
                   </div>
@@ -957,7 +960,7 @@ export default function MainSite() {
         <div className="ms-fixed-stage">
           <canvas id="fieldB" className="ms-field" />
           <div style={cueB}>
-            <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>SCROLL IN_</span>
+            <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>SCROLL IN_</span>
             <span style={css("font:400 19px/1 'Caveat',cursive;color:#8a6224")}>there's work in here too</span>
           </div>
         </div>
@@ -965,7 +968,7 @@ export default function MainSite() {
 
       {revealBVisible && (
         <div style={revealB}>
-          <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)")}>02 — SELECTED WORK</span>
+          <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.66)")}>02 — SELECTED WORK</span>
           <span style={css("font:300 clamp(38px,7vw,96px)/1 'Cormorant Garamond',serif")}>now the work</span>
           <span style={css("font:400 20px/1 'Caveat',cursive;color:#8a6224")}>proceed....</span>
         </div>
@@ -979,7 +982,7 @@ export default function MainSite() {
           content. */}
       <section id="work" data-pane style={{ position: 'relative', background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply' }}>
         <div style={{ position: 'sticky', top: 0, height: '100vh', display: 'grid', alignContent: 'center', justifyItems: 'center', gap: 16, textAlign: 'center', padding: '0 clamp(20px,5vw,64px)' }}>
-          <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)")}>SELECTED WORK — 2024 → 2026</span>
+          <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.66)")}>SELECTED WORK — 2024 → 2026</span>
           <h2 style={css("margin:0;font:300 clamp(46px,9vw,132px)/.92 'Cormorant Garamond',serif;letter-spacing:-.02em")}>some off my projects</h2>
           <span style={css("font:400 20px/1 'Caveat',cursive;color:#8a6224")}>you may continue scrolling&nbsp;</span>
         </div>
@@ -1019,7 +1022,7 @@ export default function MainSite() {
           <a href="https://youtube.com/@maehlo" target="_blank" rel="noopener noreferrer">YOUTUBE ↗</a>
           <a href="https://instagram.com/pseudo.sq" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
           <a href="https://github.com/MalvinBoye" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
-          <span style={css("font:400 19px/1 'Caveat',cursive;color:rgba(32,31,29,.5)")}>type "poster" anywhere</span>
+          <span style={css("font:400 19px/1 'Caveat',cursive;color:rgba(32,31,29,.66)")}>type "poster" anywhere</span>
         </div>
       </section>
 
@@ -1028,6 +1031,12 @@ export default function MainSite() {
       </footer>
 
       {boardOpen && <PosterBoard onClose={() => setBoardOpen(false)} />}
+
+      {/* a quiet nudge for act1/act2's dead-quiet buffer stretches — see
+          showScrollHint above */}
+      <div className="ms-scroll-hint" style={{ opacity: showScrollHint ? 1 : 0 }} aria-hidden="true">
+        <span className="ms-scroll-hint-chevron">⌄</span>
+      </div>
     </div>
   );
 }

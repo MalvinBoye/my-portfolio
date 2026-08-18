@@ -119,6 +119,40 @@ function ScrollToTop() {
   return null;
 }
 
+// a hairline fixed to the right edge, filling gold as you scroll — the whole
+// site hides the native scrollbar (see index.css), so this is the only
+// position cue left; kept to a single thin, quiet line rather than anything
+// that competes with the page.
+function ScrollProgress() {
+  const fillRef = useRef(null);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    function update() {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(1, Math.max(0, doc.scrollTop / max)) : 0;
+      if (fillRef.current) fillRef.current.style.height = (pct * 100).toFixed(2) + '%';
+    }
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+    // re-measure on route change too — a same-scrollY navigation (already at
+    // the top) wouldn't otherwise fire a 'scroll' event against the new
+    // page's height.
+  }, [pathname]);
+
+  return (
+    <div className="scroll-progress" aria-hidden="true">
+      <div ref={fillRef} className="scroll-progress-fill" />
+    </div>
+  );
+}
+
 // app
 function AppContent() {
   const [showSig, setShowSig] = useState(false);
@@ -144,6 +178,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <ScrollProgress />
       <AppContent />
     </BrowserRouter>
   );

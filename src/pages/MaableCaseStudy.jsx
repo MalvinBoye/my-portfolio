@@ -41,7 +41,7 @@ const nextUp = [
   `Whether ten tools in one product stays coherent. Focus Mode is the pressure valve, but the day it becomes the default view is the day the rest needs pruning.`,
 ];
 
-const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)");
+const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.66)");
 const kickerDark = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:#b68235");
 const plate = css("border:1px solid rgba(32,31,29,.2);background:#f7f5ef;padding:18px;border-radius:4px;box-shadow:0 3px 12px rgba(45,43,43,.12)");
 
@@ -50,7 +50,7 @@ export default function MaableCaseStudy() {
     <div className="maable-case" style={{ background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply', minHeight: '100vh', color: '#201f1d', fontFamily: '"Lora", Georgia, serif' }}>
 
       {/* NAV */}
-      <div style={css("display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 7vw;border-bottom:1px solid rgba(32,31,29,.14);font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(32,31,29,.6)")}>
+      <div style={css("display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 7vw;border-bottom:1px solid rgba(32,31,29,.14);font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(32,31,29,.66)")}>
         <Link to="/" className="maable-link">← MAEHLO.COM</Link>
         <span>CASE 002 · MAABLE · 2026</span>
       </div>
@@ -65,11 +65,11 @@ export default function MaableCaseStudy() {
           Productivity apps are excellent at recording the work you didn't do. Maable pays you for the work you did.
         </p>
         <div style={css("display:flex;flex-wrap:wrap;gap:44px;border-top:1px solid rgba(32,31,29,.2);padding-top:20px;margin-top:10px;font:400 14px/1.5 'Lora',serif")}>
-          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>ROLE</span><span>Design engineering — product, UI, front end</span></div>
-          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>SCOPE</span><span>Web app · 10+ tools · 5 life areas</span></div>
-          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>STATUS</span><span>Live — Focus Mode &amp; Companion shipped</span></div>
+          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>ROLE</span><span>Design engineering — product, UI, front end</span></div>
+          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>SCOPE</span><span>Web app · 10+ tools · 5 life areas</span></div>
+          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>STATUS</span><span>Live — Focus Mode &amp; Companion shipped</span></div>
           <div style={css("display:grid;gap:5px")}>
-            <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>LINK</span>
+            <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>LINK</span>
             <a href="https://maable-web.vercel.app/" target="_blank" rel="noopener noreferrer" className="maable-link">maable-web.vercel.app ↗</a>
           </div>
         </div>
@@ -78,21 +78,21 @@ export default function MaableCaseStudy() {
       {/* SCREENS */}
       <section style={css("padding:0 7vw 70px")}>
         <div style={plate}><img src={maableDashboard} alt="Maable dashboard" style={css("display:block;width:100%;border-radius:2px")} /></div>
-        <p style={css("margin:12px 0 0;font:400 21px/1.35 'Caveat',cursive;color:rgba(32,31,29,.6)")}>
+        <p style={css("margin:12px 0 0;font:400 21px/1.35 'Caveat',cursive;color:rgba(32,31,29,.66)")}>
           formerly &ldquo;Manageable&rdquo; — shorter name, same promise, fewer syllables to type at 2am
         </p>
         <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(22px,3.5vw,44px);margin-top:44px")}>
           <div style={css("display:grid;gap:12px")}>
             <div style={plate}><img src={maableBoard} alt="Maable moodboard" style={css("display:block;width:100%;border-radius:2px")} /></div>
-            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.62)")}>the moodboard — a corkboard for photos and word clips, because not everything worth keeping is a task</span>
+            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.66)")}>the moodboard — a corkboard for photos and word clips, because not everything worth keeping is a task</span>
           </div>
           <div style={css("display:grid;gap:12px")}>
             <div style={plate}><img src={maableMenu} alt="Maable navigation menu" style={css("display:block;width:100%;border-radius:2px")} /></div>
-            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.62)")}>the whole app in one menu — ten-plus tools sorted into explore, grow and connect</span>
+            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.66)")}>the whole app in one menu — ten-plus tools sorted into explore, grow and connect</span>
           </div>
           <div style={css("display:grid;gap:12px")}>
             <div style={plate}><img src={maableCompanion} alt="Maable companion chat" style={css("display:block;width:100%;border-radius:2px")} /></div>
-            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.62)")}>the companion — two bars and a curve for a face, and a chat box that actually starts your timer</span>
+            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.66)")}>the companion — two bars and a curve for a face, and a chat box that actually starts your timer</span>
           </div>
         </div>
       </section>
@@ -140,13 +140,13 @@ export default function MaableCaseStudy() {
         <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:clamp(16px,2.4vw,28px)")}>
           {toolkit.map(t => (
             <div key={t.title} style={css("border:1px solid rgba(32,31,29,.2);border-radius:4px;padding:20px;display:grid;gap:7px;background:#f7f5ef")}>
-              <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;color:rgba(32,31,29,.5)")}>{t.kicker}</span>
+              <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;color:rgba(32,31,29,.66)")}>{t.kicker}</span>
               <span style={css("font:300 30px/1.05 'Cormorant Garamond',serif")}>{t.title}</span>
               <span style={css("font:400 15px/1.5 'Lora',serif;color:rgba(32,31,29,.72)")}>{t.body}</span>
             </div>
           ))}
         </div>
-        <p style={css("margin:0;font:400 21px/1.4 'Caveat',cursive;color:rgba(32,31,29,.58)")}>five life areas hold it together: career, student, hobbies, reading corner, and — genuinely — feeling lazy. rest days count.</p>
+        <p style={css("margin:0;font:400 21px/1.4 'Caveat',cursive;color:rgba(32,31,29,.66)")}>five life areas hold it together: career, student, hobbies, reading corner, and — genuinely — feeling lazy. rest days count.</p>
       </section>
 
       {/* WHAT I'D WATCH NEXT */}
@@ -173,9 +173,9 @@ export default function MaableCaseStudy() {
       <section style={css("background:#14130f;color:#efece4;padding:70px 7vw 30px;display:grid;gap:20px")}>
         <p style={css("margin:0;max-width:26ch;font:300 clamp(30px,4.6vw,58px)/1.1 'Cormorant Garamond',serif")}>Want one of these for your thing?</p>
         <a href="mailto:malvinboye@gmail.com" className="maable-link" style={css("justify-self:start;font:400 clamp(20px,2.6vw,30px)/1 'Lora',serif;color:#b68235;border-bottom:1px solid rgba(182,130,53,.6);padding-bottom:8px")}>malvinboye@gmail.com</a>
-        <div style={css("display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;border-top:1px solid rgba(239,236,228,.18);padding-top:18px;margin-top:36px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:rgba(239,236,228,.45)")}>
+        <div style={css("display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;border-top:1px solid rgba(239,236,228,.18);padding-top:18px;margin-top:36px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:rgba(239,236,228,.55)")}>
           <span>MALVIN BOYE © 2026</span><span>SEE YOU SPACE COWBOY…</span>
-          <Link to="/" style={{ color: 'rgba(239,236,228,.45)' }}>BACK TO MAEHLO.COM</Link>
+          <Link to="/" style={{ color: 'rgba(239,236,228,.55)' }}>BACK TO MAEHLO.COM</Link>
         </div>
       </section>
 

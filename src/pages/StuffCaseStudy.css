@@ -3,6 +3,10 @@
 .stuff-case {
   scroll-behavior: smooth;
 }
+.stuff-case :focus-visible {
+  outline: 2px solid #b68235;
+  outline-offset: 2px;
+}
 .stuff-case ::selection {
   background: rgba(182, 130, 53, .25);
 }

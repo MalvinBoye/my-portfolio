@@ -3,6 +3,10 @@
 .maable-case {
   scroll-behavior: smooth;
 }
+.maable-case :focus-visible {
+  outline: 2px solid #b68235;
+  outline-offset: 2px;
+}
 .maable-case ::selection {
   background: rgba(182, 130, 53, .25);
 }

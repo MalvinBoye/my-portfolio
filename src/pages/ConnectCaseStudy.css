@@ -3,6 +3,10 @@
 .connect-case {
   scroll-behavior: smooth;
 }
+.connect-case :focus-visible {
+  outline: 2px solid #b68235;
+  outline-offset: 2px;
+}
 .connect-case ::selection {
   background: rgba(182, 130, 53, .25);
 }

@@ -21,7 +21,7 @@ const results = [
   '6 cashiers onboarded, zero support escalations',
 ];
 
-const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)");
+const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.66)");
 const kickerDark = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:#b68235");
 
 export default function EvMartCaseStudy() {
@@ -29,7 +29,7 @@ export default function EvMartCaseStudy() {
     <div className="evmart-case" style={{ background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply', minHeight: '100vh', color: '#201f1d', fontFamily: '"Lora", Georgia, serif' }}>
 
       {/* NAV */}
-      <div style={css("display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 7vw;border-bottom:1px solid rgba(32,31,29,.14);font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(32,31,29,.6)")}>
+      <div style={css("display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 7vw;border-bottom:1px solid rgba(32,31,29,.14);font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(32,31,29,.66)")}>
         <Link to="/" className="evmart-link">← MAEHLO.COM</Link>
         <span>CASE 003 · EV MART POS · 2022</span>
       </div>
@@ -44,9 +44,9 @@ export default function EvMartCaseStudy() {
           Three branches, one point-of-sale interface, and a queue of Accra cashiers losing time to a UI that fought them at every step.
         </p>
         <div style={css("display:flex;flex-wrap:wrap;gap:44px;border-top:1px solid rgba(32,31,29,.2);padding-top:20px;margin-top:10px;font:400 14px/1.5 'Lora',serif")}>
-          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>ROLE</span><span>UX research, UI redesign, deployment lead</span></div>
-          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>SCOPE</span><span>POS redesign · 3 branches · Donfox Systems, Accra</span></div>
-          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>STATUS</span><span>Deployed · 27% faster checkout</span></div>
+          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>ROLE</span><span>UX research, UI redesign, deployment lead</span></div>
+          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>SCOPE</span><span>POS redesign · 3 branches · Donfox Systems, Accra</span></div>
+          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>STATUS</span><span>Deployed · 27% faster checkout</span></div>
         </div>
       </section>
 
@@ -101,9 +101,9 @@ export default function EvMartCaseStudy() {
       <section style={css("padding:80px 7vw 30px;display:grid;gap:20px")}>
         <p style={css("margin:0;max-width:26ch;font:300 clamp(32px,5vw,64px)/1.1 'Cormorant Garamond',serif")}>Want one of these for your thing?</p>
         <a href="mailto:malvinboye@gmail.com" className="evmart-link" style={css("justify-self:start;font:400 clamp(20px,2.6vw,30px)/1 'Lora',serif;color:#8a6224;border-bottom:1px solid rgba(182,130,53,.6);padding-bottom:8px")}>malvinboye@gmail.com</a>
-        <div style={css("display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;border-top:1px solid rgba(32,31,29,.14);padding-top:18px;margin-top:36px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:rgba(32,31,29,.4)")}>
+        <div style={css("display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;border-top:1px solid rgba(32,31,29,.14);padding-top:18px;margin-top:36px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:rgba(32,31,29,.66)")}>
           <span>MALVIN BOYE © 2026</span><span>SEE YOU SPACE COWBOY…</span>
-          <Link to="/" style={{ color: 'rgba(32,31,29,.4)' }}>BACK TO MAEHLO.COM</Link>
+          <Link to="/" style={{ color: 'rgba(32,31,29,.66)' }}>BACK TO MAEHLO.COM</Link>
         </div>
       </section>
 

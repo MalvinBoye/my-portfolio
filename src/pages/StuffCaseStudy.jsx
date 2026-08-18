@@ -29,7 +29,7 @@ const drawn = [
   { src: petMeeks, alt: 'Meeks the cat' },
 ];
 
-const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.5)");
+const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.66)");
 const kickerDark = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:#b68235");
 const plate = css("border:1px solid rgba(32,31,29,.2);background:#f7f5ef;padding:14px;border-radius:4px;box-shadow:0 3px 12px rgba(45,43,43,.12)");
 
@@ -38,7 +38,7 @@ export default function StuffCaseStudy() {
     <div className="stuff-case" style={{ background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply', minHeight: '100vh', color: '#201f1d', fontFamily: '"Lora", Georgia, serif' }}>
 
       {/* NAV */}
-      <div style={css("display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 7vw;border-bottom:1px solid rgba(32,31,29,.14);font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(32,31,29,.6)")}>
+      <div style={css("display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 7vw;border-bottom:1px solid rgba(32,31,29,.14);font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(32,31,29,.66)")}>
         <Link to="/" className="stuff-link">← MAEHLO.COM</Link>
         <span>CASE 001 · STUFF · 2026</span>
       </div>
@@ -53,9 +53,9 @@ export default function StuffCaseStudy() {
           Lists don't fail ADHD people because they're badly organised. They fail because opening one feels like being told off.
         </p>
         <div style={css("display:flex;flex-wrap:wrap;gap:44px;border-top:1px solid rgba(32,31,29,.2);padding-top:20px;margin-top:10px;font:400 14px/1.5 'Lora',serif")}>
-          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>ROLE</span><span>Research, product, UI, illustration</span></div>
-          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>SCOPE</span><span>iOS concept, 9 rounds, ~40 screens</span></div>
-          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.5)")}>STATUS</span><span>Design complete · build next</span></div>
+          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>ROLE</span><span>Research, product, UI, illustration</span></div>
+          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>SCOPE</span><span>iOS concept, 9 rounds, ~40 screens</span></div>
+          <div style={css("display:grid;gap:5px")}><span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>STATUS</span><span>Design complete · build next</span></div>
         </div>
       </section>
 
@@ -85,7 +85,7 @@ export default function StuffCaseStudy() {
         {screens.map(s => (
           <div key={s.alt} style={css("display:grid;gap:12px")}>
             <div style={plate}><img src={s.src} alt={s.alt} style={css("display:block;width:100%;border-radius:2px")} /></div>
-            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.62)")}>{s.cap}</span>
+            <span style={css("font:400 20px/1.35 'Caveat',cursive;color:rgba(32,31,29,.66)")}>{s.cap}</span>
           </div>
         ))}
       </section>
@@ -106,9 +106,9 @@ export default function StuffCaseStudy() {
       <section style={css("background:#14130f;color:#efece4;padding:80px 7vw 30px;display:grid;gap:20px")}>
         <p style={css("margin:0;max-width:26ch;font:300 clamp(32px,5vw,64px)/1.1 'Cormorant Garamond',serif")}>Want one of these for your thing?</p>
         <a href="mailto:malvinboye@gmail.com" className="stuff-link" style={css("justify-self:start;font:400 clamp(20px,2.6vw,30px)/1 'Lora',serif;color:#b68235;border-bottom:1px solid rgba(182,130,53,.6);padding-bottom:8px")}>malvinboye@gmail.com</a>
-        <div style={css("display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;border-top:1px solid rgba(239,236,228,.18);padding-top:18px;margin-top:36px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:rgba(239,236,228,.45)")}>
+        <div style={css("display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;border-top:1px solid rgba(239,236,228,.18);padding-top:18px;margin-top:36px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:rgba(239,236,228,.55)")}>
           <span>MALVIN BOYE © 2026</span><span>SEE YOU SPACE COWBOY…</span>
-          <Link to="/" style={{ color: 'rgba(239,236,228,.45)' }}>BACK TO MAEHLO.COM</Link>
+          <Link to="/" style={{ color: 'rgba(239,236,228,.55)' }}>BACK TO MAEHLO.COM</Link>
         </div>
       </section>
 
