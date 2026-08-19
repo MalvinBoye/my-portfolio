@@ -538,51 +538,89 @@ function workItemStyle(w, i, night) {
 
 const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.22em;color:rgba(32,31,29,.66)");
 
-// A quiet gold cursor trail, mounted only while showScrollHint is true — the
-// same act1/act2 dead-quiet buffer stretches the chevron hint covers. Extra
-// company for a moment when there's genuinely nothing else on screen but
-// paper. Canvas rather than DOM nodes, matching the doodle fields elsewhere
-// in this file, and skipped entirely under prefers-reduced-motion.
+// A cursor trail for act1/act2's dead-quiet scroll buffers — the same
+// stretches the "keep scrolling" chevron covers, where there's genuinely
+// nothing else on screen but paper. Two stacked canvases: an ink layer that
+// sketches short hand-drawn hachure marks (parallel pen strokes, like a
+// technical elevation drawing) wherever the cursor has recently passed,
+// persisting and slowly fading rather than clearing every frame — so
+// moving the mouse reads as *drawing* a small plan, not just leaving dots —
+// and a glow layer redrawn fresh each frame as a soft warm light immediately
+// at the cursor, like it's what's revealing the linework underneath. Skipped
+// entirely under prefers-reduced-motion.
 function CursorTrail({ active }) {
-  const canvasRef = useRef(null);
+  const inkCanvasRef = useRef(null);
+  const glowCanvasRef = useRef(null);
   const rafRef = useRef(null);
-  const pointsRef = useRef([]);
   const mouseRef = useRef({ x: -9999, y: -9999 });
+  const lastStrokeRef = useRef({ x: -9999, y: -9999 });
   const reduced = useRef(prefersReducedMotion()).current;
 
   useEffect(() => {
     if (!active || reduced) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const inkCv = inkCanvasRef.current, glowCv = glowCanvasRef.current;
+    const inkCtx = inkCv.getContext('2d');
+    const glowCtx = glowCv.getContext('2d');
+
     function resize() {
       const dpr = Math.min(1.5, window.devicePixelRatio || 1);
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
+      [inkCv, glowCv].forEach(c => { c.width = window.innerWidth * dpr; c.height = window.innerHeight * dpr; });
+      inkCtx.clearRect(0, 0, inkCv.width, inkCv.height);
     }
     resize();
     window.addEventListener('resize', resize);
     function onMove(e) { mouseRef.current = { x: e.clientX, y: e.clientY }; }
     window.addEventListener('mousemove', onMove, { passive: true });
 
+    // a small cluster of short, mostly-vertical strokes with hand-drawn
+    // jitter — an elevation drawing's hachure marks, not a dot.
+    function drawHachureCluster(cx, cy, dpr) {
+      const n = 2 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < n; i++) {
+        const ox = (Math.random() - 0.5) * 28;
+        const oy = (Math.random() - 0.5) * 12;
+        const len = 14 + Math.random() * 18;
+        const angle = Math.PI / 2 + (Math.random() - 0.5) * 0.4;
+        const x0 = (cx + ox) * dpr, y0 = (cy + oy - len / 2) * dpr;
+        const x1 = x0 + Math.cos(angle) * len * dpr, y1 = y0 + Math.sin(angle) * len * dpr;
+        inkCtx.beginPath();
+        inkCtx.moveTo(x0, y0);
+        inkCtx.lineTo(x1, y1);
+        inkCtx.strokeStyle = 'rgba(32,31,29,.4)';
+        inkCtx.lineWidth = Math.max(1, dpr);
+        inkCtx.lineCap = 'round';
+        inkCtx.stroke();
+      }
+    }
+
     function loop() {
       rafRef.current = requestAnimationFrame(loop);
       const dpr = Math.min(1.5, window.devicePixelRatio || 1);
       const m = mouseRef.current;
-      const pts = pointsRef.current;
-      const last = pts[pts.length - 1];
-      if (m.x > -9000 && (!last || Math.hypot(m.x - last.x, m.y - last.y) > 5)) {
-        pts.push({ x: m.x, y: m.y, life: 1 });
-        if (pts.length > 22) pts.shift();
+
+      // slow erase of the ink layer — a fresh sketch each visit, not a
+      // permanent scribble.
+      inkCtx.globalCompositeOperation = 'destination-out';
+      inkCtx.fillStyle = 'rgba(0,0,0,.006)';
+      inkCtx.fillRect(0, 0, inkCv.width, inkCv.height);
+      inkCtx.globalCompositeOperation = 'source-over';
+
+      const last = lastStrokeRef.current;
+      if (m.x > -9000 && Math.hypot(m.x - last.x, m.y - last.y) > 18) {
+        drawHachureCluster(m.x, m.y, dpr);
+        lastStrokeRef.current = { x: m.x, y: m.y };
       }
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = pts.length - 1; i >= 0; i--) {
-        const p = pts[i];
-        p.life -= 0.05;
-        if (p.life <= 0) { pts.splice(i, 1); continue; }
-        ctx.beginPath();
-        ctx.arc(p.x * dpr, p.y * dpr, 3 * p.life * dpr, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(182,130,53,${(p.life * 0.5).toFixed(3)})`;
-        ctx.fill();
+
+      glowCtx.clearRect(0, 0, glowCv.width, glowCv.height);
+      if (m.x > -9000) {
+        const gx = m.x * dpr, gy = m.y * dpr, r = 70 * dpr;
+        const grad = glowCtx.createRadialGradient(gx, gy, 0, gx, gy, r);
+        grad.addColorStop(0, 'rgba(182,130,53,.16)');
+        grad.addColorStop(1, 'rgba(182,130,53,0)');
+        glowCtx.fillStyle = grad;
+        glowCtx.beginPath();
+        glowCtx.arc(gx, gy, r, 0, Math.PI * 2);
+        glowCtx.fill();
       }
     }
     loop();
@@ -591,19 +629,19 @@ function CursorTrail({ active }) {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMove);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      pointsRef.current = [];
-      const c = canvasRef.current;
-      if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height);
+      lastStrokeRef.current = { x: -9999, y: -9999 };
+      inkCtx.clearRect(0, 0, inkCv.width, inkCv.height);
+      glowCtx.clearRect(0, 0, glowCv.width, glowCv.height);
     };
   }, [active, reduced]);
 
   if (reduced) return null;
+  const base = { position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none' };
   return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 19, opacity: active ? 1 : 0, transition: 'opacity .4s ease' }}
-    />
+    <>
+      <canvas ref={inkCanvasRef} aria-hidden="true" style={{ ...base, zIndex: 18, opacity: active ? 1 : 0, transition: 'opacity .6s ease' }} />
+      <canvas ref={glowCanvasRef} aria-hidden="true" style={{ ...base, zIndex: 19, opacity: active ? 1 : 0, transition: 'opacity .4s ease' }} />
+    </>
   );
 }
 
@@ -903,7 +941,7 @@ export default function MainSite() {
             <h1 style={css("margin:0;font:300 clamp(52px,8.4vw,124px)/.92 'Cormorant Garamond',serif;letter-spacing:-.02em")}>
               <span>Malvin Mallock Boye</span><span className="ms-caret">_</span>
             </h1>
-            <p style={css("margin:0;max-width:28ch;font:400 clamp(17px,1.7vw,21px)/1.5 'Lora',serif;color:rgba(32,31,29,.75);text-wrap:pretty")}>Design engineer based in the DMV. I design and build for minds that are always in motion.</p>
+            <p style={css("margin:0;max-width:28ch;font:400 clamp(17px,1.7vw,21px)/1.5 'Lora',serif;color:rgba(32,31,29,.75);text-wrap:pretty")}>Designer and design engineer in Washington DC. I make software that's kind to a wandering mind.</p>
           </div>
           <div style={cueA}>
             <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>SCROLL IN_</span>
