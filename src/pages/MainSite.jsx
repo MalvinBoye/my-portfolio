@@ -979,7 +979,7 @@ export default function MainSite() {
       <div className="ms-topbar">
         <span>MALVIN MALLOCK BOYE — MAEHLO</span>
         <span className="ms-topbar-right">
-          <a href="#me">ABOUT</a><a href="#work">WORK</a><a href="#say">CONTACT</a>
+          <Link to="/about">ABOUT</Link><a href="#work">WORK</a><a href="#say">CONTACT</a>
           <span style={{ color: artMode ? '#b8391f' : '#e2604a' }} data-ink>●</span><span style={{ fontVariantNumeric: 'tabular-nums' }}>{clock}</span>
         </span>
       </div>
@@ -1177,8 +1177,6 @@ export default function MainSite() {
       <section id="say" className="ms-say">
         <a href="mailto:malvinboye@gmail.com" style={css("font:300 clamp(30px,5.6vw,72px)/1 'Cormorant Garamond',serif;color:#201f1d;border-bottom:1px solid rgba(138,98,36,.55);padding-bottom:8px")}>malvinboye@gmail.com</a>
         <div style={css("display:flex;flex-wrap:wrap;gap:22px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em")}>
-          <a href="https://youtube.com/@maehlo" target="_blank" rel="noopener noreferrer">YOUTUBE ↗</a>
-          <a href="https://instagram.com/pseudo.sq" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
           <a href="https://github.com/MalvinBoye" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
           <span style={css("font:400 19px/1 'Caveat',cursive;color:rgba(32,31,29,.66)")}>type "poster" anywhere</span>
         </div>
