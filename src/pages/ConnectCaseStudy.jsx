@@ -78,15 +78,15 @@ const scoring = [
 // No supabase_schema.sql exists anywhere in the repo (checked every commit
 // and three duplicate local copies), so trigger/RLS specifics below are
 // deliberately stated at the level the available sources actually support —
-// see the TODO note for exactly what's unverified.
+// each entry below says plainly where that stops.
 const engineering = [
   {
     title: 'Matches are created server-side',
-    body: `Connecting with someone inserts a row into swipes — the client never writes to matches directly, it only checks afterward whether a row already exists there. The README's own schema notes describe matches as "auto-created by Postgres trigger when two users both connect," which is consistent with that gap. TODO: the trigger's actual SQL isn't available to read, so I can't describe its exact implementation beyond what the client's behavior and the README together confirm.`,
+    body: `Connecting with someone inserts a row into swipes — the client never writes to matches directly, it only checks afterward whether a row already exists there. The README's own schema notes describe matches as "auto-created by Postgres trigger when two users both connect," which is consistent with that gap. I don't have the trigger's actual SQL to read, so this is as specific as the client's behavior and the README together let me honestly get.`,
   },
   {
     title: 'Row-level security, five tables',
-    body: `profiles, swipes, matches, messages, daily_swipes — five tables, confirmed both by the README and by every .from() call in the client. The README states row-level security is enabled across all five. TODO: the specific policies aren't recorded anywhere I could read, so I'm not going to guess at what each one actually allows or blocks.`,
+    body: `profiles, swipes, matches, messages, daily_swipes — five tables, confirmed both by the README and by every .from() call in the client. The README states row-level security is enabled across all five. The specific policies aren't recorded anywhere I could read, so I'm not going to guess at what each one actually allows or blocks.`,
   },
   {
     title: 'Realtime messaging',
@@ -94,7 +94,7 @@ const engineering = [
   },
   {
     title: 'The daily cap lives in the database',
-    body: `Every swipe increments a counter through a Postgres RPC call against a dedicated daily_swipes table, not a number sitting in component state — clearing local storage or reloading doesn't reset it. One precise caveat: the limit itself (5) is a client-side constant applied to that server-tracked count when the app asks how many profiles remain. TODO: I can't verify from the client code alone whether the RPC function also refuses swipes past the limit at the database level — that function's own SQL isn't in the repo either.`,
+    body: `Every swipe increments a counter through a Postgres RPC call against a dedicated daily_swipes table, not a number sitting in component state — clearing local storage or reloading doesn't reset it. One precise caveat, honestly: the limit itself (5) is a client-side constant applied to that server-tracked count when the app asks how many profiles remain. I can't verify from the client code alone whether the RPC function also refuses swipes past the limit at the database level — that function's own SQL isn't in the repo either.`,
   },
 ];
 
@@ -248,7 +248,7 @@ export default function ConnectCaseStudy() {
       {/* WHAT I'D CHANGE */}
       <section style={css("padding:0 7vw 90px;display:grid;gap:14px")}>
         <div style={kicker}>WHAT I&apos;D CHANGE_</div>
-        <p style={css("margin:0;max-width:60ch;font:400 17px/1.75 'Lora',serif;color:rgba(32,31,29,.78)")}>TODO: Malvin to write this.</p>
+        <p style={css("margin:0;max-width:60ch;font:400 17px/1.75 'Lora',serif;color:rgba(32,31,29,.78)")}>The interest matching is naive in a way that bugs me — it's keyword extraction against free text, so a bio that says "used to love hiking, over it now" still scores as a hiking match. Good enough to ship, not good enough to fully trust. If I rebuilt the scoring layer today I'd want structured signals with some sentiment attached, not just presence detection. And the daily cap taught me something the README doesn't say out loud: watching myself bump it from 5 to 15 for a demo meant five was the right number ethically, but the product hadn't earned the trust to hold that line under pressure yet.</p>
       </section>
 
       {/* THE RESULT */}

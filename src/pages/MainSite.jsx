@@ -834,7 +834,7 @@ export default function MainSite() {
             <h1 style={css("margin:0;font:300 clamp(52px,8.4vw,124px)/.92 'Cormorant Garamond',serif;letter-spacing:-.02em")}>
               <span>Malvin Mallock Boye</span><span className="ms-caret">_</span>
             </h1>
-            <p style={css("margin:0;max-width:28ch;font:400 clamp(17px,1.7vw,21px)/1.5 'Lora',serif;color:rgba(32,31,29,.75);text-wrap:pretty")}>TODO: tagline — rewriting this</p>
+            <p style={css("margin:0;max-width:28ch;font:400 clamp(17px,1.7vw,21px)/1.5 'Lora',serif;color:rgba(32,31,29,.75);text-wrap:pretty")}>Designer and design engineer in Washington DC. I build the thing, then make it feel like something.</p>
           </div>
           <div style={cueA}>
             <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>SCROLL IN_</span>
