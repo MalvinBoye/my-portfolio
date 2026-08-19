@@ -27,17 +27,21 @@ const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:
 const kickerDark = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:#b68235");
 
 // Screenshots live in public/case/connect/ (not imported — served by path,
-// like everything else in public/). The folder was empty when this section
-// was built; ScreenShot falls back to a labelled placeholder on load
-// failure so the layout is already correct once real files land at these
-// exact names.
+// like everything else in public/). These are rendered straight from the
+// wireframe frames in "Connect Redesign.dc.html" (a Claude Design critique
+// pass on the shipped app) — captured via headless Chrome at each frame's
+// native 392×730, not hand-picked photos. Captions condense that file's own
+// numbered annotations, not invented copy. ScreenShot still falls back to a
+// labelled placeholder on load failure, in case a filename ever drifts.
 const screens = [
-  { file: 'connect-partners.png', alt: 'Potential Partners — scored profile list', cap: `potential partners — a full score breakdown sits behind every card, so "why am I seeing this person" always has an answer` },
-  { file: 'connect-reflection-connect.png', alt: 'Reflection screen before connecting', cap: `reflection, before connecting — a deliberate pause instead of a swipe, because friction here is care, not a bug` },
-  { file: 'connect-transparency.png', alt: 'Transparency dashboard', cap: `the transparency dashboard — full algorithmic accounting; no equivalent exists in any mainstream dating app` },
-  { file: 'connect-messages.png', alt: 'Real-time messages screen', cap: `messages, in real time — with a nudge to move offline once a conversation has actually gone somewhere` },
-  { file: 'connect-date-ideas.png', alt: 'Curated date ideas screen', cap: `date ideas — the app actively trying to talk you into leaving it` },
-  { file: 'connect-profile.png', alt: 'My profile screen', cap: `my profile — full user control, a completeness tracker, and a data download sitting in settings` },
+  { file: 'connect-splash.png', alt: 'Redesigned splash and intention screen', cap: `splash folds straight into intention — the one thing that gates who you see belongs at the door, not two screens in` },
+  { file: 'connect-partners.png', alt: 'Redesigned Potential Partners screen', cap: `the daily cap as five marks you watch spend down, and all seven scoring signals visible at a glance — not one tap deep` },
+  { file: 'connect-reflection-connect.png', alt: 'Redesigned reflection screen before connecting', cap: `one question, no repeated chrome around it — and "not yet" instead of "go back", because leaving is a legitimate answer` },
+  { file: 'connect-transparency.png', alt: 'Redesigned transparency dashboard, "the ledger"', cap: `four scattered cards become one table, because the claim is "here's the arithmetic" — hard filters get named as gates, not folded into the score` },
+  { file: 'connect-messages.png', alt: 'Redesigned conversation screen', cap: `the move-offline nudge lives inside the thread itself — the app speaking, not a banner interrupting you` },
+  { file: 'connect-date-ideas.png', alt: 'Redesigned date ideas screen', cap: `an idea you can actually send into a conversation — closing a loop the shipped version leaves as a dead end` },
+  { file: 'connect-profile.png', alt: 'Redesigned profile and settings screen', cap: `profile completeness stated in the same points the scoring uses everywhere else, one settings list instead of eight bordered cards` },
+  { file: 'connect-cap.png', alt: 'Redesigned daily cap reached screen', cap: `the daily limit names itself plainly instead of apologising — both exits lead outward, to a chat or a plan, not back into the app` },
 ];
 
 function ScreenShot({ file, alt, cap }) {
@@ -46,8 +50,8 @@ function ScreenShot({ file, alt, cap }) {
     <div style={css("display:grid;gap:12px")}>
       <div style={css("border:1px solid rgba(32,31,29,.2);background:#f7f5ef;padding:14px;border-radius:4px;box-shadow:0 3px 12px rgba(45,43,43,.12)")}>
         {broken ? (
-          <div style={{ aspectRatio: '1920/1062', display: 'grid', placeItems: 'center', gap: 6, border: '1px dashed rgba(32,31,29,.3)', borderRadius: 2, padding: 16, textAlign: 'center' }}>
-            <span style={css("font:400 11px/1.6 ui-monospace,Menlo,monospace;letter-spacing:.1em;color:rgba(32,31,29,.66)")}>EXPECTED{' '}FILE{' '}—{' '}public/case/connect/{file}</span>
+          <div style={{ aspectRatio: '432/770', display: 'grid', placeItems: 'center', gap: 6, border: '1px dashed rgba(32,31,29,.3)', borderRadius: 2, padding: 16, textAlign: 'center' }}>
+            <span style={css("font:400 11px/1.6 ui-monospace,Menlo,monospace;letter-spacing:.1em;color:rgba(32,31,29,.66)")}>EXPECTED{' '}FILE{' '}—{' '}public/case/connect/{file}</span>
           </div>
         ) : (
           <img src={`/case/connect/${file}`} alt={alt} onError={() => setBroken(true)} style={css("display:block;width:100%;border-radius:2px")} />
@@ -177,8 +181,10 @@ export default function ConnectCaseStudy() {
 
       {/* SCREENS */}
       <section style={css("padding:0 7vw 90px;display:grid;gap:26px")}>
-        <div style={kicker}>SCREENS_</div>
-        <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:clamp(24px,4vw,54px)")}>
+        <div style={kicker}>THE REDESIGN_</div>
+        <h2 style={css("margin:0;max-width:26ch;font:300 clamp(32px,5vw,64px)/1.08 'Cormorant Garamond',serif")}>Eight screens, structure only — a craft pass on what shipped.</h2>
+        <p style={css("margin:0;max-width:58ch;font:400 17px/1.75 'Lora',serif;color:rgba(32,31,29,.78);text-wrap:pretty")}>The flow, the five-a-day cap, and the seven signals all stay exactly as shipped. What changes is hierarchy: what's visible without a tap, what stops competing for the same weight, and where the copy stops explaining itself twice.</p>
+        <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(24px,4vw,54px);margin-top:8px")}>
           {screens.map(s => <ScreenShot key={s.file} {...s} />)}
         </div>
       </section>
