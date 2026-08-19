@@ -538,6 +538,75 @@ function workItemStyle(w, i, night) {
 
 const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.22em;color:rgba(32,31,29,.66)");
 
+// A quiet gold cursor trail, mounted only while showScrollHint is true — the
+// same act1/act2 dead-quiet buffer stretches the chevron hint covers. Extra
+// company for a moment when there's genuinely nothing else on screen but
+// paper. Canvas rather than DOM nodes, matching the doodle fields elsewhere
+// in this file, and skipped entirely under prefers-reduced-motion.
+function CursorTrail({ active }) {
+  const canvasRef = useRef(null);
+  const rafRef = useRef(null);
+  const pointsRef = useRef([]);
+  const mouseRef = useRef({ x: -9999, y: -9999 });
+  const reduced = useRef(prefersReducedMotion()).current;
+
+  useEffect(() => {
+    if (!active || reduced) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    function resize() {
+      const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    function onMove(e) { mouseRef.current = { x: e.clientX, y: e.clientY }; }
+    window.addEventListener('mousemove', onMove, { passive: true });
+
+    function loop() {
+      rafRef.current = requestAnimationFrame(loop);
+      const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+      const m = mouseRef.current;
+      const pts = pointsRef.current;
+      const last = pts[pts.length - 1];
+      if (m.x > -9000 && (!last || Math.hypot(m.x - last.x, m.y - last.y) > 5)) {
+        pts.push({ x: m.x, y: m.y, life: 1 });
+        if (pts.length > 22) pts.shift();
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = pts.length - 1; i >= 0; i--) {
+        const p = pts[i];
+        p.life -= 0.05;
+        if (p.life <= 0) { pts.splice(i, 1); continue; }
+        ctx.beginPath();
+        ctx.arc(p.x * dpr, p.y * dpr, 3 * p.life * dpr, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(182,130,53,${(p.life * 0.5).toFixed(3)})`;
+        ctx.fill();
+      }
+    }
+    loop();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('mousemove', onMove);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      pointsRef.current = [];
+      const c = canvasRef.current;
+      if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height);
+    };
+  }, [active, reduced]);
+
+  if (reduced) return null;
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 19, opacity: active ? 1 : 0, transition: 'opacity .4s ease' }}
+    />
+  );
+}
+
 export default function MainSite() {
   const now = useTypewriter(NOW_LIST, 46, 2400, 22);
   const clock = useClock();
@@ -834,7 +903,7 @@ export default function MainSite() {
             <h1 style={css("margin:0;font:300 clamp(52px,8.4vw,124px)/.92 'Cormorant Garamond',serif;letter-spacing:-.02em")}>
               <span>Malvin Mallock Boye</span><span className="ms-caret">_</span>
             </h1>
-            <p style={css("margin:0;max-width:28ch;font:400 clamp(17px,1.7vw,21px)/1.5 'Lora',serif;color:rgba(32,31,29,.75);text-wrap:pretty")}>Designer and design engineer in Washington DC. I build the thing, then make it feel like something.</p>
+            <p style={css("margin:0;max-width:28ch;font:400 clamp(17px,1.7vw,21px)/1.5 'Lora',serif;color:rgba(32,31,29,.75);text-wrap:pretty")}>Design engineer based in the DMV. I design and build for minds that are always in motion.</p>
           </div>
           <div style={cueA}>
             <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>SCROLL IN_</span>
@@ -1031,6 +1100,8 @@ export default function MainSite() {
       </footer>
 
       {boardOpen && <PosterBoard onClose={() => setBoardOpen(false)} />}
+
+      <CursorTrail active={showScrollHint} />
 
       {/* a quiet nudge for act1/act2's dead-quiet buffer stretches — see
           showScrollHint above */}

@@ -119,7 +119,7 @@ export default function ConnectCaseStudy() {
 
       {/* NAV */}
       <div style={css("display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 7vw;border-bottom:1px solid rgba(32,31,29,.14);font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(32,31,29,.66)")}>
-        <Link to="/" className="connect-link">← MAEHLO.COM</Link>
+        <Link to="/work" className="connect-link">← MAEHLO.COM</Link>
         <span>CASE 005 · CONNECT · 2026</span>
       </div>
 
@@ -287,7 +287,7 @@ export default function ConnectCaseStudy() {
         <a href="mailto:malvinboye@gmail.com" className="connect-link" style={css("justify-self:start;font:400 clamp(20px,2.6vw,30px)/1 'Lora',serif;color:#b68235;border-bottom:1px solid rgba(182,130,53,.6);padding-bottom:8px")}>malvinboye@gmail.com</a>
         <div style={css("display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;border-top:1px solid rgba(239,236,228,.18);padding-top:18px;margin-top:36px;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:rgba(239,236,228,.55)")}>
           <span>MALVIN BOYE © 2026</span><span>SEE YOU SPACE COWBOY…</span>
-          <Link to="/" style={{ color: 'rgba(239,236,228,.55)' }}>BACK TO MAEHLO.COM</Link>
+          <Link to="/work" style={{ color: 'rgba(239,236,228,.55)' }}>BACK TO MAEHLO.COM</Link>
         </div>
       </section>
 

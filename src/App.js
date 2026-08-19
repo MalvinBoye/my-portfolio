@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './App.css';
 import MainSite from './pages/MainSite';
+import ProjectsPage from './pages/ProjectsPage';
 import MaableCaseStudy from './pages/MaableCaseStudy';
 import StuffCaseStudy from './pages/StuffCaseStudy';
 import EvMartCaseStudy from './pages/EvMartCaseStudy';
@@ -163,6 +164,7 @@ function AppContent() {
       {!showSig && (
         <Routes>
           <Route path="/" element={<MainSite />} />
+          <Route path="/work" element={<ProjectsPage />} />
           <Route path="/work/stuff" element={<StuffCaseStudy />} />
           <Route path="/work/maable" element={<MaableCaseStudy />} />
           <Route path="/work/ev-mart" element={<EvMartCaseStudy />} />
