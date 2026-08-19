@@ -490,10 +490,10 @@ function PosterBoard({ onClose }) {
 // ── selected work — a stack of full-viewport sticky cards, each one covering
 // the last as it scrolls into place ─────────────────────────────────────────
 const WORK = [
+  { title: 'Connect', kicker: 'social, with a conscience', studio: 'Personal — full-stack', cat: 'A social product designed around what it costs the person using it — attention, comparison, time — rather than what it extracts from them.', year: '2026', href: '/work/connect', cta: 'READ THE CASE STUDY ↗' },
   { title: 'Stuff', kicker: "a grocery app for a brain that wanders", studio: 'Personal — research → UI', cat: "Lists don't fail ADHD people because they're badly organised. They fail because opening one feels like being told off. Kraft paper, a cat with opinions, and a currency you earn by finishing.", year: '2026', href: '/work/stuff', kraft: true, cta: 'READ THE CASE STUDY ↗' },
   { title: 'Maable', kicker: 'productivity that pays you back', studio: 'Personal — design engineering', cat: 'Ten tools on one surface, XP as the exhaust of real work rather than a separate game, and a companion whose mood tracks your week. Live on the web.', year: '2026', href: '/work/maable', img: maableDashboard, cta: 'READ THE CASE STUDY ↗' },
   { title: 'DormDrop', kicker: 'campus delivery, minus the chaos', studio: 'Personal — UI/UX, frontend', cat: 'Ordering built around dorm reality: shared drop points, tiny windows between classes, and roommates who never split the bill.', year: '2024', href: '/work/dormdrop', img: dormdrop1, cta: 'READ THE CASE STUDY ↗' },
-  { title: 'Connect', kicker: 'social, with a conscience', studio: 'Personal — full-stack', cat: 'A social product designed around what it costs the person using it — attention, comparison, time — rather than what it extracts from them.', year: '2026', href: '/work/connect', cta: 'READ THE CASE STUDY ↗' },
 ];
 
 // derived per-item palette/layout — a kraft-paper treatment for the one item
@@ -645,6 +645,26 @@ function CursorTrail({ active }) {
   );
 }
 
+// A comic-strip "psst" callout for act1's blank scroll buffer — the
+// counterpart to CursorTrail, which now runs only on act2's buffer so the
+// two dead-quiet stretches don't repeat the same trick. Pops in like a
+// speech-bubble panel (thick ink border, halftone dots, drop shadow, a hand-
+// drawn tail) instead of fading, and teases the "Art." toggle that's coming
+// up next in #meTrack. The className (rather than the opacity alone) is what
+// re-triggers the pop keyframe each time this zone is re-entered — React
+// removes it on the way out and re-adds it on the way back in.
+function ComicHint({ active }) {
+  return (
+    <div
+      className={'ms-comic-hint' + (active ? ' ms-comic-hint--pop' : '')}
+      style={{ opacity: active ? 1 : 0 }}
+      aria-hidden="true"
+    >
+      <span className="ms-comic-hint-text">click <b>"ART."</b> for a change in perspective</span>
+    </div>
+  );
+}
+
 export default function MainSite() {
   const now = useTypewriter(NOW_LIST, 46, 2400, 22);
   const clock = useClock();
@@ -652,7 +672,7 @@ export default function MainSite() {
   // whether #meTrack/#workTrack pin+pan at all or just lay out normally.
   const [reduced] = useState(prefersReducedMotion);
 
-  const [artMode, setArtMode] = useState(false);
+  const [artMode, setArtMode] = useState(() => localStorage.getItem('ms-art-mode') === '1');
   const [boardOpen, setBoardOpen] = useState(false);
   const [p1, setP1] = useState(0);
   const [p2, setP2] = useState(0);
@@ -877,6 +897,7 @@ export default function MainSite() {
   // CSS class that flips every panel to night colors.
   useEffect(() => {
     document.body.classList.toggle('night', artMode);
+    localStorage.setItem('ms-art-mode', artMode ? '1' : '');
     if (fieldARef.current) fieldARef.current.setNight(artMode);
     if (fieldBRef.current) fieldBRef.current.setNight(artMode);
     return () => { document.body.classList.remove('night'); };
@@ -919,7 +940,9 @@ export default function MainSite() {
   // specifically to absorb real-world scroll timing slop. Without a cue,
   // that stretch reads as "the page ended" rather than "keep going" — shown
   // only in that window, not before the reveal has even appeared.
-  const showScrollHint = (p1Full > REVEAL_OUT[1] && p1Full < 0.995) || (p2Full > REVEAL_OUT[1] && p2Full < 0.995);
+  const showScrollHintA = p1Full > REVEAL_OUT[1] && p1Full < 0.995;
+  const showScrollHintB = p2Full > REVEAL_OUT[1] && p2Full < 0.995;
+  const showScrollHint = showScrollHintA || showScrollHintB;
 
   return (
     <div className="main-site" style={{ background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply' }}>
@@ -1139,7 +1162,8 @@ export default function MainSite() {
 
       {boardOpen && <PosterBoard onClose={() => setBoardOpen(false)} />}
 
-      <CursorTrail active={showScrollHint} />
+      <CursorTrail active={showScrollHintB} />
+      <ComicHint active={showScrollHintA} />
 
       {/* a quiet nudge for act1/act2's dead-quiet buffer stretches — see
           showScrollHint above */}
