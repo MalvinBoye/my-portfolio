@@ -132,18 +132,26 @@ const GLYPHS = [
   return cells;
 });
 
-// night mode swaps every particle from ink greyscale to a cream/cyan/gold
-// trio (ABGR-packed, matching the Uint32Array pixel format both fields
-// write into) — see DotField.setNight() / MorphField below.
+// dark mode (the site's default now) swaps every particle from ink
+// greyscale to a cream/cyan/gold trio (ABGR-packed, matching the
+// Uint32Array pixel format both fields write into) — see DotField.setNight()
+// / MorphField below. Mono mode (reached by clicking "Art.") uses a plain
+// greyscale trio instead — same packing, just no color, for the quote
+// canvas that only ever renders against mono's white stage.
 const NIGHT_COLS = [
   (255 << 24) | (230 << 16) | (239 << 8) | 242,
   (255 << 24) | (78 << 16) | (193 << 8) | 242,
   (255 << 24) | (214 << 16) | (127 << 8) | 74,
 ];
-function paintNight(col, n) {
+const MONO_COLS = [
+  (255 << 24) | (17 << 16) | (17 << 8) | 17,
+  (255 << 24) | (55 << 16) | (55 << 8) | 55,
+  (255 << 24) | (100 << 16) | (100 << 8) | 100,
+];
+function paintPalette(col, n, palette) {
   for (let i = 0; i < n; i++) {
     const r = Math.random();
-    col[i] = r < 0.42 ? NIGHT_COLS[0] : (r < 0.72 ? NIGHT_COLS[1] : NIGHT_COLS[2]);
+    col[i] = r < 0.42 ? palette[0] : (r < 0.72 ? palette[1] : palette[2]);
   }
 }
 
@@ -195,7 +203,7 @@ class DotField {
     this._want = v;
     if (!this.ready || this._night === v) return;
     this._night = v;
-    if (v) { this._day = this._day || this.g.slice(); paintNight(this.g, this.count); }
+    if (v) { this._day = this._day || this.g.slice(); paintPalette(this.g, this.count, NIGHT_COLS); }
     else if (this._day) this.g.set(this._day);
   }
   blast(x, y) {
@@ -278,6 +286,9 @@ class DotField {
 }
 
 // ── interactive quote-particle field for "art mode" ─────────────────────────
+// this canvas only ever mounts inside the mono-mode swap panel (see the
+// artMode ternary in MainSite's render below), so its particles are always
+// the plain greyscale trio, not the colorful one DotField uses in dark mode.
 const QUOTE = ['EMBARRASSMENT', 'IS AN UNDEREXPLORED', 'EMOTION'];
 
 class MorphField {
@@ -293,7 +304,7 @@ class MorphField {
     for (let i = 0; i < n; i++) {
       this.mass[i] = 0.5 + Math.random() * 1.1;
       const r = Math.random();
-      this.col[i] = r < 0.42 ? NIGHT_COLS[0] : (r < 0.72 ? NIGHT_COLS[1] : NIGHT_COLS[2]);
+      this.col[i] = r < 0.42 ? MONO_COLS[0] : (r < 0.72 ? MONO_COLS[1] : MONO_COLS[2]);
       this.px[i] = Math.random() * 900; this.py[i] = Math.random() * 500;
     }
     this.dpr = Math.min(1.3, window.devicePixelRatio || 1);
@@ -491,41 +502,43 @@ function PosterBoard({ onClose }) {
 // the last as it scrolls into place ─────────────────────────────────────────
 const WORK = [
   { title: 'Connect', kicker: 'social, with a conscience', studio: 'Personal — full-stack', cat: 'A social product designed around what it costs the person using it — attention, comparison, time — rather than what it extracts from them.', year: '2026', href: '/work/connect', cta: 'READ THE CASE STUDY ↗' },
-  { title: 'Stuff', kicker: "a grocery app for a brain that wanders", studio: 'Personal — research → UI', cat: "Lists don't fail ADHD people because they're badly organised. They fail because opening one feels like being told off. Kraft paper, a cat with opinions, and a currency you earn by finishing.", year: '2026', href: '/work/stuff', kraft: true, cta: 'READ THE CASE STUDY ↗' },
+  { title: 'Stuff', kicker: "a grocery app for a brain that wanders", studio: 'Personal — research → UI', cat: "Lists don't fail ADHD people because they're badly organised. They fail because opening one feels like being told off. Kraft paper, a cat with opinions, and a currency you earn by finishing.", year: '2026', href: '/work/stuff', cta: 'READ THE CASE STUDY ↗' },
   { title: 'Maable', kicker: 'productivity that pays you back', studio: 'Personal — design engineering', cat: 'Ten tools on one surface, XP as the exhaust of real work rather than a separate game, and a companion whose mood tracks your week. Live on the web.', year: '2026', href: '/work/maable', img: maableDashboard, cta: 'READ THE CASE STUDY ↗' },
   { title: 'DormDrop', kicker: 'campus delivery, minus the chaos', studio: 'Personal — UI/UX, frontend', cat: 'Ordering built around dorm reality: shared drop points, tiny windows between classes, and roommates who never split the bill.', year: '2024', href: '/work/dormdrop', img: dormdrop1, cta: 'READ THE CASE STUDY ↗' },
 ];
 
-// derived per-item palette/layout — a kraft-paper treatment for the one item
-// with no screenshot, a sepia photo treatment for the rest, both swapping to
-// a near-black night variant; falls back to "IN PROGRESS" copy without a href
-function workItemStyle(w, i, night) {
+// derived per-item palette/layout — a sepia photo treatment for the ones
+// with a screenshot, a grained paper treatment for the one without, both
+// swapping between dark mode's near-black card and mono's flat white one;
+// falls back to "IN PROGRESS" copy without a href. Gold stays gold in both
+// modes (kept as the one accent color, per the mono-mode brief) — only the
+// paper/text/shadow swap.
+function workItemStyle(w, i, mono) {
   const live = !!w.href;
   const onImage = !!w.img;
-  const kraft = !!w.kraft && !night;
-  const paper = kraft ? '#c7a878' : (night ? '#0f0e0c' : '#e9e5db');
-  const fg = kraft ? '#2b2015' : (onImage ? '#f4f1e8' : (night ? '#f2efe6' : '#201f1d'));
-  const soft = kraft ? 'rgba(43,32,21,.78)' : (onImage ? 'rgba(244,241,232,.76)' : (night ? 'rgba(242,239,230,.72)' : 'rgba(32,31,29,.7)'));
-  const gold = kraft ? '#4a3015' : (onImage ? '#e9c680' : (night ? '#f2c14e' : '#8a6224'));
+  const paper = mono ? '#ffffff' : '#0f0e0c';
+  const fg = mono ? '#141414' : (onImage ? '#f4f1e8' : '#f2efe6');
+  const soft = mono ? (onImage ? 'rgba(20,20,20,.74)' : 'rgba(20,20,20,.7)') : (onImage ? 'rgba(244,241,232,.76)' : 'rgba(242,239,230,.72)');
+  const gold = mono ? '#8a6224' : '#f2c14e';
   return {
     live,
     num: '0' + (i + 1),
     tail: live ? w.year : w.year + ' · SOON',
     cta: w.cta || (live ? 'READ THE CASE STUDY ↗' : 'IN PROGRESS'),
     wrap: css(`position:sticky;top:0;display:block;height:100vh;text-decoration:none;z-index:${i + 2};${live ? 'cursor:pointer' : 'cursor:default'}`),
-    card: css(`position:relative;height:100vh;overflow:hidden;background:${paper};box-shadow:0 -24px 60px rgba(20,19,15,${night ? '.6' : '.18'})`),
+    card: css(`position:relative;height:100vh;overflow:hidden;background:${paper};box-shadow:0 -24px 60px rgba(20,19,15,${mono ? '.14' : '.6'})`),
     // the no-image variant is built as a plain object rather than via css():
     // GRAIN is itself a `url("data:...;base64,...")` string, and css()'s
     // naive `.split(';')` would slice it in half at that embedded semicolon.
     bleed: onImage
-      ? css(`position:absolute;inset:0;background:${paper} url("${w.img}") center/cover no-repeat;filter:sepia(.16) contrast(1.04) saturate(.85)`)
+      ? css(`position:absolute;inset:0;background:${paper} url("${w.img}") center/cover no-repeat;filter:${mono ? 'grayscale(1) contrast(1.05)' : 'sepia(.16) contrast(1.04) saturate(.85)'}`)
       : {
           position: 'absolute', inset: 0, background: paper,
-          backgroundImage: `${GRAIN}, radial-gradient(120% 90% at 20% 12%, rgba(255,246,226,.5), rgba(120,84,42,.22) 70%)`,
-          backgroundBlendMode: 'multiply, soft-light',
+          backgroundImage: mono ? 'none' : `${GRAIN}, radial-gradient(120% 90% at 20% 12%, rgba(255,246,226,.5), rgba(120,84,42,.22) 70%)`,
+          backgroundBlendMode: mono ? 'normal' : 'multiply, soft-light',
         },
     veil: onImage
-      ? css('position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,11,9,.62) 0%,rgba(12,11,9,.28) 40%,rgba(12,11,9,.78) 100%)')
+      ? css(`position:absolute;inset:0;background:linear-gradient(180deg,${mono ? 'rgba(255,255,255,.55) 0%,rgba(255,255,255,.15) 40%,rgba(255,255,255,.74) 100%' : 'rgba(12,11,9,.62) 0%,rgba(12,11,9,.28) 40%,rgba(12,11,9,.78) 100%'})`)
       : css('position:absolute;inset:0'),
     body: css(`position:absolute;inset:0;z-index:2;display:grid;align-content:space-between;gap:clamp(16px,3vh,40px);padding:clamp(72px,10vh,130px) clamp(20px,5vw,64px) clamp(36px,6vh,72px);color:${fg}`),
     metaInk: { color: soft },
@@ -548,7 +561,7 @@ const kicker = css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:
 // and a glow layer redrawn fresh each frame as a soft warm light immediately
 // at the cursor, like it's what's revealing the linework underneath. Skipped
 // entirely under prefers-reduced-motion.
-function CursorTrail({ active }) {
+function CursorTrail({ active, mono }) {
   const inkCanvasRef = useRef(null);
   const glowCanvasRef = useRef(null);
   const rafRef = useRef(null);
@@ -561,6 +574,11 @@ function CursorTrail({ active }) {
     const inkCv = inkCanvasRef.current, glowCv = glowCanvasRef.current;
     const inkCtx = inkCv.getContext('2d');
     const glowCtx = glowCv.getContext('2d');
+    // act2's page background flips between near-black (dark, default) and
+    // flat white (mono) — a dark ink stroke would vanish against dark, so
+    // the stroke color has to follow the same theme this trail is drawn
+    // over rather than staying fixed.
+    const inkStroke = mono ? 'rgba(20,20,20,.4)' : 'rgba(242,239,230,.42)';
 
     function resize() {
       const dpr = Math.min(1.5, window.devicePixelRatio || 1);
@@ -586,7 +604,7 @@ function CursorTrail({ active }) {
         inkCtx.beginPath();
         inkCtx.moveTo(x0, y0);
         inkCtx.lineTo(x1, y1);
-        inkCtx.strokeStyle = 'rgba(32,31,29,.4)';
+        inkCtx.strokeStyle = inkStroke;
         inkCtx.lineWidth = Math.max(1, dpr);
         inkCtx.lineCap = 'round';
         inkCtx.stroke();
@@ -633,7 +651,7 @@ function CursorTrail({ active }) {
       inkCtx.clearRect(0, 0, inkCv.width, inkCv.height);
       glowCtx.clearRect(0, 0, glowCv.width, glowCv.height);
     };
-  }, [active, reduced]);
+  }, [active, reduced, mono]);
 
   if (reduced) return null;
   const base = { position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none' };
@@ -660,7 +678,7 @@ function ComicHint({ active }) {
       style={{ opacity: active ? 1 : 0 }}
       aria-hidden="true"
     >
-      <span className="ms-comic-hint-text">click <b>"ART."</b> for a change in perspective</span>
+      <span className="ms-comic-hint-text" data-ink>click <b>"ART."</b> for a change in perspective</span>
     </div>
   );
 }
@@ -672,6 +690,9 @@ export default function MainSite() {
   // whether #meTrack/#workTrack pin+pan at all or just lay out normally.
   const [reduced] = useState(prefersReducedMotion);
 
+  // false (the default, unset in localStorage) = dark mode. true = the mono
+  // black-on-white look reached by clicking "Art." — see the artMode effect
+  // below for how that maps to body classes.
   const [artMode, setArtMode] = useState(() => localStorage.getItem('ms-art-mode') === '1');
   const [boardOpen, setBoardOpen] = useState(false);
   const [p1, setP1] = useState(0);
@@ -892,15 +913,18 @@ export default function MainSite() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // art mode doubles as a site-wide dark theme — toggling it swaps both
-  // doodle fields' particle colors (see DotField.setNight) along with the
-  // CSS class that flips every panel to night colors.
+  // The site now defaults to the dark theme (artMode false); clicking "Art."
+  // (artMode true) switches to a flat black-on-white mono theme instead of
+  // the old cream/day look, which is retired. Toggling swaps both doodle
+  // fields' particle colors (see DotField.setNight) along with the CSS
+  // class that recolors every panel.
   useEffect(() => {
-    document.body.classList.toggle('night', artMode);
+    document.body.classList.toggle('night', !artMode);
+    document.body.classList.toggle('mono', artMode);
     localStorage.setItem('ms-art-mode', artMode ? '1' : '');
-    if (fieldARef.current) fieldARef.current.setNight(artMode);
-    if (fieldBRef.current) fieldBRef.current.setNight(artMode);
-    return () => { document.body.classList.remove('night'); };
+    if (fieldARef.current) fieldARef.current.setNight(!artMode);
+    if (fieldBRef.current) fieldBRef.current.setNight(!artMode);
+    return () => { document.body.classList.remove('night', 'mono'); };
   }, [artMode]);
 
   useEffect(() => {
@@ -943,6 +967,10 @@ export default function MainSite() {
   const showScrollHintA = p1Full > REVEAL_OUT[1] && p1Full < 0.995;
   const showScrollHintB = p2Full > REVEAL_OUT[1] && p2Full < 0.995;
   const showScrollHint = showScrollHintA || showScrollHintB;
+  // the handful of gold Caveat "notes" outside #meTrack (which don't have a
+  // dark/mono CSS override to lean on since they're deliberately exempted
+  // via data-ink) need their own theme-correct gold picked by hand.
+  const accentGold = artMode ? '#8a6224' : '#f2c14e';
 
   return (
     <div className="main-site" style={{ background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply' }}>
@@ -952,7 +980,7 @@ export default function MainSite() {
         <span>MALVIN MALLOCK BOYE — MAEHLO</span>
         <span className="ms-topbar-right">
           <a href="#me">ABOUT</a><a href="#work">WORK</a><a href="#say">CONTACT</a>
-          <span style={{ color: '#c8402c' }}>●</span><span style={{ fontVariantNumeric: 'tabular-nums' }}>{clock}</span>
+          <span style={{ color: artMode ? '#b8391f' : '#e2604a' }} data-ink>●</span><span style={{ fontVariantNumeric: 'tabular-nums' }}>{clock}</span>
         </span>
       </div>
 
@@ -992,7 +1020,7 @@ export default function MainSite() {
           <section id="me" data-pane className={"ms-stage" + (reduced ? ' ms-stage--static' : '')} style={{ background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply', padding: 'clamp(28px,4.4vh,58px) 0 clamp(10px,1.6vh,26px)', gap: 'clamp(10px,1.6vh,22px)' }}>
             <div style={css("display:flex;flex-wrap:wrap;align-items:baseline;gap:clamp(18px,5vw,64px);padding:0 clamp(20px,5vw,64px);font:300 clamp(36px,6.2vw,88px)/1 'Cormorant Garamond',serif")}>
               <span className="ms-hi1">Life.</span><span className="ms-hi2">People.</span>
-              <span onClick={() => setArtMode(true)} className="ms-hi3 ms-art-toggle">Art.</span>
+              <span onClick={() => setArtMode(true)} className="ms-hi3 ms-art-toggle" data-ink>Art.</span>
             </div>
 
             <div className={"ms-rail" + (reduced ? ' ms-rail--static' : '')}>
@@ -1006,7 +1034,7 @@ export default function MainSite() {
                   <div style={{ display: 'grid', gap: 16 }}>
                     <span style={kicker}>ORIGIN</span>
                     <div style={css("display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;font:300 clamp(26px,3.2vw,42px)/1.1 'Cormorant Garamond',serif")}>
-                      <span>Tema, Ghana</span><span style={{ color: '#b68235' }}>→</span><span>Washington DC</span>
+                      <span>Tema, Ghana</span><span style={{ color: '#b68235' }} data-ink>→</span><span>Washington DC</span>
                     </div>
                     <p style={css("margin:0;font:400 17px/1.7 'Lora',serif;color:rgba(32,31,29,.84);max-width:40ch;text-wrap:pretty")}>Raised in a few different places; Tema would always be home. Drawing since three, a couple of instruments not long after. Art would always be a part of me, hence why I started design engineering.</p>
                   </div>
@@ -1072,11 +1100,11 @@ export default function MainSite() {
           <section data-pane className={reduced ? 'ms-stage--static' : 'ms-stage'} style={{ gap: 'clamp(18px,2.6vw,34px)', padding: 'clamp(56px,8vw,92px) clamp(20px,5vw,64px)', background: '#efece4', backgroundImage: GRAIN, backgroundBlendMode: 'multiply' }}>
             <div style={css("display:flex;flex-wrap:wrap;align-items:baseline;gap:clamp(18px,5vw,64px);font:300 clamp(36px,6.2vw,88px)/1 'Cormorant Garamond',serif")}>
               <span style={{ opacity: 0.16 }}>Life.</span><span style={{ opacity: 0.16 }}>People.</span>
-              <span onClick={() => setArtMode(false)} className="ms-art-toggle">Art.</span>
+              <span onClick={() => setArtMode(false)} className="ms-art-toggle" data-ink>Art.</span>
             </div>
             <div style={css("display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:14px")}>
               <span style={kicker}>MY FAVOURITE QUOTE — DRAG YOUR CURSOR THROUGH IT · CLICK TO BLOW IT APART</span>
-              <span onClick={() => setArtMode(false)} className="ms-art-toggle" style={css("font:400 20px/1 'Caveat',cursive;color:#c8402c")}>click "Art." again to put me back together</span>
+              <span onClick={() => setArtMode(false)} className="ms-art-toggle" data-ink style={css("font:400 20px/1 'Caveat',cursive")}>click "Art." again to put me back together</span>
             </div>
             <div style={{ position: 'relative', height: 'clamp(360px,58vh,640px)', overflow: 'hidden' }}>
               <canvas id="artField" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }} />
@@ -1091,7 +1119,7 @@ export default function MainSite() {
           <canvas id="fieldB" className="ms-field" />
           <div style={cueB}>
             <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;color:rgba(32,31,29,.66)")}>SCROLL IN_</span>
-            <span style={css("font:400 19px/1 'Caveat',cursive;color:#8a6224")}>there's work in here too</span>
+            <span style={{ ...css("font:400 19px/1 'Caveat',cursive"), color: accentGold }} data-ink>there's work in here too</span>
           </div>
         </div>
       </div>
@@ -1100,7 +1128,7 @@ export default function MainSite() {
         <div style={revealB}>
           <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.66)")}>02 — SELECTED WORK</span>
           <span style={css("font:300 clamp(38px,7vw,96px)/1 'Cormorant Garamond',serif")}>now the work</span>
-          <span style={css("font:400 20px/1 'Caveat',cursive;color:#8a6224")}>proceed....</span>
+          <span style={{ ...css("font:400 20px/1 'Caveat',cursive"), color: accentGold }} data-ink>proceed....</span>
         </div>
       )}
 
@@ -1114,7 +1142,7 @@ export default function MainSite() {
         <div style={{ position: 'sticky', top: 0, height: '100vh', display: 'grid', alignContent: 'center', justifyItems: 'center', gap: 16, textAlign: 'center', padding: '0 clamp(20px,5vw,64px)' }}>
           <span style={css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;color:rgba(32,31,29,.66)")}>SELECTED WORK — 2024 → 2026</span>
           <h2 style={css("margin:0;font:300 clamp(46px,9vw,132px)/.92 'Cormorant Garamond',serif;letter-spacing:-.02em")}>some off my projects</h2>
-          <span style={css("font:400 20px/1 'Caveat',cursive;color:#8a6224")}>you may continue scrolling&nbsp;</span>
+          <span style={{ ...css("font:400 20px/1 'Caveat',cursive"), color: accentGold }} data-ink>you may continue scrolling&nbsp;</span>
         </div>
 
         {WORK.map((w, i) => {
@@ -1162,7 +1190,7 @@ export default function MainSite() {
 
       {boardOpen && <PosterBoard onClose={() => setBoardOpen(false)} />}
 
-      <CursorTrail active={showScrollHintB} />
+      <CursorTrail active={showScrollHintB} mono={artMode} />
       <ComicHint active={showScrollHintA} />
 
       {/* a quiet nudge for act1/act2's dead-quiet buffer stretches — see

@@ -116,10 +116,10 @@ html { scroll-behavior: smooth; }
 }
 .ms-field { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
-/* night mode — a full site-wide dark theme, toggled on document.body whenever
-   artMode is on (see Component.applyNight() in the reference script). Every
-   override needs !important because it's fighting the inline `style=` strings
-   the rest of the page is built from. */
+/* dark mode — the site's default now, toggled on document.body whenever
+   artMode is off (see the artMode effect in MainSite.jsx). Every override
+   needs !important because it's fighting the inline `style=` strings the
+   rest of the page is built from. */
 body.night { background: #080807; }
 body.night .main-site { background: #080807 !important; background-image: none !important; }
 body.night .main-site section,
@@ -131,13 +131,39 @@ body.night .main-site span,
 body.night .main-site h1 { border-color: rgba(242, 239, 230, .24) !important; }
 body.night .main-site p,
 body.night .main-site h1,
+body.night .main-site h2,
 body.night .main-site li { color: #f2efe6 !important; }
-body.night .main-site span:not([data-ink]) { color: #e8e4d9; }
+body.night .main-site span:not([data-ink]) { color: #e8e4d9 !important; }
 body.night .main-site [data-plate] { background: #16150f !important; }
 body.night .main-site [data-pane],
 body.night .main-site .ms-stage { background: #080807 !important; background-image: none !important; }
 body.night .main-site a { color: #f2c14e !important; }
 body.night .main-site canvas { background: transparent !important; }
+
+/* mono mode — reached only by clicking "Art." from the (now default) dark
+   look; the old cream/day theme is retired. Same !important-heavy structure
+   as body.night, mirrored to a flat white/black palette — gold links are
+   kept as the one accent color, everything else desaturates to black or
+   grey. */
+body.mono { background: #ffffff; }
+body.mono .main-site { background: #ffffff !important; background-image: none !important; }
+body.mono .main-site section,
+body.mono .main-site header,
+body.mono .main-site footer,
+body.mono .main-site div,
+body.mono .main-site p,
+body.mono .main-site span,
+body.mono .main-site h1 { border-color: rgba(20, 20, 20, .2) !important; }
+body.mono .main-site p,
+body.mono .main-site h1,
+body.mono .main-site h2,
+body.mono .main-site li { color: #141414 !important; }
+body.mono .main-site span:not([data-ink]) { color: #262626 !important; }
+body.mono .main-site [data-plate] { background: #f4f4f2 !important; }
+body.mono .main-site [data-pane],
+body.mono .main-site .ms-stage { background: #ffffff !important; background-image: none !important; }
+body.mono .main-site a { color: #8a6224 !important; }
+body.mono .main-site canvas { background: transparent !important; }
 
 /* #meTrack's horizontal rail carousel — .ms-stage is a fixed full-viewport
    plate, its child .ms-rail scrolls sideways via transform (driven

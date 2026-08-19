@@ -30,3 +30,5 @@
 }
 body.night .scroll-progress { background: rgba(239, 236, 228, .12); }
 body.night .scroll-progress-fill { background: #f2c14e; }
+body.mono .scroll-progress { background: rgba(20, 20, 20, .08); }
+body.mono .scroll-progress-fill { background: #8a6224; }

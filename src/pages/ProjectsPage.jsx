@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProjectsPage.css';
-import { css, GRAIN } from '../utils/cssString';
+import { css } from '../utils/cssString';
 import stuff1c from '../images/stuff-1c.png';
 import maableDashboard from '../images/maable-dashboard.png';
 import dormdrop1 from '../images/dormdrop-1.png';
@@ -15,31 +15,31 @@ const PROJECTS = [
   { title: 'EV Mart POS', kicker: 'a till that cashiers stopped cursing at', studio: 'Donfox Systems, Accra — UX research', year: '2022', href: '/work/ev-mart', img: null },
 ];
 
-// mirrors MainSite's artMode → localStorage('ms-art-mode') flag: clicking
-// "Art." on the home page flips the whole site into night mode, and since
-// that state doesn't otherwise survive a route change, this page reads the
-// same flag on mount so navigating here from a dark home page keeps it dark
-// instead of snapping back to cream.
+// mirrors MainSite's artMode → localStorage('ms-art-mode') flag: the home
+// page defaults to dark and clicking "Art." switches it to a flat mono
+// black-on-white look. That state doesn't otherwise survive a route change,
+// so this page reads the same flag on mount to match whichever one was
+// active — dark by default, same as MainSite.
 export default function ProjectsPage() {
-  const [night] = useState(() => localStorage.getItem('ms-art-mode') === '1');
+  const [mono] = useState(() => localStorage.getItem('ms-art-mode') === '1');
 
   useEffect(() => {
-    if (night) document.body.classList.add('night');
-    return () => document.body.classList.remove('night');
-  }, [night]);
+    document.body.classList.add(mono ? 'mono' : 'night');
+    return () => document.body.classList.remove('night', 'mono');
+  }, [mono]);
 
-  const bg = night ? '#080807' : '#efece4';
-  const fg = night ? '#f2efe6' : '#201f1d';
-  const ink66 = night ? 'rgba(242,239,230,.66)' : 'rgba(32,31,29,.66)';
-  const ink72 = night ? 'rgba(242,239,230,.72)' : 'rgba(32,31,29,.72)';
-  const ink78 = night ? 'rgba(242,239,230,.78)' : 'rgba(32,31,29,.78)';
-  const border = night ? 'rgba(242,239,230,.24)' : 'rgba(32,31,29,.18)';
-  const border14 = night ? 'rgba(242,239,230,.16)' : 'rgba(32,31,29,.14)';
-  const gold = night ? '#f2c14e' : '#8a6224';
-  const thumbBg = night ? '#16150f' : '#f7f5ef';
+  const bg = mono ? '#ffffff' : '#080807';
+  const fg = mono ? '#141414' : '#f2efe6';
+  const ink66 = mono ? 'rgba(20,20,20,.66)' : 'rgba(242,239,230,.66)';
+  const ink72 = mono ? 'rgba(20,20,20,.72)' : 'rgba(242,239,230,.72)';
+  const ink78 = mono ? 'rgba(20,20,20,.78)' : 'rgba(242,239,230,.78)';
+  const border = mono ? 'rgba(20,20,20,.2)' : 'rgba(242,239,230,.24)';
+  const border14 = mono ? 'rgba(20,20,20,.14)' : 'rgba(242,239,230,.16)';
+  const gold = mono ? '#8a6224' : '#f2c14e';
+  const thumbBg = mono ? '#f4f4f2' : '#16150f';
 
   return (
-    <div className="projects-page" style={{ background: bg, backgroundImage: night ? 'none' : GRAIN, backgroundBlendMode: night ? 'normal' : 'multiply', minHeight: '100vh', color: fg, fontFamily: '"Lora", Georgia, serif' }}>
+    <div className="projects-page" style={{ background: bg, minHeight: '100vh', color: fg, fontFamily: '"Lora", Georgia, serif' }}>
 
       {/* NAV */}
       <div style={{ ...css("display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 7vw;font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em"), borderBottom: `1px solid ${border14}`, color: ink66 }}>
@@ -51,7 +51,7 @@ export default function ProjectsPage() {
       <section style={css("padding:clamp(60px,10vw,120px) 7vw 50px;display:grid;gap:22px")}>
         <div style={{ ...css("font:400 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em"), color: ink66 }}>SELECTED WORK_</div>
         <h1 style={css("margin:0;font:300 clamp(58px,12vw,150px)/.9 'Cormorant Garamond',serif;letter-spacing:-.02em")}>
-          work<span style={{ color: night ? '#f2c14e' : '#c8402c' }}>.</span>
+          work<span style={{ color: gold }}>.</span>
         </h1>
         <p style={{ ...css("margin:0;max-width:46ch;font:400 clamp(17px,1.8vw,21px)/1.6 'Lora',serif;text-wrap:pretty"), color: ink78 }}>Five projects, 2022 through 2026 — shipped, half-shipped, and one still just a wireframe pass.</p>
       </section>
@@ -68,7 +68,7 @@ export default function ProjectsPage() {
             >
               <div style={{ width: 84, height: 84, flexShrink: 0, borderRadius: 4, overflow: 'hidden', background: thumbBg, border: `1px solid ${border}` }}>
                 {p.img ? (
-                  <img src={p.img} alt={`${p.title} preview`} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', filter: 'sepia(.13)' }} />
+                  <img src={p.img} alt={`${p.title} preview`} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', filter: mono ? 'grayscale(1) contrast(1.05)' : 'sepia(.13)' }} />
                 ) : (
                   <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center' }}>
                     <span style={{ ...css("font:400 10px/1.3 ui-monospace,Menlo,monospace;letter-spacing:.08em;text-align:center"), color: ink66 }}>NO SHOTS</span>
