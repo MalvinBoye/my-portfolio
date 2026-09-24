@@ -486,6 +486,18 @@ const CASES = {
         paras: ["The till ran on an existing C/C++ point-of-sale system I wasn't going to replace mid-shift across three branches. Everything had to ship as a change inside what already existed.",
           "That ruled out most of the obvious fixes. I worked with the screens that were already there, restructuring them just enough to tell the truth about what mattered."],
         why: 'Constraints like this are usually where I do my best work. A blank canvas invites everything; a working system you can\'t break only lets through the changes that actually earn their place.' },
+      { step: 'Redesign', head: 'Hierarchy, fewer confirmations, real errors', caption: 'the confirmation that survived the cut, and the ones that didn\'t',
+        paras: ['Three changes carried the whole project. Primary actions got real visual priority, so the right button became the obvious one. Redundant confirmations were cut back to the ones that actually needed a second thought.',
+          'And errors stopped reading like successes. Different colour, different weight, different wording, so a mistake actually looked like one.'],
+        why: "Each change removes a place where habit was doing the thinking. A cashier's attention is a resource too, and the old screen spent it on the wrong things." },
+      { step: 'Impact', head: '27% faster, and nothing to roll back', caption: 'measured across real shifts',
+        paras: ['Checkout got 27% faster across all three deployed branches, measured against real shifts. Six cashiers onboarded onto the new screens with zero support escalations.',
+          'Nothing shipped needed a rollback. Every change was scoped tightly enough to work inside the live system from day one.'],
+        why: "Shipping inside someone else's live system raises the bar for what counts as done. On a system people are relying on that day, it has to go out clean." },
+      { step: 'Reflection', head: "What I'd still change", caption: 'a short list, on purpose',
+        paras: ["I'd like real usage data next time — a week of logged taps would tell me which confirmation cuts actually mattered and which just felt good to remove.",
+          "And I'd push for a proper error log a manager could actually read, something the C/C++ constraint kept off the table this time."],
+        why: "Working inside someone else's system taught me to separate what I'd do with more time from what the project actually needed. Most of what's left is worth returning to eventually." },
     ],
   },
   maelo: {
@@ -705,6 +717,7 @@ class Board {
         ...c, id: 'cs-' + (i + 1), no: pad2(i + 1), label: pad2(i + 1) + ' ' + c.step,
         alt: `${C.title} — ${c.caption}`, paras: c.paras.map(t => ({ t })),
         imgSrc: c.img ? (IMG_MAP[c.img] || c.img) : '',
+        hasPlate: !!(c.art || c.video || c.img || c.ph),
       })),
       ctaLabel: C.cta[0], ctaHref: toRoute(C.cta[1]),
       ctaKind: C.cta[1].startsWith('http') ? 'external' : C.cta[1].startsWith('mailto:') ? 'mailto' : 'internal',
@@ -834,8 +847,8 @@ export default function CaseStudy({ caseId }) {
             </div>
             <h2 style={{ margin: 0, fontFamily: "'Pixelify Sans',monospace", fontWeight: 500, fontSize: 'clamp(34px,3.6vw,58px)', lineHeight: 1, textWrap: 'balance', background: '#fff', justifySelf: 'start', paddingRight: 8 }}>{c.head}</h2>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,300px),1fr))', gap: 'clamp(20px,3vw,40px)', alignItems: 'start' }}>
-              <div style={{ display: 'grid', gap: 14, background: '#fff' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: c.hasPlate ? 'repeat(auto-fit,minmax(min(100%,300px),1fr))' : 'minmax(0,1fr)', gap: 'clamp(20px,3vw,40px)', alignItems: 'start' }}>
+              <div style={{ display: 'grid', gap: 14, background: '#fff', maxWidth: c.hasPlate ? 'none' : '62ch' }}>
                 {c.paras.map((p, j) => (
                   <p key={j} style={{ margin: 0, fontSize: 'clamp(20px,1.5vw,24px)', lineHeight: 1.25, color: '#1f1e1c', textWrap: 'pretty' }}>{p.t}</p>
                 ))}
@@ -845,6 +858,7 @@ export default function CaseStudy({ caseId }) {
                 </aside>
               </div>
 
+              {c.hasPlate && (
               <figure style={{ margin: 0, display: 'grid', gap: 8 }}>
                 <div aria-hidden="true" style={{ position: 'relative', height: 14 }}>
                   <span style={{ position: 'absolute', left: 0, right: 0, top: 7, borderTop: '1px solid #141414' }} />
@@ -878,6 +892,7 @@ export default function CaseStudy({ caseId }) {
                   <span style={{ textTransform: 'uppercase', whiteSpace: 'nowrap' }}>fig. {c.no}.1</span><span style={{ textAlign: 'right', textWrap: 'pretty' }}>{c.caption}</span>
                 </figcaption>
               </figure>
+              )}
             </div>
           </article>
         ))}
