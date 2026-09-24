@@ -296,9 +296,9 @@ const CASES = {
     kicker: 'Case 02 — gamified productivity',
     title: 'Maable',
     lede: 'Productivity that gives something back, rather than keeping score against you.',
-    intro: "A to-do list is really just a ledger of debt. It grows while you rest and never says thank you. Maable puts ten tools on one surface and turns your own work into XP, so the reward comes when you finish, not guilt when you open the app. It's live, and I designed and built the whole thing myself.",
+    intro: "A to-do list is really just a ledger of debt. It grows while you rest and never says thank you. Maable puts ten tools on one surface and turns your own work into XP, so the reward comes when you finish, not guilt when you open the app. It's live, built with Kimberly Galdamez Salazar and Yuri Son.",
     tags: ['Live', 'Productivity', 'Design engineering', 'Front end'],
-    meta: [['Role', 'Product, design engineering, front end'], ['Timeline', '2026, live at maable-web.vercel.app'], ['Tools', 'React, Vite, Supabase, Figma'], ['Team', 'Solo, from design to deployment']],
+    meta: [['Role', 'Product, design engineering, front end'], ['Timeline', '2026, live at maable-web.vercel.app'], ['Tools', 'React, Vite, Supabase, Figma'], ['Team', 'Kimberly Galdamez Salazar, Yuri Son']],
     verdict: "Ten tools on one surface, with XP that's a by-product of the work, not the point of it.",
     receipts: [
       ['10', 'tools, one surface', 'Tasks, habits, notes, flashcards, a timer, a journal, breathwork, a moodboard, games and now-playing.'],
@@ -424,7 +424,7 @@ const CASES = {
     lede: 'A student marketplace where you can trust the person two floors up, because they\'ve been verified.',
     intro: "Buying a stranger's old textbook is normal. Buying it from someone who lives two floors up needs a different kind of trust. DormDrop is a marketplace for American University students only: sign-up is gated behind a verified .edu email, browsing is split into categories, and every conversation stays inside the app.",
     tags: ['Built', 'Team project', 'UX', 'Front end', 'Marketplace'],
-    meta: [['Role', 'UX flows, information architecture, React front end'], ['Timeline', '2024'], ['Tools', 'React, Figma'], ['Team', '3 people · American University']],
+    meta: [['Role', 'UX flows, information architecture, React front end'], ['Timeline', '2024'], ['Tools', 'React, Figma'], ['Team', 'Alpha Diallo, Andrew Darfoor · American University']],
     verdict: 'Every listing traces back to a real, accountable student, and the safeguards never leave the app.',
     receipts: [
       ['1', 'gate: .edu', 'Sign-up requires a student email, so accountability comes built in.'],
@@ -470,7 +470,7 @@ const CASES = {
     lede: 'A checkout screen redesigned on-site, so three branches of cashiers stopped fighting the till and started trusting it.',
     intro: "Three branches, one shared point-of-sale interface, and cashiers who'd learned to work around it rather than with it. The till buried its most-used actions behind a flat hierarchy, added a confirmation to nearly every action until confirming became a reflex instead of a check, and let errors read exactly like successes. I spent shifts standing at the counter in Accra watching cashiers work around all three, then redesigned what could ship without touching the C/C++ system underneath. It's live across all three branches.",
     tags: ['Deployed', 'Retail', 'UX research', 'UI', 'Systems'],
-    meta: [['Role', 'UX research, UI redesign, deployment lead'], ['Timeline', '2022 · Donfox Systems, Accra'], ['Tools', 'On-site research, existing C/C++ POS'], ['Team', 'Solo, three branches']],
+    meta: [['Role', 'UX research, UI redesign, deployment lead'], ['Timeline', '2022 · Donfox Systems, Accra'], ['Tools', 'On-site research, existing C/C++ POS'], ['Team', 'Solo, three branches'], ['Supervisor', 'Vincent Togbor, senior developer']],
     verdict: 'A till that stopped fighting the people using it, redesigned around what they actually did at the counter.',
     receipts: [
       ['27%', 'faster checkout', 'Measured across all three deployed branches, not a lab number.'],
