@@ -1,0 +1,7 @@
+/* Ported verbatim from the design handoff's Works.dc.html <helmet><style>
+   block, scoped under .mh-works instead of bare html/body/a/:focus-visible,
+   since this app has other pages sharing those elements. */
+.mh-works { background: #fff; color: #141414; font-family: 'VT323', ui-monospace, monospace; overflow-x: hidden; }
+.mh-works a { color: #141414; text-decoration: none; }
+.mh-works a:hover { color: #8a6224; }
+.mh-works :focus-visible { outline: 2px solid #8a6224; outline-offset: 3px; }
