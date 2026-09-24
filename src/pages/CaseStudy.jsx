@@ -221,14 +221,6 @@ function drawArt(cv, kind) {
     for (let r = 0; r < 2; r++) box(92, 48 + r * 12, 54, 9);
     dim(8, 152, 82, 'HIERARCHY');
   }
-  if (kind === 'evChart') {
-    dots();
-    const bx = 20, by = 66, bw = 16, gap = 26;
-    const vals = [22, 30, 26, 46];
-    ink(bx - 4, 10, 1, 60); ink(bx - 4, by, 130, 1);
-    vals.forEach((v, i) => { const x = bx + i * gap; if (i === vals.length - 1) { red(x, by - v, bw, v); } else { box(x, by - v, bw, v, false); } });
-    text('CHECKOUT SPEED', bx - 4, by + 8);
-  }
   // Maelo's "hurdles" plate — new pixel art, not from the handoff: an
   // iPhone in a transparent case with polaroids tucked behind it, same
   // ink/paper/dither vocabulary as everything else.
@@ -487,25 +479,13 @@ const CASES = {
           "None of that showed up in a support ticket. It showed up in a queue, in a cashier's shoulders, in the half-second hesitation before the same button every single time."],
         why: "Nobody files a ticket for a screen that's merely annoying. You only find that kind of problem by standing where the problem actually happens." },
       { step: 'Research', head: 'Standing at the counter, not reading the logs', art: 'evTill', caption: 'a real rush, three branches, no ticket queue involved',
-        paras: ["I spent shifts at the counter in Accra, watching real transactions during a real rush, then asked cashiers what they'd change if nobody was going to say no. Three answers kept repeating: fix the buttons, cut the confirmations, make errors look like errors.",
+        paras: ["I spent shifts at the counter in Accra, watching real transactions during a real rush, then asked cashiers what they'd change. Three answers kept repeating: fix the buttons, cut the confirmations, make errors look like errors.",
           'The system itself gave no signal any of this was wrong. Checkout completed either way — slow and confirmed to death, or fast — and it logged the same.'],
         why: "If the system can't tell you something's broken, you have to go find out for yourself. That's true of software, and it's true of most things I design for." },
       { step: 'Constraint', head: "A system I could redress, not rebuild", art: 'evFlow', caption: 'before and after, inside the same hierarchy',
-        paras: ["The till ran on an existing C/C++ point-of-sale system I wasn't going to replace mid-shift across three branches. Everything had to ship as a change inside what already existed, not a rewrite of it.",
-          'That ruled out most of the obvious fixes. No new framework, no fresh information architecture from scratch — just the existing screens, made to tell the truth about what mattered.'],
+        paras: ["The till ran on an existing C/C++ point-of-sale system I wasn't going to replace mid-shift across three branches. Everything had to ship as a change inside what already existed.",
+          "That ruled out most of the obvious fixes. I worked with the screens that were already there, restructuring them just enough to tell the truth about what mattered."],
         why: 'Constraints like this are usually where I do my best work. A blank canvas invites everything; a working system you can\'t break only lets through the changes that actually earn their place.' },
-      { step: 'Redesign', head: 'Hierarchy, fewer confirmations, real errors', art: 'evFlow', caption: 'the confirmation that survived the cut, and the ones that didn\'t',
-        paras: ['Three changes carried the whole project. Primary actions got real visual priority, so the right button became the obvious one instead of the memorised one. Redundant confirmations were cut back to the ones that actually needed a second thought.',
-          'And errors stopped reading like successes — different colour, different weight, different wording, so a mistake actually looked like one instead of blending into the next tap.'],
-        why: "Each change removes a place where habit was doing the thinking instead of the interface. A cashier's attention is a resource too, and the old screen spent it on the wrong things." },
-      { step: 'Impact', head: '27% faster, and nothing to roll back', art: 'evChart', caption: 'measured across real shifts, not a lab test',
-        paras: ['Checkout got 27% faster across all three deployed branches, measured against real shifts, not a lab test. Six cashiers onboarded onto the new screens with zero support escalations.',
-          'Nothing shipped needed a rollback. Every change was scoped tightly enough to work inside the live system from day one.'],
-        why: "Shipping inside someone else's live system raises the bar for what counts as done. If it can't go out clean, on a system people are relying on that day, it isn't ready." },
-      { step: 'Reflection', head: "What I'd still change", art: 'evChart', caption: 'nice-to-have, not unfinished',
-        paras: ["I'd like real usage data next time, not just observed shifts and interviews — a week of logged taps would tell me which confirmation cuts actually mattered and which just felt good to remove.",
-          "And I'd push for one more thing the C/C++ constraint kept off the table: a proper error log a manager could actually read, instead of one only I ever looked at."],
-        why: "Working inside someone else's system taught me to separate what I'd do with more time from what the project actually needed. Most of what's left is nice-to-have, not unfinished." },
     ],
   },
   maelo: {
