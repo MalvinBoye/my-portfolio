@@ -7,9 +7,12 @@ import stuff4a from '../images/stuff-4a.png';
 import bagJala from '../images/bag-jala.png';
 import petMeeks from '../images/pet-meeks.png';
 import bagGracias from '../images/bag-gracias.png';
-import manageable1 from '../images/manageable-1.png';
-import maableNotes from '../images/maable-notes.png';
-import maableRevision from '../images/maable-revision.png';
+import maableHome from '../images/maable-home.webp';
+import maableCompanion from '../images/maable-companion.webp';
+import maableOverdue from '../images/maable-overdue.webp';
+import maableMenu from '../images/maable-menu.webp';
+import maableKoreanNotes from '../images/maable-korean-notes.webp';
+import maableMoodboard from '../images/maable-moodboard.webp';
 import connect1 from '../images/connect-1.png';
 import dormdrop1 from '../images/dormdrop-1.png';
 import dormdrop2 from '../images/dormdrop-2.png';
@@ -64,9 +67,12 @@ const IMG_MAP = {
   'assets/bag-jala.png': bagJala,
   'assets/pet-meeks.png': petMeeks,
   'assets/bag-gracias.png': bagGracias,
-  'src/images/manageable-1.png': manageable1,
-  'assets/maable-notes.png': maableNotes,
-  'assets/maable-revision.png': maableRevision,
+  'src/images/maable-home.webp': maableHome,
+  'src/images/maable-companion.webp': maableCompanion,
+  'src/images/maable-overdue.webp': maableOverdue,
+  'src/images/maable-menu.webp': maableMenu,
+  'src/images/maable-korean-notes.webp': maableKoreanNotes,
+  'src/images/maable-moodboard.webp': maableMoodboard,
   'src/images/connect-1.png': connect1,
   'public/case/connect/connect-splash.png': '/case/connect/connect-splash.png',
   'public/case/connect/connect-transparency.png': '/case/connect/connect-transparency.png',
@@ -289,43 +295,43 @@ const CASES = {
   maable: {
     kicker: 'Case 02 — gamified productivity',
     title: 'Maable',
-    lede: 'Productivity that gives something back, rather than keeping a tally of what you owe it.',
-    intro: "A to-do list is essentially a ledger of debt: it grows when you rest and never says thank you. Maable puts ten tools on one surface and turns the work itself into XP, so the reward arrives when you finish rather than guilt greeting you when you open it. It's live, and I designed and built it from start to finish.",
+    lede: 'Productivity that gives something back, rather than keeping score against you.',
+    intro: "A to-do list is really just a ledger of debt. It grows while you rest and never says thank you. Maable puts ten tools on one surface and turns your own work into XP, so the reward comes when you finish, not guilt when you open the app. It's live, and I designed and built the whole thing myself.",
     tags: ['Live', 'Productivity', 'Design engineering', 'Front end'],
     meta: [['Role', 'Product, design engineering, front end'], ['Timeline', '2026, live at maable-web.vercel.app'], ['Tools', 'React, Vite, Supabase, Figma'], ['Team', 'Solo, from design to deployment']],
-    verdict: 'Ten tools on one surface, with XP that comes as a by-product of real work.',
+    verdict: "Ten tools on one surface, with XP that's a by-product of the work, not the point of it.",
     receipts: [
       ['10', 'tools, one surface', 'Tasks, habits, notes, flashcards, a timer, a journal, breathwork, a moodboard, games and now-playing.'],
       ['5', 'life areas', 'Career, student, hobbies, a reading corner, and feeling lazy. Rest days count towards the same total.'],
-      ['0', 'paid skins', 'Every skin is unlocked with XP. Selling them would have undermined the very loop they belong to.'],
+      ['0', 'paid skins', 'Every skin is unlocked with XP. Selling them would have undermined the whole loop.'],
     ],
     cta: ['Visit the live site ↗', 'https://maable-web.vercel.app/'],
     next: ['Next — Stuff →', 'Stuff - case study.dc.html'],
     chapters: [
-      { step: 'Problem', head: 'Task apps punish you. Games reward you.', img: 'src/images/manageable-1.png', caption: "a scoreboard that's permanently in the red",
-        paras: ["A to-do list is a ledger of debt. It grows while you rest, it never thanks you, and the scoreboard is permanently in the red.",
-          'Meanwhile the tools are scattered: a timer in one tab, notes in another, a journal in a fourth. Every switch is another chance to wander off and not come back.'],
-        why: "Games solved the problem of getting people to return long ago. I wanted to borrow the part that works, being rewarded, and leave behind the part that doesn't, which is the guilt." },
-      { step: 'Goal', head: 'One surface, and a reason to come back', img: 'assets/maable-notes.png', caption: 'reward people as they leave',
-        paras: ["Put everything on one surface so there's no need to switch. Reward people as they finish, rather than guilting them when they arrive. And give the product a stake in your week that isn't a push notification.",
-          'The standard I set: a bad day should still be manageable, and a good day should visibly count for something.'],
-        why: "For a wandering mind, every tab switch is an exit. Keeping everything on one surface wasn't about convenience; it was about removing the ways out." },
-      { step: 'Challenge', head: 'Ten tools without ten times the clutter', img: 'assets/maable-revision.png', caption: 'feature-rich products tend to drown in their own interface',
-        paras: ['Ten tools is a lot to hold on one screen without it turning into a control panel. Feature-rich products usually collapse under the weight of their own interface.',
-          'The companion was the other challenge. A mascot that reacts to your progress walks a fine line between care and guilt, and that line sits in a different place for everyone.'],
-        why: 'Curiosity wants everything at once; focus wants almost nothing. The real challenge was letting both live comfortably in the same app.' },
-      { step: 'Process', head: 'Four decisions the whole product rests on', img: 'assets/maable-notes.png', caption: 'XP as a by-product, not the point',
-        paras: ["XP as a by-product. Every task, habit, note and breathing session earns XP towards a level. Because the reward comes from the work itself, it can't be farmed and doesn't need balancing like an economy.",
-          'A companion with a mood rather than a mascot. Focus Mode as subtraction, where one click strips the app back to five tools. And skins that are earned, never sold.'],
-        why: "If the reward is the point, people will game it. If it's a by-product, the only way to earn it is to do the work. That single idea made every other decision simpler." },
-      { step: 'Impact', head: 'Shipped and in use', img: 'src/images/manageable-1.png', caption: 'live at maable-web.vercel.app',
-        paras: ['Maable is live and free to start, with Focus Mode and the Companion in production. Five life areas hold the system together, including feeling lazy, because rest days count towards the same total.',
-          'Here, design and build were the same job, which is really the whole case for design engineering. The mood curve and the Focus Mode transition were tuned in the browser, not in a mock-up.'],
-        why: "Building it myself meant the feel was decided in the real material. You can't judge how a mood curve feels from a static frame." },
-      { step: 'Reflection', head: "What I'm keeping an eye on", img: 'assets/maable-revision.png', caption: 'the honest test is week three',
-        paras: ['Whether XP survives week three. The honest measure is retention after the first level-up, not sign-ups. If levels stop meaning anything once the novelty fades, the loop needs rethinking.',
-          'And whether ten tools stay coherent. Focus Mode is the release valve, but if it ever becomes the default view, that\'s the sign the rest needs pruning.'],
-        why: 'Novelty is what gets a curious mind through the door. Week three is when I find out whether there was anything behind it.' },
+      { step: 'Problem', head: 'Task apps punish you. Games reward you.', img: 'src/images/maable-overdue.webp', caption: 'a scoreboard that stays in the red',
+        paras: ['A to-do list is a ledger of debt. It grows while you rest, never says thank you, and the scoreboard stays in the red.',
+          'Meanwhile the tools are scattered — a timer in one tab, notes in another, a journal in a third. Every switch is a chance to wander off.'],
+        why: 'Games worked out how to bring people back a long time ago. I wanted to borrow the reward, not the guilt.' },
+      { step: 'Goal', head: 'One surface, and a reason to come back', img: 'src/images/maable-home.webp', caption: 'everything on one screen, nothing to switch to',
+        paras: ["Put everything in one place, so there's no need to switch. Reward people when they finish, not when they open the app. Give it a stake in your week that isn't a push notification.",
+          'The standard I set: a bad day should still feel manageable. A good day should visibly count for something.'],
+        why: 'For a wandering mind, every tab switch is an exit. One surface removes the ways out.' },
+      { step: 'Challenge', head: 'Ten tools without ten times the clutter', img: 'src/images/maable-menu.webp', caption: 'ten tools, one menu, still legible',
+        paras: ["Ten tools is a lot to fit on one screen without it turning into a control panel.",
+          'The companion was trickier still. A mascot that reacts to your mood can tip into guilt quite easily, and where that line sits is different for everyone.'],
+        why: 'Curiosity wants everything at once. Focus wants almost nothing. The job was letting both live in the same app.' },
+      { step: 'Process', head: 'Four decisions the whole product rests on', img: 'src/images/maable-companion.webp', caption: 'a companion with a mood, not a mascot',
+        paras: ["XP as a by-product. Tasks, habits, notes and breathing sessions all earn XP towards a level. Because the reward comes from the work itself, it can't be gamed.",
+          'A companion with a mood, not a mascot. Focus Mode, which strips the app back to five tools with one click. And skins you earn, never buy.'],
+        why: "If the reward were the whole point, people would find a way to farm it. As a by-product, the only way to earn it is to do the work." },
+      { step: 'Impact', head: 'Shipped and in use', img: 'src/images/maable-moodboard.webp', caption: 'a moodboard, one of the ten tools, in daily use',
+        paras: ["Maable is live and free to start, with Focus Mode and the Companion both in production. Five areas of life hold it together — even feeling lazy, since rest days count too.",
+          'Design and build were the same job here, which is the whole case for design engineering. I tuned the mood curve and the Focus Mode transition in the browser, not in a mock-up.'],
+        why: "Building it myself meant the feel got decided in the real material. You can't tell how a mood curve feels from a static frame." },
+      { step: 'Reflection', head: "What I'm keeping an eye on", img: 'src/images/maable-korean-notes.webp', caption: 'notes, still being used weeks in',
+        paras: ["Whether XP still means something in week three. Sign-ups are easy; the honest test is whether people come back once the novelty's worn off.",
+          'And whether ten tools stay coherent. Focus Mode is the release valve — if it ever became the default view, that would tell me the rest needs pruning.'],
+        why: 'Novelty gets a curious mind through the door. Week three is when I find out whether there was anything behind it.' },
     ],
   },
   maehlo: {

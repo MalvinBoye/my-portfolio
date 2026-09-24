@@ -71,7 +71,7 @@ const QUESTS = [
 ];
 const TOOLS = [
   ['Figma', 'screens, systems'], ['Procreate', 'every drawing'], ['HTML / CSS', 'the real material'], ['React', 'apps that ship'],
-  ['Vite', 'fast builds'], ['Supabase', 'data + auth'], ['Premiere-ish', 'video edits'], ['A notebook', 'always first'],
+  ['Vite', 'fast builds'], ['Supabase', 'data + auth'], ['Final Cut Pro', 'video edits'], ['A notebook', 'always first'],
 ];
 const pad2 = (n) => String(n).padStart(2, '0');
 const KCELL = 4, KRAD = [1.5, 2.2, 2.5, 2.3, 1.9, 1.4, 1.0, 0.7];
