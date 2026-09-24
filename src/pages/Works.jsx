@@ -45,6 +45,12 @@ const WORKS = [
     lede: 'A student marketplace where every listing traces back to a verified student.',
     meta: [['Type', 'Case study'], ['Status', 'Built']],
     at: [21, 80], shape: 'bar' },
+  // Not part of the original design handoff — an older case study, rebuilt
+  // into this plan on request alongside its own case-study page.
+  { name: 'EV Mart', art: 'evTill', href: 'EvMart - case study.dc.html',
+    lede: 'A checkout screen redesigned on-site, so three branches of cashiers stopped fighting the till.',
+    meta: [['Role', 'UX research, UI, deployment'], ['Status', 'Deployed']],
+    at: [47, 12], shape: 'block' },
 ];
 const N = WORKS.length;
 const pad2 = (n) => String(n).padStart(2, '0');
@@ -60,6 +66,7 @@ const HREF_MAP = {
   'Maehlo - case study.dc.html': '/work/maehlo',
   'Connect - case study.dc.html': '/work/connect',
   'DormDrop - case study.dc.html': '/work/dormdrop',
+  'EvMart - case study.dc.html': '/work/ev-mart',
 };
 
 // WORKS' own `img` fields are the source prototype's file paths, kept
@@ -79,6 +86,9 @@ const SHAPES = {
   round: { w: 4, h: 4, inside: (x, y) => Math.hypot(x - 2, y - 2) < 2, walls: [['h', 0.4, 2, 3.2]] },
   pair: { w: 5.4, h: 3, inside: (x, y) => (x < 2.2 && y < 2.4) || (x > 3.2 && x < 5.4 && y > 0.6 && y < 3) || (x >= 2.2 && x <= 3.2 && y > 1.1 && y < 1.7), walls: [] },
   bar: { w: 6, h: 1.8, inside: (x, y) => x < 6 && y < 1.8, walls: [['v', 1.5, 0, 1.8], ['v', 3, 0, 1.8], ['v', 4.5, 0, 1.8]] },
+  // EV Mart's footprint — new, not from the handoff: a small single-room
+  // block, distinct from the other five shapes.
+  block: { w: 3.4, h: 3, inside: (x, y) => x < 3.4 && y < 3, walls: [['v', 1.7, 0, 3]] },
 };
 
 // 3×5 pixel font (this page's own copy — a slightly different letter set
@@ -115,7 +125,9 @@ const RAD = [1.5, 2.2, 2.5, 2.3, 1.9, 1.4, 1.0, 0.7];
 // as one general-purpose sprite generator rather than a separate unused
 // subsystem (unlike the Home page's Board/WORKS-gallery dead code).
 const ART_B = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
-const ART_F = { A: '010101111101101', B: '110101110101110', C: '011100100100011', D: '110101101101110', E: '111100110100111', F: '111100110100100', G: '011100101101011', H: '101101111101101', I: '111010010010111', K: '101101110101101', L: '100100100100111', M: '101111111101101', N: '110101101101101', O: '010101101101010', P: '110101110100100', R: '110101110101101', S: '011100010001110', T: '111010010010010', U: '101101101101111', W: '101101111111101', Y: '101101010010010', '0': '111101101101111', '1': '010110010010111', '2': '110001010100111', '3': '110001010001110', '4': '101101111001001', '5': '111100110001110', '→': '000010111010000', ' ': '000000000000000', '·': '000000010000000', '?': '110001010000010' };
+// V added (not in the source's font — never needed by the ported plates)
+// for EV Mart's own new plate art, same 3x5 shape convention as the rest.
+const ART_F = { A: '010101111101101', B: '110101110101110', C: '011100100100011', D: '110101101101110', E: '111100110100111', F: '111100110100100', G: '011100101101011', H: '101101111101101', I: '111010010010111', K: '101101110101101', L: '100100100100111', M: '101111111101101', N: '110101101101101', O: '010101101101010', P: '110101110100100', R: '110101110101101', S: '011100010001110', T: '111010010010010', U: '101101101101111', V: '101101101101010', W: '101101111111101', Y: '101101010010010', '0': '111101101101111', '1': '010110010010111', '2': '110001010100111', '3': '110001010001110', '4': '101101111001001', '5': '111100110001110', '→': '000010111010000', ' ': '000000000000000', '·': '000000010000000', '?': '110001010000010' };
 const ART_K = ['X.......XXXX....', 'XX....XXXXXXXX..', '.XX.XXXooXXXXXX.', '..XXXXXooXXXXoX.', '.XX.XXXXXXoXXXX.', 'XX....XXXXXXXX..', 'X.......XXXX....'];
 function drawArt(cv, kind) {
   const c = cv.getContext('2d'), W = 160, H = 90;
@@ -210,6 +222,22 @@ function drawArt(cv, kind) {
     c.putImageData(od, 0, 0);
     c.restore();
     paper(6, 76, 62, 9); text('◑ INVERT', 8, 78);
+  }
+  // EV Mart's plate — new pixel art, not from the handoff (EV Mart isn't
+  // part of the original design), matching the same ink/paper/red/dither
+  // vocabulary as the plates above. Same drawing as CaseStudy.jsx's own
+  // copy — each page here owns its own drawArt, same as the source.
+  if (kind === 'evTill') {
+    dots();
+    const x = 46, y = 16, w = 76, h = 52;
+    shadowBox(x, y, w, h);
+    box(x + 6, y + 6, 64, 24); dith(x + 7, y + 7, 62, 22, 4);
+    text('TOTAL', x + 10, y + 10, ink);
+    text('12.50', x + 10, y + 18, red);
+    for (let i = 0; i < 4; i++) { const bw = i === 0 ? 22 : 12; box(x + 6 + (i === 0 ? 0 : 22 + (i - 1) * 14), y + 34, bw, 12); }
+    ink(x + 50, y - 12, 18, 12);
+    for (let ry = 0; ry < 3; ry++) paper(x + 52, y - 10 + ry * 3, 14, 1);
+    text('EV MART', x - 4, y + h + 8);
   }
 }
 
@@ -580,7 +608,7 @@ export default function Works() {
                 style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0, borderRadius: '50%', cursor: 'pointer' }} />
             ))}
           </div>
-          <span style={{ position: 'absolute', left: 12, top: 10, zIndex: 2, background: '#fff', padding: '0 6px', fontSize: 'clamp(14px,1.05vw,17px)', letterSpacing: '.12em', textTransform: 'uppercase', pointerEvents: 'none' }}>Pond site · 5 plots · 1:200</span>
+          <span style={{ position: 'absolute', left: 12, top: 10, zIndex: 2, background: '#fff', padding: '0 6px', fontSize: 'clamp(14px,1.05vw,17px)', letterSpacing: '.12em', textTransform: 'uppercase', pointerEvents: 'none' }}>Pond site · 6 plots · 1:200</span>
         </section>
 
         <section aria-live="polite" style={{ display: 'grid', gridTemplateRows: 'auto auto 1fr auto', alignContent: 'start', background: '#fff', boxShadow: '0 -3px 0 0 #141414,0 3px 0 0 #141414,-3px 0 0 0 #141414,3px 0 0 0 #141414,10px 10px 0 #141414' }}>

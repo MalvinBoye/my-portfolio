@@ -9,7 +9,6 @@ import Works from './pages/Works';
 import WorksStack from './pages/WorksStack';
 import About from './pages/About';
 import CaseStudy from './pages/CaseStudy';
-import EvMartCaseStudy from './pages/EvMartCaseStudy';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -174,10 +173,7 @@ function AppContent() {
           <Route path="/work/connect" element={<CaseStudy caseId="connect" />} />
           <Route path="/work/dormdrop" element={<CaseStudy caseId="dormdrop" />} />
           <Route path="/work/maelo" element={<CaseStudy caseId="maelo" />} />
-          {/* /work/ev-mart: old-site case study, not part of the new route
-              table and not named in the handoff's deletion list either —
-              left in place pending a decision, see chat. */}
-          <Route path="/work/ev-mart" element={<EvMartCaseStudy />} />
+          <Route path="/work/ev-mart" element={<CaseStudy caseId="evmart" />} />
         </Routes>
       )}
     </>

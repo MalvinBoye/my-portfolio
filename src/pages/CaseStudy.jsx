@@ -45,6 +45,7 @@ const HREF_MAP = {
   'Maehlo - case study.dc.html': '/work/maehlo',
   'Connect - case study.dc.html': '/work/connect',
   'DormDrop - case study.dc.html': '/work/dormdrop',
+  'EvMart - case study.dc.html': '/work/ev-mart',
 };
 const toRoute = (dcHref) => HREF_MAP[dcHref] || dcHref;
 
@@ -83,7 +84,10 @@ const KOI_DN = [
 // paper, tone only as ordered dither, same vocabulary as the pond itself.
 // Only ever invoked with the Maehlo case's own chapter `art` values.
 const AB = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
-const FONT = { A: '010101111101101', B: '110101110101110', C: '011100100100011', D: '110101101101110', E: '111100110100111', F: '111100110100100', G: '011100101101011', H: '101101111101101', I: '111010010010111', K: '101101110101101', L: '100100100100111', M: '101111111101101', N: '110101101101101', O: '010101101101010', P: '110101110100100', R: '110101110101101', S: '011100010001110', T: '111010010010010', U: '101101101101111', W: '101101111111101', Y: '101101010010010', '0': '111101101101111', '1': '010110010010111', '2': '110001010100111', '3': '110001010001110', '4': '101101111001001', '5': '111100110001110', '→': '000010111010000', ' ': '000000000000000', '·': '000000010000000', '?': '110001010000010' };
+// V is not in the source's version of this font (never needed by the
+// ported plates); added here — 3x5, same shape convention as the rest —
+// since EV Mart's own new plates need it for "EV MART".
+const FONT = { A: '010101111101101', B: '110101110101110', C: '011100100100011', D: '110101101101110', E: '111100110100111', F: '111100110100100', G: '011100101101011', H: '101101111101101', I: '111010010010111', K: '101101110101101', L: '100100100100111', M: '101111111101101', N: '110101101101101', O: '010101101101010', P: '110101110100100', R: '110101110101101', S: '011100010001110', T: '111010010010010', U: '101101101101111', V: '101101101101010', W: '101101111111101', Y: '101101010010010', '0': '111101101101111', '1': '010110010010111', '2': '110001010100111', '3': '110001010001110', '4': '101101111001001', '5': '111100110001110', '→': '000010111010000', ' ': '000000000000000', '·': '000000010000000', '?': '110001010000010' };
 const KOI_R = ['X.......XXXX....', 'XX....XXXXXXXX..', '.XX.XXXooXXXXXX.', '..XXXXXooXXXXoX.', '.XX.XXXXXXoXXXX.', 'XX....XXXXXXXX..', 'X.......XXXX....'];
 function drawArt(cv, kind) {
   const c = cv.getContext('2d'), W = 160, H = 90;
@@ -178,6 +182,38 @@ function drawArt(cv, kind) {
     c.putImageData(od, 0, 0);
     c.restore();
     paper(6, 76, 62, 9); text('◑ INVERT', 8, 78);
+  }
+  // EV Mart's plates — new pixel art, not from the handoff (EV Mart isn't
+  // part of the original design), drawn in the same ink/paper/red/dither
+  // vocabulary as everything above so it reads as part of the same system.
+  if (kind === 'evTill') {
+    dots();
+    const x = 46, y = 16, w = 76, h = 52;
+    shadowBox(x, y, w, h);
+    box(x + 6, y + 6, 64, 24); dith(x + 7, y + 7, 62, 22, 4);
+    text('TOTAL', x + 10, y + 10, ink);
+    text('12.50', x + 10, y + 18, red);
+    for (let i = 0; i < 4; i++) { const bw = i === 0 ? 22 : 12; box(x + 6 + (i === 0 ? 0 : 22 + (i - 1) * 14), y + 34, bw, 12); }
+    ink(x + 50, y - 12, 18, 12);
+    for (let ry = 0; ry < 3; ry++) paper(x + 52, y - 10 + ry * 3, 14, 1);
+    text('EV MART', x - 4, y + h + 8);
+  }
+  if (kind === 'evFlow') {
+    dots();
+    box(8, 10, 66, 66); text('BEFORE', 12, 14);
+    for (let r = 0; r < 4; r++) box(14, 26 + r * 12, 54, 9);
+    box(86, 10, 66, 66); text('AFTER', 90, 14);
+    ink(92, 28, 54, 16); paper(93, 29, 52, 14); text('CONFIRM', 96, 34, red);
+    for (let r = 0; r < 2; r++) box(92, 48 + r * 12, 54, 9);
+    dim(8, 152, 82, 'HIERARCHY');
+  }
+  if (kind === 'evChart') {
+    dots();
+    const bx = 20, by = 66, bw = 16, gap = 26;
+    const vals = [22, 30, 26, 46];
+    ink(bx - 4, 10, 1, 60); ink(bx - 4, by, 130, 1);
+    vals.forEach((v, i) => { const x = bx + i * gap; if (i === vals.length - 1) { red(x, by - v, bw, v); } else { box(x, by - v, bw, v, false); } });
+    text('CHECKOUT SPEED', bx - 4, by + 8);
   }
 }
 
@@ -368,7 +404,7 @@ const CASES = {
       ['3', 'person team', 'I led the UX and information architecture and built the React front end.'],
     ],
     cta: ['Back to selected works →', 'Works.dc.html'],
-    next: ['Next — Stuff →', 'Stuff - case study.dc.html'],
+    next: ['Next — EV Mart →', 'EvMart - case study.dc.html'],
     chapters: [
       { step: 'Problem', head: 'Open marketplaces run on blind trust', img: 'src/images/dormdrop-1.png', caption: 'one line of truth: American University students only',
         paras: ['With open sign-up, anyone could list anything, and there was no reputation system standing in for real accountability.',
@@ -394,6 +430,52 @@ const CASES = {
         paras: ['Verification solves who someone is, but not how reliable they are. Next, I\'d explore a light reputation layer, built from completed sales rather than star ratings, so trust can grow over time.',
           "I'd also run proper sessions with students on moving day, when the marketplace matters most, to see where the flows hold up under real pressure."],
         why: 'Working in a team of three taught me to design for handover as much as for users. Clear flows made it far easier for everyone to build the same thing.' },
+    ],
+  },
+  // EV Mart isn't part of the original design handoff — it's an older
+  // case study, rebuilt into this template on request. Facts (role, scope,
+  // timeline, results) are carried over unchanged from the old page; only
+  // the voice, structure and art are new, matching the rest of this site.
+  evmart: {
+    kicker: 'Case 06 — retail POS redesign',
+    title: 'EV Mart',
+    lede: 'A checkout screen redesigned on-site, so three branches of cashiers stopped fighting the till and started trusting it.',
+    intro: "Three branches, one shared point-of-sale interface, and cashiers who'd learned to work around it rather than with it. The till buried its most-used actions behind a flat hierarchy, added a confirmation to nearly every action until confirming became a reflex instead of a check, and let errors read exactly like successes. I spent shifts standing at the counter in Accra watching cashiers work around all three, then redesigned what could ship without touching the C/C++ system underneath. It's live across all three branches.",
+    tags: ['Deployed', 'Retail', 'UX research', 'UI', 'Systems'],
+    meta: [['Role', 'UX research, UI redesign, deployment lead'], ['Timeline', '2022 · Donfox Systems, Accra'], ['Tools', 'On-site research, existing C/C++ POS'], ['Team', 'Solo, three branches']],
+    verdict: 'A till that stopped fighting the people using it, redesigned around what they actually did at the counter.',
+    receipts: [
+      ['27%', 'faster checkout', 'Measured across all three deployed branches, not a lab number.'],
+      ['0', 'rollbacks', 'Every change shipped inside the existing system, so nothing needed reverting.'],
+      ['6', 'cashiers, zero escalations', 'Onboarded onto the new screens without a single support ticket after launch.'],
+    ],
+    cta: ['Talk to me about this ↗', 'mailto:malvinboye@gmail.com'],
+    next: ['Next — Stuff →', 'Stuff - case study.dc.html'],
+    chapters: [
+      { step: 'Problem', head: 'Three tills, the same fight every shift', art: 'evTill', caption: 'the same button, hesitated over, every till',
+        paras: ["EV Mart runs three branches through one shared point-of-sale screen, and every cashier I watched fought the same three things: buttons that never told you which one mattered, a confirmation on almost every tap, and errors that looked exactly like successes.",
+          "None of that showed up in a support ticket. It showed up in a queue, in a cashier's shoulders, in the half-second hesitation before the same button every single time."],
+        why: "Nobody files a ticket for a screen that's merely annoying. You only find that kind of problem by standing where the problem actually happens." },
+      { step: 'Research', head: 'Standing at the counter, not reading the logs', art: 'evTill', caption: 'a real rush, three branches, no ticket queue involved',
+        paras: ["I spent shifts at the counter in Accra, watching real transactions during a real rush, then asked cashiers what they'd change if nobody was going to say no. Three answers kept repeating: fix the buttons, cut the confirmations, make errors look like errors.",
+          'The system itself gave no signal any of this was wrong. Checkout completed either way — slow and confirmed to death, or fast — and it logged the same.'],
+        why: "If the system can't tell you something's broken, you have to go find out for yourself. That's true of software, and it's true of most things I design for." },
+      { step: 'Constraint', head: "A system I could redress, not rebuild", art: 'evFlow', caption: 'before and after, inside the same hierarchy',
+        paras: ["The till ran on an existing C/C++ point-of-sale system I wasn't going to replace mid-shift across three branches. Everything had to ship as a change inside what already existed, not a rewrite of it.",
+          'That ruled out most of the obvious fixes. No new framework, no fresh information architecture from scratch — just the existing screens, made to tell the truth about what mattered.'],
+        why: 'Constraints like this are usually where I do my best work. A blank canvas invites everything; a working system you can\'t break only lets through the changes that actually earn their place.' },
+      { step: 'Redesign', head: 'Hierarchy, fewer confirmations, real errors', art: 'evFlow', caption: 'the confirmation that survived the cut, and the ones that didn\'t',
+        paras: ['Three changes carried the whole project. Primary actions got real visual priority, so the right button became the obvious one instead of the memorised one. Redundant confirmations were cut back to the ones that actually needed a second thought.',
+          'And errors stopped reading like successes — different colour, different weight, different wording, so a mistake actually looked like one instead of blending into the next tap.'],
+        why: "Each change removes a place where habit was doing the thinking instead of the interface. A cashier's attention is a resource too, and the old screen spent it on the wrong things." },
+      { step: 'Impact', head: '27% faster, and nothing to roll back', art: 'evChart', caption: 'measured across real shifts, not a lab test',
+        paras: ['Checkout got 27% faster across all three deployed branches, measured against real shifts, not a lab test. Six cashiers onboarded onto the new screens with zero support escalations.',
+          'Nothing shipped needed a rollback. Every change was scoped tightly enough to work inside the live system from day one.'],
+        why: "Shipping inside someone else's live system raises the bar for what counts as done. If it can't go out clean, on a system people are relying on that day, it isn't ready." },
+      { step: 'Reflection', head: "What I'd still change", art: 'evChart', caption: 'nice-to-have, not unfinished',
+        paras: ["I'd like real usage data next time, not just observed shifts and interviews — a week of logged taps would tell me which confirmation cuts actually mattered and which just felt good to remove.",
+          "And I'd push for one more thing the C/C++ constraint kept off the table: a proper error log a manager could actually read, instead of one only I ever looked at."],
+        why: "Working inside someone else's system taught me to separate what I'd do with more time from what the project actually needed. Most of what's left is nice-to-have, not unfinished." },
     ],
   },
   maelo: {
@@ -563,7 +645,8 @@ class Board {
         alt: `${C.title} — ${c.caption}`, paras: c.paras.map(t => ({ t })),
         imgSrc: c.img ? (IMG_MAP[c.img] || c.img) : '',
       })),
-      ctaLabel: C.cta[0], ctaHref: toRoute(C.cta[1]), ctaExternal: C.cta[1].startsWith('http'),
+      ctaLabel: C.cta[0], ctaHref: toRoute(C.cta[1]),
+      ctaKind: C.cta[1].startsWith('http') ? 'external' : C.cta[1].startsWith('mailto:') ? 'mailto' : 'internal',
       nextLabel: C.next[0], nextHref: toRoute(C.next[1]),
       invLabel: this.state.inv ? '◐ light' : '◑ invert',
       invPressed: this.state.inv ? 'true' : 'false',
@@ -732,12 +815,12 @@ export default function CaseStudy({ caseId }) {
         ))}
 
         <footer style={{ display: 'flex', flexWrap: 'wrap', gap: 18, alignItems: 'center', justifyContent: 'space-between', borderTop: '3px solid #141414', paddingTop: 22 }}>
-          {rv.ctaExternal ? (
-            <a href={rv.ctaHref} target="_blank" rel="noopener noreferrer" style={{ padding: '6px 16px', background: '#141414', color: '#fff', fontSize: 'clamp(18px,1.35vw,22px)', letterSpacing: '.14em', textTransform: 'uppercase', boxShadow: '0 -2px 0 0 #141414,0 2px 0 0 #141414,-2px 0 0 0 #141414,2px 0 0 0 #141414,6px 6px 0 #8b1a1a' }}
-              onMouseEnter={hoverCTA} onMouseLeave={unhoverCTA}>{rv.ctaLabel}</a>
-          ) : (
+          {rv.ctaKind === 'internal' ? (
             <Link to={rv.ctaHref} style={{ padding: '6px 16px', background: '#141414', color: '#fff', fontSize: 'clamp(18px,1.35vw,22px)', letterSpacing: '.14em', textTransform: 'uppercase', boxShadow: '0 -2px 0 0 #141414,0 2px 0 0 #141414,-2px 0 0 0 #141414,2px 0 0 0 #141414,6px 6px 0 #8b1a1a' }}
               onMouseEnter={hoverCTA} onMouseLeave={unhoverCTA}>{rv.ctaLabel}</Link>
+          ) : (
+            <a href={rv.ctaHref} {...(rv.ctaKind === 'external' ? { target: '_blank', rel: 'noopener noreferrer' } : {})} style={{ padding: '6px 16px', background: '#141414', color: '#fff', fontSize: 'clamp(18px,1.35vw,22px)', letterSpacing: '.14em', textTransform: 'uppercase', boxShadow: '0 -2px 0 0 #141414,0 2px 0 0 #141414,-2px 0 0 0 #141414,2px 0 0 0 #141414,6px 6px 0 #8b1a1a' }}
+              onMouseEnter={hoverCTA} onMouseLeave={unhoverCTA}>{rv.ctaLabel}</a>
           )}
           <Link to={rv.nextHref} style={{ background: '#fff', padding: '0 6px', fontFamily: "'Pixelify Sans',monospace", fontSize: 'clamp(22px,2vw,32px)' }}>{rv.nextLabel}</Link>
         </footer>

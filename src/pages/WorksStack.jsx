@@ -27,6 +27,10 @@ const WORKS = [
     lede: 'A dating app built as a critique of dating apps, designed to succeed the moment you leave.', meta: [['Role', 'Solo design, full stack'], ['Status', 'Live']] },
   { name: 'DormDrop', motif: 'box', href: 'DormDrop - case study.dc.html',
     lede: 'A student marketplace where every listing traces back to a verified student.', meta: [['Role', 'UX, front end'], ['Team', '3 people']] },
+  // Not part of the original design handoff — an older case study, rebuilt
+  // into this loop on request alongside its own case-study page.
+  { name: 'EV Mart', motif: 'till', href: 'EvMart - case study.dc.html',
+    lede: 'A checkout screen redesigned on-site, so three branches of cashiers stopped fighting the till.', meta: [['Role', 'UX research, UI, deployment'], ['Status', 'Deployed']] },
 ];
 const YT = { name: 'YouTube', motif: 'play', yt: true,
   lede: 'The secret folder. Where I talk about making videos — process, edits, and everything behind the channel.',
@@ -51,6 +55,7 @@ const HREF_MAP = {
   'Connect - case study.dc.html': '/work/connect',
   'DormDrop - case study.dc.html': '/work/dormdrop',
   'Maelo - YouTube study.dc.html': '/work/maelo',
+  'EvMart - case study.dc.html': '/work/ev-mart',
 };
 
 // Deterministic per-slot dice, so the loop is stable when you scroll back:
@@ -126,6 +131,9 @@ function drawFolder(cv, w, idx) {
   if (M === 'koi') { [[46, 28], [48, 27], [50, 27], [52, 27], [54, 28], [56, 28], [58, 29], [60, 28], [62, 27], [62, 30], [48, 29], [50, 29], [52, 29], [54, 29], [56, 29]].forEach(([x, y]) => c.fillRect(x, y, 2, 2)); c.fillStyle = '#fff'; c.fillRect(47, 28, 1, 1); }
   if (M === 'link') { c.fillRect(46, 24, 7, 7); c.fillRect(61, 30, 7, 7); c.fillStyle = '#fff'; c.fillRect(47, 25, 5, 5); c.fillRect(62, 31, 5, 5); c.fillStyle = ink; for (let k = 0; k < 9; k++) c.fillRect(53 + k, 30 + Math.round(k * 0.4), 1, 1); }
   if (M === 'box') { c.fillRect(48, 26, 16, 1); c.fillRect(48, 37, 16, 1); c.fillRect(48, 26, 1, 12); c.fillRect(63, 26, 1, 12); c.fillRect(48, 30, 16, 1); for (let k = 0; k < 5; k++) { c.fillRect(56 - k, 20 + k, 1, 1); c.fillRect(56 + k, 20 + k, 1, 1); } c.fillRect(56, 16, 1, 9); }
+  // EV Mart's motif — new, not from the handoff: a small till, matching
+  // the compact stamped-icon style of the motifs above.
+  if (M === 'till') { c.fillRect(46, 21, 22, 15); c.fillStyle = '#fff'; c.fillRect(48, 23, 18, 8); c.fillStyle = ink; for (let x = 49; x < 65; x += 2) c.fillRect(x, 26, 1, 1); c.fillRect(50, 33, 5, 3); c.fillRect(58, 33, 5, 3); }
   if (M === 'play') {
     c.fillStyle = '#fff'; c.fillRect(44, 22, 26, 16); c.fillStyle = RED;
     for (let r = 0; r < 9; r++) c.fillRect(54, 26 + r, Math.min(r, 8 - r) + 1, 1);
