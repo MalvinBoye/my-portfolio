@@ -1,7 +1,13 @@
 /* Ported verbatim from the design handoff's shared case-study <helmet><style>
    block (identical across Stuff/Maable/Maehlo/Connect/DormDrop/Maelo), scoped
-   under .mh-case instead of bare html/body/a/:focus-visible/::selection. */
-.mh-case { background: #fff; color: #141414; font-family: 'VT323', ui-monospace, monospace; overflow-x: hidden; }
+   under .mh-case instead of bare html/body/a/:focus-visible/::selection.
+   `overflow-x:hidden` is dropped here (index.css already sets it globally
+   on body): setting overflow on only one axis makes the UA treat the other
+   as `auto` per spec, which turns .mh-case into its own scroll container —
+   and since the sticky rail's containing block becomes THAT element rather
+   than the real (viewport) scroller, it never sticks. Confirmed live: the
+   rail disappeared on scroll until this was removed. */
+.mh-case { background: #fff; color: #141414; font-family: 'VT323', ui-monospace, monospace; }
 .mh-case a { color: #141414; text-decoration: none; }
 .mh-case a:hover { color: #8b1a1a; }
 .mh-case :focus-visible { outline: 2px solid #8a6224; outline-offset: 3px; }

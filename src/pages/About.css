@@ -1,7 +1,12 @@
 /* Ported verbatim from the design handoff's About.dc.html <helmet><style>
    block, scoped under .mh-about instead of bare html/body/a/:focus-visible/
-   ::selection, since this app has other pages sharing those elements. */
-.mh-about { background: #fff; color: #141414; font-family: 'VT323', ui-monospace, monospace; overflow-x: hidden; }
+   ::selection, since this app has other pages sharing those elements.
+   `overflow-x:hidden` is dropped (index.css already sets it globally on
+   body): setting overflow on only one axis makes the other become `auto`
+   per spec, turning .mh-about into its own scroll container and breaking
+   the sticky header's containing block — see CaseStudy.css for the same
+   fix, found the same way. */
+.mh-about { background: #fff; color: #141414; font-family: 'VT323', ui-monospace, monospace; }
 .mh-about a { color: #141414; text-decoration: none; }
 .mh-about a:hover { color: #8b1a1a; }
 .mh-about :focus-visible { outline: 2px solid #8a6224; outline-offset: 3px; }
