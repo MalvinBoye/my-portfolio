@@ -6,6 +6,7 @@ import './App.css';
 import Home from './pages/Home';
 import Thinking from './pages/Thinking';
 import Works from './pages/Works';
+import WorksStack from './pages/WorksStack';
 import AboutPage from './pages/AboutPage';
 import ProjectsPage from './pages/ProjectsPage';
 import MaableCaseStudy from './pages/MaableCaseStudy';
@@ -169,6 +170,7 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/thinking" element={<Thinking />} />
           <Route path="/works" element={<Works />} />
+          <Route path="/works/stack" element={<WorksStack />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/work" element={<ProjectsPage />} />
           <Route path="/work/stuff" element={<StuffCaseStudy />} />
