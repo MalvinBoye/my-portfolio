@@ -8,12 +8,8 @@ import Thinking from './pages/Thinking';
 import Works from './pages/Works';
 import WorksStack from './pages/WorksStack';
 import About from './pages/About';
-import ProjectsPage from './pages/ProjectsPage';
-import MaableCaseStudy from './pages/MaableCaseStudy';
-import StuffCaseStudy from './pages/StuffCaseStudy';
+import CaseStudy from './pages/CaseStudy';
 import EvMartCaseStudy from './pages/EvMartCaseStudy';
-import DormDropCaseStudy from './pages/DormDropCaseStudy';
-import ConnectCaseStudy from './pages/ConnectCaseStudy';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -172,12 +168,16 @@ function AppContent() {
           <Route path="/works" element={<Works />} />
           <Route path="/works/stack" element={<WorksStack />} />
           <Route path="/about" element={<About />} />
-          <Route path="/work" element={<ProjectsPage />} />
-          <Route path="/work/stuff" element={<StuffCaseStudy />} />
-          <Route path="/work/maable" element={<MaableCaseStudy />} />
+          <Route path="/work/stuff" element={<CaseStudy caseId="stuff" />} />
+          <Route path="/work/maable" element={<CaseStudy caseId="maable" />} />
+          <Route path="/work/maehlo" element={<CaseStudy caseId="maehlo" />} />
+          <Route path="/work/connect" element={<CaseStudy caseId="connect" />} />
+          <Route path="/work/dormdrop" element={<CaseStudy caseId="dormdrop" />} />
+          <Route path="/work/maelo" element={<CaseStudy caseId="maelo" />} />
+          {/* /work/ev-mart: old-site case study, not part of the new route
+              table and not named in the handoff's deletion list either —
+              left in place pending a decision, see chat. */}
           <Route path="/work/ev-mart" element={<EvMartCaseStudy />} />
-          <Route path="/work/dormdrop" element={<DormDropCaseStudy />} />
-          <Route path="/work/connect" element={<ConnectCaseStudy />} />
         </Routes>
       )}
     </>
