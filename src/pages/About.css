@@ -1,0 +1,9 @@
+/* Ported verbatim from the design handoff's About.dc.html <helmet><style>
+   block, scoped under .mh-about instead of bare html/body/a/:focus-visible/
+   ::selection, since this app has other pages sharing those elements. */
+.mh-about { background: #fff; color: #141414; font-family: 'VT323', ui-monospace, monospace; overflow-x: hidden; }
+.mh-about a { color: #141414; text-decoration: none; }
+.mh-about a:hover { color: #8b1a1a; }
+.mh-about :focus-visible { outline: 2px solid #8a6224; outline-offset: 3px; }
+.mh-about ::selection { background: #141414; color: #fff; }
+html[data-inv="1"] .ab-vidpx { filter: invert(1); }

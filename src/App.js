@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Thinking from './pages/Thinking';
 import Works from './pages/Works';
 import WorksStack from './pages/WorksStack';
-import AboutPage from './pages/AboutPage';
+import About from './pages/About';
 import ProjectsPage from './pages/ProjectsPage';
 import MaableCaseStudy from './pages/MaableCaseStudy';
 import StuffCaseStudy from './pages/StuffCaseStudy';
@@ -171,7 +171,7 @@ function AppContent() {
           <Route path="/thinking" element={<Thinking />} />
           <Route path="/works" element={<Works />} />
           <Route path="/works/stack" element={<WorksStack />} />
-          <Route path="/about" element={<AboutPage />} />
+          <Route path="/about" element={<About />} />
           <Route path="/work" element={<ProjectsPage />} />
           <Route path="/work/stuff" element={<StuffCaseStudy />} />
           <Route path="/work/maable" element={<MaableCaseStudy />} />
