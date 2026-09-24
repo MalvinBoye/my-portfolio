@@ -13,6 +13,10 @@ import maableRevision from '../images/maable-revision.png';
 import connect1 from '../images/connect-1.png';
 import dormdrop1 from '../images/dormdrop-1.png';
 import dormdrop2 from '../images/dormdrop-2.png';
+import maeloSubtitle from '../images/maelo-subtitle.webp';
+import maeloFcpx from '../images/maelo-fcpx.webp';
+import maeloThumbHouse from '../images/maelo-thumb-house.webp';
+import maeloThumbStudy from '../images/maelo-thumb-study.webp';
 import dormdrop3 from '../images/dormdrop-3.png';
 
 // ---------------------------------------------------------------------------
@@ -72,6 +76,12 @@ const IMG_MAP = {
   'src/images/dormdrop-1.png': dormdrop1,
   'src/images/dormdrop-2.png': dormdrop2,
   'src/images/dormdrop-3.png': dormdrop3,
+  // Maelo's own stills — real photos supplied for the secret study, not
+  // from the handoff (which uses empty <image-slot> placeholders here).
+  'src/images/maelo-subtitle.webp': maeloSubtitle,
+  'src/images/maelo-fcpx.webp': maeloFcpx,
+  'src/images/maelo-thumb-house.webp': maeloThumbHouse,
+  'src/images/maelo-thumb-study.webp': maeloThumbStudy,
 };
 
 const pad2 = (n) => String(n).padStart(2, '0');
@@ -87,7 +97,11 @@ const AB = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
 // V is not in the source's version of this font (never needed by the
 // ported plates); added here — 3x5, same shape convention as the rest —
 // since EV Mart's own new plates need it for "EV MART".
-const FONT = { A: '010101111101101', B: '110101110101110', C: '011100100100011', D: '110101101101110', E: '111100110100111', F: '111100110100100', G: '011100101101011', H: '101101111101101', I: '111010010010111', K: '101101110101101', L: '100100100100111', M: '101111111101101', N: '110101101101101', O: '010101101101010', P: '110101110100100', R: '110101110101101', S: '011100010001110', T: '111010010010010', U: '101101101101111', V: '101101101101010', W: '101101111111101', Y: '101101010010010', '0': '111101101101111', '1': '010110010010111', '2': '110001010100111', '3': '110001010001110', '4': '101101111001001', '5': '111100110001110', '→': '000010111010000', ' ': '000000000000000', '·': '000000010000000', '?': '110001010000010' };
+// 6/7/8/9 are not in the source's version of this font (never needed by
+// the ported plates, which only ever draw 0-5); added here, in the same
+// loose style as the existing digits, since EV Mart's and Maelo's new
+// plates need the full range.
+const FONT = { A: '010101111101101', B: '110101110101110', C: '011100100100011', D: '110101101101110', E: '111100110100111', F: '111100110100100', G: '011100101101011', H: '101101111101101', I: '111010010010111', K: '101101110101101', L: '100100100100111', M: '101111111101101', N: '110101101101101', O: '010101101101010', P: '110101110100100', R: '110101110101101', S: '011100010001110', T: '111010010010010', U: '101101101101111', V: '101101101101010', W: '101101111111101', Y: '101101010010010', '0': '111101101101111', '1': '010110010010111', '2': '110001010100111', '3': '110001010001110', '4': '101101111001001', '5': '111100110001110', '6': '110100111101111', '7': '111001001010010', '8': '111101111101111', '9': '111101111001111', '→': '000010111010000', ' ': '000000000000000', '·': '000000010000000', '?': '110001010000010' };
 const KOI_R = ['X.......XXXX....', 'XX....XXXXXXXX..', '.XX.XXXooXXXXXX.', '..XXXXXooXXXXoX.', '.XX.XXXXXXoXXXX.', 'XX....XXXXXXXX..', 'X.......XXXX....'];
 function drawArt(cv, kind) {
   const c = cv.getContext('2d'), W = 160, H = 90;
@@ -214,6 +228,22 @@ function drawArt(cv, kind) {
     ink(bx - 4, 10, 1, 60); ink(bx - 4, by, 130, 1);
     vals.forEach((v, i) => { const x = bx + i * gap; if (i === vals.length - 1) { red(x, by - v, bw, v); } else { box(x, by - v, bw, v, false); } });
     text('CHECKOUT SPEED', bx - 4, by + 8);
+  }
+  // Maelo's "hurdles" plate — new pixel art, not from the handoff: an
+  // iPhone in a transparent case with polaroids tucked behind it, same
+  // ink/paper/dither vocabulary as everything else.
+  if (kind === 'iphone') {
+    dots();
+    const pol = (x, y) => { box(x, y, 24, 30); dith(x + 2, y + 2, 20, 18, 4); };
+    pol(8, 26); pol(128, 18);
+    const px = 54, py = 6, pw = 46, ph = 78;
+    for (let yy = py - 3; yy < py + ph + 3; yy += 3) { ink(px - 3, yy, 1, 1); ink(px + pw + 2, yy, 1, 1); }
+    for (let xx = px - 3; xx < px + pw + 3; xx += 3) { ink(xx, py - 3, 1, 1); ink(xx, py + ph + 2, 1, 1); }
+    box(px, py, pw, ph);
+    box(px + 4, py + 4, 18, 18);
+    ring(px + 9, py + 10, 4, 2); ring(px + 17, py + 10, 4, 2); ring(px + 9, py + 18, 3, 2);
+    ink(px - 1, py + 20, 1, 8); ink(px + pw, py + 16, 1, 10); ink(px + pw, py + 30, 1, 10);
+    text('16', px + pw - 14, py + ph - 10, red);
   }
 }
 
@@ -494,27 +524,27 @@ const CASES = {
     cta: ['Watch on YouTube ↗', 'https://www.youtube.com/@Maehlo'],
     next: ['Next — Stuff →', 'Stuff - case study.dc.html'],
     chapters: [
-      { step: 'Why', head: 'University left very little room to make things', ph: 'A vlog still from campus', caption: 'somewhere to make things without a mark scheme',
+      { step: 'Why', head: 'University left very little room to make things', img: 'src/images/maelo-thumb-study.webp', caption: 'somewhere to make things without a mark scheme',
         paras: ['Before university I had plenty of creative outlets, places where I could simply be myself. A STEM degree replaced most of them with problem sets, where there\'s one right answer and a rubric to meet.',
           "So I began filming my days and cutting them together, usually without uploading anything. It wasn't meant to be content. It was the one part of my week that nobody was marking."],
         why: 'It\'s the same instinct behind everything I design: follow whatever I\'m curious about. In this case, that was the simple pleasure of making something without a brief.' },
-      { step: 'Spark', head: 'Losing my Korean is what made it public', ph: 'A Konglish subtitle frame', caption: 'two languages on one timeline',
+      { step: 'Spark', head: 'Losing my Korean is what made it public', img: 'src/images/maelo-subtitle.webp', caption: 'two languages on one timeline',
         paras: ['I study languages in my spare time, and I noticed my Korean starting to fade. Studying on my own wasn\'t enough to keep it; I needed to be using it every week.',
           'So the videos became bilingual. Scripts, voiceovers and captions are all in a mix of Korean and English, and that\'s where the name 마앨로 Maelo comes from.'],
         why: 'I attached a habit I kept dropping to something I already enjoyed. If I want to post, I have to practise. It\'s the same idea behind the XP in Maable.' },
-      { step: 'Channel', head: 'A student, a designer, and simply me', ph: 'Your favourite thumbnail', caption: "no niche, and that's deliberate",
+      { step: 'Channel', head: 'A student, a designer, and simply me', img: 'src/images/maelo-thumb-house.webp', caption: "no niche, and that's deliberate",
         paras: ["Maelo is where I document my life as a student and a designer: days at university, the things I'm making, and working things out as I go. There's no gimmick, and that's intentional.",
           'The person I have in mind is someone rather like me. Curious, a little scattered, and only a small push away from making something of their own.'],
         why: "A wandering mind doesn't need a flawless creator to look up to. It helps far more to watch an ordinary person actually begin. The lack of polish is rather the point." },
-      { step: 'Craft', head: 'How a video comes together', ph: 'Final Cut Pro timeline screenshot', caption: 'pinterest → filming → final cut → canva',
+      { step: 'Craft', head: 'How a video comes together', img: 'src/images/maelo-fcpx.webp', caption: 'pinterest → filming → final cut → canva',
         paras: ['It starts with a mood. A Pinterest board sets the look before I film anything. I shoot across the week, edit in Final Cut Pro, choose music that carries the pace, and put the thumbnail and titles together in Canva.',
           "Editing is where my design background shows. Pacing is really about managing attention: I can see exactly where a viewer is likely to drift, and that's where I cut."],
         why: 'Editing has taught me more about attention than any UX article. The timeline shows you, second by second, where someone stops caring.' },
-      { step: 'Hurdles', head: 'What I actually find difficult', ph: 'Behind-the-scenes shot of your setup', caption: 'consistency is most of it',
+      { step: 'Hurdles', head: 'What I actually find difficult', art: 'iphone', caption: 'consistency is most of it',
         paras: ['Consistency, above all. Two uploads in a year is what happens when the only deadline is one you set yourself. Coming back meant treating uploads as a routine rather than waiting to feel inspired, and I now post most weeks. I still take breaks when I need them; I\'d rather step away for a week than put out something I don\'t care about.',
           'There\'s also filming in public and being comfortable on camera, writing in two languages without it turning into a lesson, and keeping it enjoyable so it stays an outlet rather than becoming another assignment.'],
         why: 'The editing was never the hard part; turning up was. Realising that changed how I plan. A series of small, repeatable videos beats one perfect one that never gets finished.' },
-      { step: 'Payoff', head: 'What it says about how I work', ph: "A still you're proud of", caption: 'self-directed, and made in public',
+      { step: 'Payoff', head: 'What it says about how I work', video: '/uploads/maelo-plate6.mp4', caption: 'self-directed, and made in public',
         paras: ['Every video is a small project from start to finish: concept, art direction, filming, editing, sound, packaging and publishing. The feedback is public, and retention graphs are brutally honest.',
           'It also keeps my taste moving. The pacing, type and framing I try out in a vlog tend to find their way into my interfaces, and the other way round.'],
         why: 'Accountability is really what I get out of it. Knowing someone might watch pushes me to do better, and I hope it nudges someone else into starting something of their own.' },
@@ -562,6 +592,7 @@ class Board {
     this._iv = setInterval(() => this.frame(), 40);
     this.paintArt();
     this._artT = setTimeout(() => this.paintArt(), 300);
+    this.initChapterVid();
   }
 
   unmount() {
@@ -569,11 +600,61 @@ class Board {
     window.removeEventListener('resize', this._rs);
     clearInterval(this._iv);
     clearTimeout(this._artT);
+    cancelAnimationFrame(this._vraf);
   }
 
   // Only meaningful for the Maehlo case (its chapters carry `art`, not
   // `img`); a harmless no-op elsewhere since no .cs-art canvases exist.
   paintArt() { document.querySelectorAll('.cs-art').forEach((cv) => { try { drawArt(cv, cv.dataset.art); } catch (_) { /* not mounted yet */ } }); }
+
+  // Only meaningful for Maelo's "Payoff" chapter (the one chapter with a
+  // `video`) — a harmless no-op elsewhere since no .cs-vid exists. Same
+  // technique as About's portrait-video glitch (loop in colour, drop into
+  // a 1-bit ordered-dithered pixel feed for a moment), just a shorter,
+  // simpler cycle: every 4s instead of every ~10s.
+  initChapterVid() {
+    const v = document.querySelector('.cs-vid'), cv = document.querySelector('.cs-vidpx');
+    if (!v || !cv) return;
+    v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+    v.addEventListener('ended', () => { v.currentTime = 0; v.play().catch(() => {}); });
+    try { v.play().catch(() => {}); } catch (_) { /* autoplay blocked */ }
+    if (this.calm) return;
+    const src = document.createElement('canvas'), sc = src.getContext('2d', { willReadFrequently: true });
+    const c = cv.getContext('2d');
+    const PERIOD = 4, DUR = 1.5;
+    const t0 = performance.now() / 1000 - 1;
+    const tick = () => {
+      if (!document.body.contains(cv)) return; // torn down (route changed)
+      const t = (performance.now() / 1000 - t0) % PERIOD;
+      const on = t < DUR && v.readyState >= 2;
+      if (!on) { cv.style.opacity = '0'; this._vraf = requestAnimationFrame(tick); return; }
+      const u = t / DUR;
+      const cols = u < 0.12 || u > 0.88 ? 20 : 38;
+      const r = cv.getBoundingClientRect(), ar = r.height / Math.max(1, r.width);
+      const w = cols, hh = Math.max(1, Math.round(cols * ar));
+      if (src.width !== w || src.height !== hh) { src.width = w; src.height = hh; cv.width = w; cv.height = hh; }
+      const vw = v.videoWidth, vh = v.videoHeight;
+      if (vw && vh) {
+        const vr = vh / vw;
+        let sx = 0, sy = 0, sw = vw, sh = vh;
+        if (vr > ar) { sh = vw * ar; sy = (vh - sh) / 2; } else { sw = vh / ar; sx = (vw - sw) / 2; }
+        sc.drawImage(v, sx, sy, sw, sh, 0, 0, w, hh);
+        const d = sc.getImageData(0, 0, w, hh), p = d.data, out = c.createImageData(w, hh), o = out.data;
+        const tear = Math.random() < 0.35 ? Math.floor(Math.random() * hh) : -1, tearN = 1 + Math.floor(Math.random() * 3), shift = Math.round((Math.random() - 0.5) * 6);
+        for (let y = 0; y < hh; y++) for (let x = 0; x < w; x++) {
+          const xs = tear >= 0 && y >= tear && y < tear + tearN ? Math.min(w - 1, Math.max(0, x + shift)) : x;
+          const i = (y * w + xs) * 4, L = (0.3 * p[i] + 0.59 * p[i + 1] + 0.11 * p[i + 2]) / 255;
+          const lum = Math.min(1, Math.max(0, (L - 0.5) * 1.35 + 0.5));
+          const on1 = lum > (AB[(y & 3) * 4 + (x & 3)] + 0.5) / 16, j = (y * w + x) * 4, val = on1 ? 250 : 20;
+          o[j] = o[j + 1] = o[j + 2] = val; o[j + 3] = 255;
+        }
+        c.putImageData(out, 0, 0);
+      }
+      cv.style.opacity = '1';
+      this._vraf = requestAnimationFrame(tick);
+    };
+    this._vraf = requestAnimationFrame(tick);
+  }
 
   // Which sheet is on the desk, and develop any plate that's come into view:
   // it resolves in three hard steps from a coarse grey mosaic to the photo
@@ -795,14 +876,21 @@ export default function CaseStudy({ caseId }) {
                   {c.art && (
                     <canvas className="cs-art" data-art={c.art} width="160" height="90" role="img" aria-label={c.alt} style={{ display: 'block', width: '100%', height: '100%', background: '#fff', imageRendering: 'pixelated' }} />
                   )}
-                  {!c.art && c.imgSrc && (
+                  {!c.art && c.video && (
+                    // Loops in colour; every 4s it drops into a 1-bit
+                    // dithered pixel feed for a moment, same technique as
+                    // About's portrait-video glitch, just a shorter cycle.
+                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                      <video className="cs-vid" src={c.video} autoPlay muted loop playsInline style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <canvas className="cs-vidpx" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0, imageRendering: 'pixelated' }} />
+                    </div>
+                  )}
+                  {!c.art && !c.video && c.imgSrc && (
                     <img src={c.imgSrc} alt={c.alt} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   )}
-                  {!c.art && !c.imgSrc && (
-                    // Maelo (the secret YouTube study): the source uses an
-                    // <image-slot> placeholder here — a design-tool-only
-                    // element (not ported). Rendered as an empty, correctly
-                    // sized frame with the placeholder text as written.
+                  {!c.art && !c.video && !c.imgSrc && (
+                    // Only reached if a chapter has none of art/video/img —
+                    // an empty, correctly sized frame with placeholder text.
                     <div role="img" aria-label={c.alt} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: 16, color: '#6d6a63', fontSize: 'clamp(15px,1.1vw,18px)', letterSpacing: '.06em' }}>{c.ph}</div>
                   )}
                 </div>
