@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './App.css';
-import MainSite from './pages/MainSite';
+import Home from './pages/Home';
 import AboutPage from './pages/AboutPage';
 import ProjectsPage from './pages/ProjectsPage';
 import MaableCaseStudy from './pages/MaableCaseStudy';
@@ -164,7 +164,7 @@ function AppContent() {
       {showSig && <SignatureIntro onComplete={() => setShowSig(false)} />}
       {!showSig && (
         <Routes>
-          <Route path="/" element={<MainSite />} />
+          <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/work" element={<ProjectsPage />} />
           <Route path="/work/stuff" element={<StuffCaseStudy />} />

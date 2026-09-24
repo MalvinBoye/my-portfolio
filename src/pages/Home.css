@@ -1,0 +1,75 @@
+/* Ported verbatim from the design handoff's Maehlo.dc.html <helmet><style>
+   block — class names kept exactly as the source uses them (not prefixed),
+   since the Pond simulation's own JS queries these exact class names
+   (`.pad`, `.lbl`, `.swim`, …) and the two have to agree. Checked against
+   the rest of this app's globally-loaded CSS (App.css, index.css) for
+   collisions: none of these names are used anywhere else in the codebase. */
+html { scroll-behavior: smooth; scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
+.mh-root { margin: 0; background: #fff; color: #141312; font-family: 'Caveat', ui-rounded, cursive; overflow-x: hidden; }
+.mh-root a { color: #8a6224; text-decoration: none; }
+.mh-root a:hover { color: #b68235; }
+.mh-root :focus-visible { outline: 2px solid #8a6224; outline-offset: 3px; }
+.mh-root ::selection { background: rgba(182, 130, 53, .22); }
+.mh-root .hw { font-family: 'Shantell Sans', 'Comic Sans MS', cursive; }
+.mh-root .pen { font-family: 'Caveat', cursive; }
+
+@keyframes mh-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.cursor { display: inline-block; width: .42em; color: #8b1a1a; animation: mh-blink 1.1s step-end infinite; }
+/* Animates the independent translate/rotate properties, NOT `transform` —
+   otherwise it overrides the inline centring transform on the sketch. */
+@keyframes mh-bob { 0%, 100% { translate: 0 0; rotate: -1deg; } 50% { translate: 0 -7px; rotate: 1.5deg; } }
+
+/* ---- the pond ---------------------------------------------------------
+   Koi are placed by left/top with `translate:-50% -50%` doing the centring,
+   which leaves `transform` entirely free for the swim path. Heading lives on
+   the independent `rotate` property for the same reason. Order of operations
+   is translate → rotate → transform, so each one stays independent. */
+.deco { font-family: 'VT323', ui-monospace, monospace; }
+.pond { position: relative; min-height: 100vh; overflow: hidden; background: #fff; }
+/* Every swimmer and pad is placed by the simulator writing transform, so the
+   element itself carries no positioning of its own beyond the origin. */
+.swim { position: absolute; left: 0; top: 0; will-change: transform; }
+.swim .sh, .swim .bd { position: absolute; inset: 0; }
+/* The pond floor: the same drawing flattened to black, blurred and thrown
+   down-right. One shape, two reads — no second illustration to keep in step. */
+.swim .sh { filter: blur(7px) brightness(0); opacity: .14; }
+.swim svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.lbl {
+  position: absolute; left: 0; top: 0; z-index: 6; padding: 1px 10px; border: 0;
+  box-shadow: 0 -2px 0 0 #141414, 0 2px 0 0 #141414, -2px 0 0 0 #141414, 2px 0 0 0 #141414;
+  background: #fff; font-size: clamp(14px, 1.2vw, 19px); letter-spacing: .06em; white-space: nowrap; color: #1a1a18; will-change: transform;
+}
+/* A mark is box + leader + caption, and all three ride the thing they name. */
+.tbox { position: absolute; left: 0; top: 0; border: 1px solid rgba(26, 26, 24, .5); z-index: 5; pointer-events: none; will-change: transform; }
+.ksh { filter: blur(5px); opacity: .13; }
+.pad { z-index: 4; }
+/* FLAG (kept verbatim per the handoff's "don't fix apparent mistakes" rule):
+   the source stylesheet defines `.crip` and `.ripple` as `display:none`
+   (the latter `!important`) here, then redefines `.ripple` with real
+   positioning further down WITHOUT a `display` property — so the earlier
+   `!important` wins and both DOM ripple pools stay invisible forever. The
+   Pond class still updates their transform/opacity every frame for nothing;
+   the ripples you actually see come entirely from the canvas-based
+   drawRings()/crushRings() pipeline (#koiPix, #sheetPix). This looks like a
+   leftover from an earlier DOM-based ripple approach the source replaced —
+   ported as-is rather than silently removing the dead work. */
+.crip { display: none; }
+.ripple { display: none !important; }
+.pellet { position: absolute; left: 0; top: 0; width: 6px; height: 6px; border-radius: 0; background: #1a1a18; z-index: 5; opacity: 0; pointer-events: none; will-change: transform; }
+.ripple { position: absolute; left: 0; top: 0; width: 12px; height: 12px; border: 1px solid #1a1a18; border-radius: 50%; z-index: 2; opacity: 0; pointer-events: none; will-change: transform; }
+/* drafting furniture: dimension runs, ticks, scale bar, title block */
+.dim { position: absolute; z-index: 1; pointer-events: none; color: #1a1a18; opacity: .62; }
+.dim .rule { position: absolute; inset: 0; border-top: 1px solid #1a1a18; }
+.dim.v .rule { inset: 0; border-top: 0; border-left: 1px solid #1a1a18; }
+.dim .tick { position: absolute; width: 1px; height: 11px; background: #1a1a18; top: -5px; }
+.dim.v .tick { width: 11px; height: 1px; left: -5px; top: auto; }
+.dim > .val {
+  position: absolute; left: 50%; top: 0; transform: translate(-50%, -50%); background: #fff; padding: 0 7px;
+  white-space: nowrap; font-size: clamp(9px, .85vw, 13px); letter-spacing: .08em; font-variant-numeric: tabular-nums;
+}
+.dim.v > .val { left: 0; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); }
+.xreg { position: absolute; z-index: 1; width: 13px; height: 13px; opacity: .45; pointer-events: none; }
+.xreg::before, .xreg::after { content: ""; position: absolute; background: #1a1a18; }
+.xreg::before { left: 6px; top: 0; width: 1px; height: 13px; }
+.xreg::after { top: 6px; left: 0; height: 1px; width: 13px; }
