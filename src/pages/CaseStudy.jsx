@@ -298,7 +298,7 @@ const CASES = {
     lede: 'Productivity that gives something back, rather than keeping score against you.',
     intro: "A to-do list is really just a ledger of debt. It grows while you rest and never says thank you. Maable puts ten tools on one surface and turns your own work into XP, so the reward comes when you finish, not guilt when you open the app. It's live, built with Kimberly Galdamez Salazar and Yuri Son.",
     tags: ['Live', 'Productivity', 'Design engineering', 'Front end'],
-    meta: [['Role', 'Product, design engineering, front end'], ['Timeline', '2026, live at maable-web.vercel.app'], ['Tools', 'React, Vite, Supabase, Figma'], ['Team', 'Kimberly Galdamez Salazar, Yuri Son']],
+    meta: [['Role', 'Product, design engineering, front end'], ['Timeline', '2025, redesigned 2026 · live at maable-web.vercel.app'], ['Tools', 'React, Vite, Supabase, Figma'], ['Team', 'Kimberly Galdamez Salazar, Yuri Son']],
     verdict: "Ten tools on one surface, with XP that's a by-product of the work, not the point of it.",
     receipts: [
       ['10', 'tools, one surface', 'Tasks, habits, notes, flashcards, a timer, a journal, breathwork, a moodboard, games and now-playing.'],

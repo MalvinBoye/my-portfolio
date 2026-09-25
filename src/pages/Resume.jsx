@@ -41,7 +41,7 @@ const WORK = [
     b: ['Led a self-directed product design project end to end: user research, flows, information architecture, and ~40 high-fidelity screens in Figma across nine iteration rounds.',
       'Designed the core interaction — a prompt surfacing a staple the user appears to have forgotten — around the hardest question in the product: when a system may interrupt someone without reading as nagging.',
       'Built an original visual system and component library with hand-drawn illustration; designed monetization around cosmetic themes so no part of the core experience is gated, advertised, or engagement-farmed.'] },
-  { t: 'Maable — Productivity Ecosystem', to: '/work/maable', url: 'maehlo.com/maable', d: '2025',
+  { t: 'Maable — Productivity Ecosystem', to: '/work/maable', url: 'maehlo.com/maable', d: '2025 · redesigned 2026',
     st: 'React · Canvas API · Motion Design · ADHD-Focused UX',
     b: ['Led interaction design, motion system, and flow structure on a 3-person team; built an adaptive decision-support algorithm to minimize cognitive load. Result: in usability testing, 7 of 15 students reported improved clarity and focus.'] },
 ];
@@ -50,7 +50,7 @@ const JOBS = [
   { t: 'Freelance Design & Front-End Development', s: 'Washington, DC', d: '2022 – Present', r: 'Designer / Developer',
     b: ['Design and build sites for small business and independent clients, owning each engagement end to end — discovery, visual direction, build, launch.'] },
   { t: 'YouTube/Editor', d: '2025 – Present', r: 'Creator',
-    b: ['Write, shoot, and edit Korean–English video weekly for ~4,000 subscribers, ~85% based in Korea — ongoing practice in pacing, motion, and designing for an audience that does not share my language.'] },
+    b: ['Write, shoot, and edit Korean–English video, weekly since 2026, for ~4,000 subscribers, ~85% based in Korea — ongoing practice in pacing, motion, and designing for an audience that does not share my language.'] },
   { t: 'Donfox Systems', s: 'Accra, Ghana', d: 'June 2022 – September 2022', r: 'Software Engineering Intern, EV Mart',
     b: ['Interviewed cashiers to identify workflow friction in the EV Mart point-of-sale interface and translated findings into a redesign of the core task flows.',
       'Rebuilt key UI components for clarity and speed, removing steps from the most frequent checkout path; branch management reported a 27% improvement in average checkout time.',

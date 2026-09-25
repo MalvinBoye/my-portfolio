@@ -19,7 +19,7 @@ const WORKS = [
     meta: [['Role', 'Research, product, UI, illustration'], ['Timeline', '9 rounds · 2026'], ['Tools', 'Procreate, Figma, HTML/CSS']] },
   { name: 'Maable', href: 'Maable - case study.dc.html', motif: 'xp',
     lede: 'Productivity that pays you back, instead of keeping a ledger of what you owe it.',
-    meta: [['Role', 'Product, design engineering, front end'], ['Timeline', '2026 · live'], ['Tools', 'React, Vite, Supabase, Figma']] },
+    meta: [['Role', 'Product, design engineering, front end'], ['Timeline', '2025 · redesigned 2026 · live'], ['Tools', 'React, Vite, Supabase, Figma']] },
   { name: 'Maehlo', href: 'Maehlo - case study.dc.html', motif: 'koi',
     lede: 'This site. Koi, architecture plans and 90s pixels — a pond you can feed.',
     meta: [['Role', 'Design, motion, front end'], ['Type', 'Portfolio']] },
