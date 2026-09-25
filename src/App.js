@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Thinking from './pages/Thinking';
 import Works from './pages/Works';
@@ -41,6 +41,10 @@ export default function App() {
         <Route path="/work/dormdrop" element={<CaseStudy caseId="dormdrop" />} />
         <Route path="/work/maelo" element={<CaseStudy caseId="maelo" />} />
         <Route path="/work/ev-mart" element={<CaseStudy caseId="evmart" />} />
+        {/* Short project URLs, as printed on the résumé PDF. */}
+        <Route path="/connect" element={<Navigate to="/work/connect" replace />} />
+        <Route path="/stuff" element={<Navigate to="/work/stuff" replace />} />
+        <Route path="/maable" element={<Navigate to="/work/maable" replace />} />
       </Routes>
     </BrowserRouter>
   );
