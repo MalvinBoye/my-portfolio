@@ -550,6 +550,115 @@ const CASES = {
   },
 };
 
+// rev. 2: context, principles and pipeline sit above the key decisions, and
+// only the chapters listed in `keep` are shown, so each study stays short.
+// The six handoff entries are verbatim from the prototype's EXTRA object;
+// `evmart` isn't in the handoff (EV Mart was added later), so its entry is
+// written in the same shape. Two deliberate deviations from the handoff:
+// Maable's "Brief" row said "designed and built solo", which contradicts
+// the team credit added since (Kimberly Galdamez Salazar, Yuri Son).
+const EXTRA = {
+  stuff: {
+    outcome: "A grocery list designed to be finished rather than merely opened: nine rounds, around forty screens and not a single stock asset.",
+    metricsLabel: "By the numbers",
+    context: [["Who", "Minds that wander, starting with mine"], ["Moment", "The second before a shop, when you either open the list or don't"], ["Constraint", "Quick enough to scan in a supermarket aisle"], ["Status", "Design complete; build next"]],
+    principles: [
+      ["Nothing that looks like a form", "No quantities, no fields and no settings to face. Notes such as “a lot of cheese” are the real unit."],
+      ["Reward finishing, never keep score", "No streaks to lose. Shika are only earned once the shop is actually done."],
+      ["Warmth has to earn its place", "Every drawn element is tested against a quick glance in the aisle. If it slows that glance down, it goes."],
+    ],
+    pipeline: [],
+    keep: [2, 3, 4, 5],
+  },
+  maable: {
+    outcome: "Live and in use: ten tools on one surface, where the only way to earn XP is to do the actual work.",
+    metricsLabel: "By the numbers",
+    context: [["Who", "Minds that switch tabs and never come back"], ["Problem", "To-do lists grow when you rest and never say thank you"], ["Brief", "Self-initiated, built with Kimberly Galdamez Salazar and Yuri Son"], ["Status", "Live at maable-web.vercel.app"]],
+    principles: [
+      ["XP is a by-product, never the point", "If the reward is the goal, people game it. If it falls out of real work, there's nothing to game."],
+      ["One surface, no exits", "Every tab switch is a way out for a wandering mind, so all ten tools live in the same place."],
+      ["Rest counts", "Feeling lazy is one of the five life areas. Rest days add to the same total as work."],
+      ["Nothing for sale", "Every skin is unlocked with XP. Selling them would undermine the loop they belong to."],
+    ],
+    pipeline: [["Figma", "Flows and the XP loop"], ["React + Vite", "The single surface and ten tools"], ["Supabase", "Accounts, tasks, habits and XP"], ["Vercel", "Deployed and live"]],
+    keep: [2, 3, 4, 5],
+  },
+  maehlo: {
+    outcome: "A portfolio people play with: twelve simulated koi on one screen, where the lily pads are the menu.",
+    metricsLabel: "By the numbers",
+    context: [["Who", "Recruiters, and people with minds like mine"], ["Problem", "Portfolios are skimmed in seconds"], ["Constraint", "The work still has to be easy to reach"], ["Status", "Live"]],
+    principles: [
+      ["Every click is a small reward", "Navigation doubles as discovery: pads warp you through, and hidden things reward poking about."],
+      ["Strict system, playful surface", "Sheets, title blocks and pixel frames repeat on every page, so the play reads as intentional."],
+      ["Rough up the polish", "Architecture alone felt too neat, so 90s pixels and dithering take the edge off it."],
+    ],
+    pipeline: [["Sprites as text", "Koi, pads and mini-me drawn as character grids"], ["Canvas simulation", "IK spine, steering, drag and collisions"], ["1-bit dither", "4×4 Bayer matrix, black and white only"], ["Pixel upscale", "Rendered small, scaled with crisp edges"], ["DOM overlay", "Labels and door pads track the simulation"]],
+    keep: [1, 2, 3, 5],
+  },
+  connect: {
+    outcome: "Shipped and live: a dating app that stops at five profiles a day and shows every point of your match score.",
+    metricsLabel: "By the numbers",
+    context: [["Who", "People worn out by endless swiping"], ["Brief", "Computer science capstone, 2026"], ["Research", "40+ dark patterns catalogued first"], ["Status", "Live"]],
+    principles: [
+      ["Show the arithmetic", "If the app judges you, you can read its working: seven signals, every point on the table."],
+      ["Friction is a feature", "A daily cap and a reflective pause turn a reflex into a choice."],
+      ["Success is leaving", "The app wins when you meet someone and stop needing it."],
+      ["Nothing to boost", "One flat price. Money can't buy a better place in the queue."],
+    ],
+    pipeline: [["React + TypeScript", "Client and the scoring ledger"], ["Supabase Postgres", "Five tables, row-level security"], ["Server-side matching", "A match is only created when both people connect"], ["Database cap", "Five a day, immune to reloads"], ["Realtime feed", "Messages arrive without polling"]],
+    keep: [2, 3, 4, 5],
+  },
+  dormdrop: {
+    outcome: "A campus marketplace where every listing traces back to a verified American University student.",
+    metricsLabel: "By the numbers",
+    context: [["Who", "American University students"], ["Problem", "Open marketplaces run on blind trust, and deals drift off to text"], ["Team", "Three people; I led UX and the front end"], ["Year", "2024"]],
+    principles: [
+      ["Trust before features", "Verification comes first, because nobody meets a stranger they can't trust."],
+      ["Browsing needs a shape", "Five categories rather than one endless feed, so you find what you came for."],
+      ["Keep the safeguards in the conversation", "Messaging good enough that nobody feels the need to move to text."],
+    ],
+    pipeline: [[".edu gate", "Sign-up verified by student email"], ["React front end", "Responsive, no native app needed"], ["API + filters", "Category filtering and search"], ["In-app messaging", "Real-time, on the platform"]],
+    keep: [2, 3, 4, 5],
+  },
+  maelo: {
+    outcome: "From two uploads in a year to roughly one a week, in two languages, made by one person.",
+    metricsLabel: "By the numbers",
+    context: [["Who", "People like me, a small push away from making something"], ["Why", "A creative outlet that university left no room for"], ["Spark", "My Korean was slipping, so the videos became bilingual"], ["Status", "Ongoing, roughly weekly"]],
+    principles: [
+      ["Make it without a brief", "It started as the one part of my week nobody was marking."],
+      ["Tie a habit to something I enjoy", "If I want to post, I have to practise my Korean."],
+      ["Cut where attention drifts", "Pacing is attention management. The timeline shows where people stop caring."],
+    ],
+    pipeline: [["Pinterest", "A mood board sets the look"], ["Film", "Shot across the week"], ["Final Cut Pro", "Edit, pace and sound"], ["Music", "Carries the rhythm"], ["Canva", "Thumbnail and titles"], ["Upload", "Roughly weekly"]],
+    keep: [2, 3, 4, 5],
+  },
+  // Not from the handoff — written to match. Facts come from the existing
+  // EV Mart copy; there's no pipeline to show, so it's left empty (the
+  // section only renders when non-empty, same as Stuff).
+  evmart: {
+    outcome: "Live across three branches: a point-of-sale screen redesigned on the shop floor, and 27% faster at the till.",
+    metricsLabel: "By the numbers",
+    context: [["Who", "Cashiers at three EV Mart branches in Accra"], ["Problem", "No clear hierarchy, a confirmation on nearly every tap, and errors that looked like successes"], ["Constraint", "An existing C/C++ system that had to stay live"], ["Status", "Deployed"]],
+    principles: [
+      ["Watch the counter first", "Shifts spent beside the cashiers showed problems no support ticket ever would."],
+      ["Make the right button obvious", "Primary actions get clear visual priority, so nobody has to memorise where to look."],
+      ["Errors should look like errors", "Colour, weight and wording all change, so a mistake gets noticed before the drawer fails to balance."],
+    ],
+    pipeline: [],
+    keep: [2, 3, 4, 5],
+  },
+};
+Object.keys(EXTRA).forEach((id) => {
+  const C0 = CASES[id], X = EXTRA[id];
+  if (C0 && X) { Object.assign(C0, X); C0.chapters = C0.chapters.filter((_, i) => X.keep.includes(i)); }
+});
+const navList = (id) => {
+  const C = CASES[id];
+  return [{ label: 'Overview', id: 'cs-top' }, { label: 'Context', id: 'cs-ctx' }, { label: 'Principles', id: 'cs-pr' },
+    ...(C.pipeline && C.pipeline.length ? [{ label: 'Pipeline', id: 'cs-pl' }] : []),
+    ...C.chapters.map((c, i) => ({ label: c.step, id: 'cs-' + (i + 1) }))];
+};
+
 class Board {
   constructor(getState, setState, caseId) {
     this._getState = getState;
@@ -659,7 +768,7 @@ class Board {
   // (or, for Maehlo's canvases / Maelo's empty frames, the same filter
   // sweep over whatever's in the plate).
   onScroll() {
-    const ids = ['cs-top', ...CASES[this.caseId].chapters.map((_, i) => 'cs-' + (i + 1))];
+    const ids = navList(this.caseId).map(n => n.id);
     const line = window.innerHeight * 0.35;
     let act = 0;
     ids.forEach((id, i) => { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top < line) act = i; });
@@ -705,7 +814,7 @@ class Board {
 
   renderVals() {
     const C = CASES[this.caseId], act = this.state.act;
-    const navItems = [{ label: 'Overview', id: 'cs-top' }, ...C.chapters.map((c, i) => ({ label: c.step, id: 'cs-' + (i + 1) }))];
+    const navItems = navList(this.caseId);
     return {
       wide: this.state.wide,
       nav: navItems.map((n, i) => ({
@@ -715,7 +824,12 @@ class Board {
       })),
       backLabel: { stack: '← Return to the stack', thinking: '← Return to my thinking', plan: '← Return to the site plan' }[this.state.from] || '← Return to the site plan',
       backHref: toRoute({ stack: 'Works Stack.dc.html', thinking: 'Thinking.dc.html', plan: 'Works.dc.html' }[this.state.from] || 'Works.dc.html'),
-      kicker: C.kicker, title: C.title, lede: C.lede, intro: C.intro, verdict: C.verdict,
+      kicker: C.kicker, title: C.title, intro: C.intro,
+      outcome: C.outcome || C.verdict, metricsLabel: C.metricsLabel || 'By the numbers',
+      context: (C.context || []).map(([k, v]) => ({ k, v })),
+      principles: (C.principles || []).map(([t, b], i) => ({ t, b, no: pad2(i + 1) })),
+      hasPipeline: !!(C.pipeline && C.pipeline.length),
+      pipeline: (C.pipeline || []).map(([t, b], i, a) => ({ t, b, no: pad2(i + 1), arrow: i < a.length - 1 ? '→' : '■' })),
       meta: C.meta.map(([k, v]) => ({ k, v })),
       tags: C.tags.map((l, i) => ({ label: l, bg: i === 0 ? '#141414' : '#fff', ink: i === 0 ? '#fff' : '#141414' })),
       receipts: C.receipts.map(([figure, label, note]) => ({ figure, label, note })),
@@ -782,7 +896,7 @@ export default function CaseStudy({ caseId }) {
         </div>
 
         <nav aria-label="Sections" style={{ position: 'relative', display: 'grid', gridTemplateColumns: '22px 1fr', columnGap: 12 }}>
-          <canvas id="railKoi" aria-hidden="true" width="11" height="200" style={{ gridRow: '1 / span 7', width: 22, height: '100%', imageRendering: 'pixelated' }} />
+          <canvas id="railKoi" aria-hidden="true" width="11" height="200" style={{ gridRow: '1 / span 12', width: 22, height: '100%', imageRendering: 'pixelated' }} />
           <div style={{ display: 'grid', gap: 8 }}>
             {rv.nav.map((n, i) => (
               <a key={i} href={n.href} onClick={n.go} aria-current={n.cur} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 'clamp(17px,1.25vw,20px)', letterSpacing: '.14em', textTransform: 'uppercase', color: n.color }}>
@@ -822,8 +936,10 @@ export default function CaseStudy({ caseId }) {
           </div>
 
           <h1 style={{ margin: 0, fontFamily: "'Pixelify Sans',monospace", fontWeight: 600, fontSize: 'clamp(76px,10vw,160px)', lineHeight: .85, letterSpacing: '-.02em', background: '#fff', justifySelf: 'start', paddingRight: 10 }}>{rv.title}</h1>
-          <p style={{ margin: 0, maxWidth: '40ch', background: '#fff', fontSize: 'clamp(24px,2vw,32px)', lineHeight: 1.12, textWrap: 'pretty' }}>{rv.lede}</p>
-          <p style={{ margin: 0, maxWidth: '62ch', background: '#fff', fontSize: 'clamp(20px,1.5vw,24px)', lineHeight: 1.25, color: '#2a2926', textWrap: 'pretty' }}>{rv.intro}</p>
+          <div style={{ display: 'grid', gap: 6, justifySelf: 'start', maxWidth: '46ch', background: '#fff', padding: '14px 18px', boxShadow: '0 -3px 0 0 #8b1a1a,0 3px 0 0 #8b1a1a,-3px 0 0 0 #8b1a1a,3px 0 0 0 #8b1a1a' }}>
+            <span style={{ fontSize: 'clamp(15px,1.1vw,18px)', letterSpacing: '.18em', textTransform: 'uppercase', color: '#8b1a1a' }}>▶ Outcome</span>
+            <p style={{ margin: 0, fontFamily: "'Pixelify Sans',monospace", fontSize: 'clamp(24px,2.2vw,36px)', lineHeight: 1.1, textWrap: 'pretty' }}>{rv.outcome}</p>
+          </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
             {rv.tags.map((t, j) => (
               <span key={j} style={{ padding: '1px 10px', background: t.bg, color: t.ink, fontSize: 'clamp(15px,1.1vw,18px)', letterSpacing: '.14em', textTransform: 'uppercase', boxShadow: '0 -2px 0 0 #141414,0 2px 0 0 #141414,-2px 0 0 0 #141414,2px 0 0 0 #141414' }}>{t.label}</span>
@@ -832,7 +948,10 @@ export default function CaseStudy({ caseId }) {
         </header>
 
         <section style={{ display: 'grid', gap: 18 }}>
-          <p style={{ margin: 0, background: '#fff', padding: '18px 20px', fontFamily: "'Pixelify Sans',monospace", fontSize: 'clamp(24px,2.2vw,36px)', lineHeight: 1.1, textWrap: 'balance', boxShadow: '0 -3px 0 0 #8b1a1a,0 3px 0 0 #8b1a1a,-3px 0 0 0 #8b1a1a,3px 0 0 0 #8b1a1a' }}>{rv.verdict}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 'clamp(16px,1.2vw,19px)', letterSpacing: '.18em', textTransform: 'uppercase' }}>
+            <span style={{ background: '#141414', color: '#fff', padding: '0 8px' }}>{rv.metricsLabel}</span>
+            <span aria-hidden="true" style={{ flex: 1, height: 0, borderTop: '2px dashed #141414' }} />
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,210px),1fr))', gap: 18 }}>
             {rv.receipts.map((r, j) => (
               <div key={j} style={{ background: '#fff', padding: '14px 16px', display: 'grid', gap: 6, alignContent: 'start', boxShadow: '0 -2px 0 0 #141414,0 2px 0 0 #141414,-2px 0 0 0 #141414,2px 0 0 0 #141414' }}>
@@ -843,6 +962,68 @@ export default function CaseStudy({ caseId }) {
             ))}
           </div>
         </section>
+
+        <section id="cs-ctx" style={{ display: 'grid', gap: 18, scrollMarginTop: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 'clamp(16px,1.2vw,19px)', letterSpacing: '.18em', textTransform: 'uppercase' }}>
+            <span style={{ background: '#141414', color: '#fff', padding: '0 8px' }}>Sheet C</span>
+            <span style={{ background: '#fff', padding: '0 6px' }}>Context</span>
+            <span aria-hidden="true" style={{ flex: 1, height: 0, borderTop: '2px dashed #141414' }} />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,300px),1fr))', gap: 'clamp(20px,3vw,40px)', alignItems: 'start' }}>
+            <p style={{ margin: 0, background: '#fff', fontSize: 'clamp(20px,1.5vw,24px)', lineHeight: 1.25, color: '#1f1e1c', textWrap: 'pretty' }}>{rv.intro}</p>
+            <dl style={{ margin: 0, display: 'grid', gridTemplateColumns: 'auto minmax(0,1fr)', background: '#fff', boxShadow: '0 -3px 0 0 #141414,0 3px 0 0 #141414,-3px 0 0 0 #141414,3px 0 0 0 #141414' }}>
+              {rv.context.map((x, j) => (
+                <React.Fragment key={j}>
+                  <dt style={{ padding: '8px 14px', borderBottom: '2px solid #141414', borderRight: '2px solid #141414', fontSize: 'clamp(14px,1vw,16px)', letterSpacing: '.16em', textTransform: 'uppercase', color: '#6d6a63', whiteSpace: 'nowrap' }}>{x.k}</dt>
+                  <dd style={{ margin: 0, padding: '8px 14px', borderBottom: '2px solid #141414', fontSize: 'clamp(19px,1.4vw,22px)', lineHeight: 1.1 }}>{x.v}</dd>
+                </React.Fragment>
+              ))}
+            </dl>
+          </div>
+        </section>
+
+        <section id="cs-pr" style={{ display: 'grid', gap: 18, scrollMarginTop: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 'clamp(16px,1.2vw,19px)', letterSpacing: '.18em', textTransform: 'uppercase' }}>
+            <span style={{ background: '#141414', color: '#fff', padding: '0 8px' }}>Sheet P</span>
+            <span style={{ background: '#fff', padding: '0 6px' }}>Design principles</span>
+            <span aria-hidden="true" style={{ flex: 1, height: 0, borderTop: '2px dashed #141414' }} />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,230px),1fr))', gap: 18 }}>
+            {rv.principles.map((p) => (
+              <div key={p.no} style={{ background: '#fff', padding: '14px 16px 16px', display: 'grid', gap: 8, alignContent: 'start', boxShadow: '0 -2px 0 0 #141414,0 2px 0 0 #141414,-2px 0 0 0 #141414,2px 0 0 0 #141414,6px 6px 0 #141414' }}>
+                <span style={{ fontSize: 'clamp(15px,1.1vw,17px)', letterSpacing: '.16em', textTransform: 'uppercase', color: '#6d6a63', fontVariantNumeric: 'tabular-nums' }}>Rule {p.no}</span>
+                <span style={{ fontFamily: "'Pixelify Sans',monospace", fontWeight: 500, fontSize: 'clamp(22px,1.8vw,28px)', lineHeight: 1.02, textWrap: 'balance' }}>{p.t}</span>
+                <span style={{ fontSize: 'clamp(18px,1.3vw,21px)', lineHeight: 1.15, color: '#3a3833', textWrap: 'pretty' }}>{p.b}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {rv.hasPipeline && (
+          <section id="cs-pl" style={{ display: 'grid', gap: 18, scrollMarginTop: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 'clamp(16px,1.2vw,19px)', letterSpacing: '.18em', textTransform: 'uppercase' }}>
+              <span style={{ background: '#141414', color: '#fff', padding: '0 8px' }}>Sheet T</span>
+              <span style={{ background: '#fff', padding: '0 6px' }}>Technical pipeline</span>
+              <span aria-hidden="true" style={{ flex: 1, height: 0, borderTop: '2px dashed #141414' }} />
+            </div>
+            <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,160px),1fr))', gap: 14 }}>
+              {rv.pipeline.map((s) => (
+                <li key={s.no} style={{ background: '#fff', display: 'grid', alignContent: 'start', boxShadow: '0 -2px 0 0 #141414,0 2px 0 0 #141414,-2px 0 0 0 #141414,2px 0 0 0 #141414' }}>
+                  <span style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '3px 10px', background: '#141414', color: '#fff', fontSize: 15, letterSpacing: '.16em', fontVariantNumeric: 'tabular-nums' }}>
+                    <span>{s.no}</span><span aria-hidden="true">{s.arrow}</span>
+                  </span>
+                  <span style={{ padding: '10px 12px 2px', fontFamily: "'Pixelify Sans',monospace", fontSize: 'clamp(19px,1.5vw,23px)', lineHeight: 1.05 }}>{s.t}</span>
+                  <span style={{ padding: '0 12px 12px', fontSize: 'clamp(17px,1.2vw,19px)', lineHeight: 1.12, color: '#3a3833', textWrap: 'pretty' }}>{s.b}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 'clamp(16px,1.2vw,19px)', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: 'calc(-1 * clamp(20px,4vh,50px))' }}>
+          <span style={{ background: '#8b1a1a', color: '#fff', padding: '0 8px' }}>Key decisions</span>
+          <span aria-hidden="true" style={{ flex: 1, height: 0, borderTop: '2px dashed #8b1a1a' }} />
+        </div>
 
         {rv.chapters.map((c) => (
           <article key={c.id} id={c.id} className="cs-sheet" style={{ display: 'grid', gap: 18, scrollMarginTop: 24 }}>

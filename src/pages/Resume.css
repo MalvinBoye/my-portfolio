@@ -1,0 +1,10 @@
+/* Ported from the design handoff's "Maelo - Resume.dc.html" <helmet><style>
+   block, scoped under .mh-resume instead of bare body/a, since this app has
+   other pages sharing those elements. `doc-page:not(:defined)` only ever
+   matches on this route, so it stays as written: it hides the sheet until
+   public/doc-page.js has registered the element, so there's no unstyled
+   flash of the page before its print box is applied. */
+doc-page:not(:defined) { visibility: hidden; }
+.mh-resume { font-family: "Lora", Georgia, serif; color: #141414; }
+.mh-resume a { color: #141414; text-decoration: none; }
+.mh-resume a:hover { color: #6b3f12; }
