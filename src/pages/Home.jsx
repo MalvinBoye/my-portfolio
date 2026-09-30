@@ -31,13 +31,9 @@ const wrapAng = (a) => { while (a > Math.PI) a -= TAU; while (a < -Math.PI) a +=
 // line to the thing it names. A label either FOLLOWS something alive (it
 // trails its subject at a fixed offset) or is pinned to a static box.
 const MARKS = [
-  { text: 'koi fish', t: 'koi', i: 0, off: [165, -155], box: false },
-  { text: 'lily pads', t: 'pad', span: [0, 1], off: [140, -85] },
   { text: '→ My thought process', t: 'pad', i: 6, off: [150, -72] },
   { text: '→ Selected works', t: 'pad', i: 7, off: [-40, -96] },
   { text: '→ About me', t: 'pad', i: 2, off: [-20, -92] },
-  { text: 'Name', t: 'el', el: '#nameBox', off: [0, -92], box: false },
-  { text: 'My why', t: 'el', el: '#tagBox', off: [0, 0], beside: 22, box: false },
 ];
 
 // Lily pads: a disc with a wedge cut out, drifting on the surface.
@@ -174,14 +170,8 @@ const KOI = [
   { x: 91.0, y: 43.1, r: 96, f: 0.92, p: 1, d: 0.52 },
   { x: 65.3, y: 63.3, r: 183, f: 1.06, p: 2, d: 0.22 },
   { x: 38.0, y: 74.0, r: 40, f: 0.46, p: 1, d: 0.78 },
-  { x: 72.0, y: 20.0, r: 210, f: 0.40, p: 2, d: 0.34 },
-  { x: 24.0, y: 58.0, r: 300, f: 0.5, p: 0, d: 0.66 },
-  { x: 84.0, y: 78.0, r: 130, f: 0.38, p: 1, d: 0.14 },
   { x: 50.0, y: 40.0, r: 70, f: 0.85, p: 0, d: 0.4 },
-  { x: 10.0, y: 82.0, r: 20, f: 0.44, p: 2, d: 0.28 },
-  { x: 60.0, y: 90.0, r: 250, f: 0.36, p: 0, d: 0.58 },
-  { x: 95.0, y: 15.0, r: 160, f: 0.72, p: 1, d: 0.74 },
-  { x: 30.0, y: 12.0, r: 330, f: 0.42, p: 1, d: 0.46 },
+  { x: 84.0, y: 78.0, r: 130, f: 0.38, p: 1, d: 0.14 },
 ];
 
 // Pixel lily flowers: X ink outline, o white petal, y ink stamen
@@ -718,7 +708,7 @@ class Pond {
         }
       }
       if (door) {
-        const rr = r / PX + (hovD ? 3 : 4), n = Math.ceil(rr * 7), tt = performance.now() / (hovD ? 90 : 220);
+        const rr = r / PX + (hovD ? 3 : 4), n = Math.ceil(rr * 7), tt = performance.now() / (hovD ? 160 : 900);
         c.fillStyle = '#8b1a1a';
         for (let k2 = 0; k2 < n; k2++) {
           if ((k2 + Math.floor(tt)) % 3 === 0) continue;
@@ -759,14 +749,14 @@ class Pond {
     crushRings(c, cw, ch);
   }
 
-  // The pond's glitch runs on a 15s cycle: while it fires, the pads drop
-  // into coarse black-and-white pixels, and the name card swaps between the
-  // full name and the alias, breaking through pixels as it goes.
+  // Every 15s the name card swaps between the full name and the alias,
+  // breaking through a fine pixel filter as it goes (rev. 3: no more coarse
+  // padPix break-up, and the pads themselves no longer glitch at all).
   padGlitch() {
     const T = performance.now() / 1000, g = T % 15, slot = Math.floor(T / 15) % 2;
     const calm = this._calmQ ?? (this._calmQ = window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     let f = '';
-    if (!calm && g < 0.6) f = g < 0.12 || g >= 0.48 ? 'url(#txtPix)' : 'url(#padPix)';
+    if (!calm && g < 0.5) f = 'url(#txtPix)';
     const showAlias = !calm && g < 0.3 ? 1 - slot : slot;
     if (showAlias !== this._nameK) {
       this._nameK = showAlias;
@@ -947,7 +937,8 @@ class Pond {
           p.spin += (dx - dy) * 0.0006 * f;
           p.bob += f * 0.05;
         }
-        if (d < R * 0.5) p.pixT = 3.2;
+        // (rev. 3: pads no longer scramble into pixel noise when a koi
+        // passes under — the p.pixT trigger that used to sit here is gone)
         const fast = Math.max(0, k.v - 85) / 140;
         const RR = R * 1.35;
         if (fast > 0 && d < RR && d > 0.01) {
@@ -1625,36 +1616,12 @@ export default function Home() {
           {MARKS.map((_, i) => <line key={i} className="ldr" x1="0" y1="0" x2="0" y2="0" stroke="#1a1a18" strokeWidth="1" />)}
         </svg>
 
-        <div className="dim" style={{ left: '14%', right: '6%', top: '13.5%', height: 1 }}>
-          <span className="rule" />
-          <span className="tick" style={{ left: 0 }} />
-          <span className="tick" style={{ right: 0 }} />
-          <span className="val">12 000</span>
-        </div>
-        <div className="dim v" style={{ left: '3.4%', top: '32%', bottom: '24%', width: 1 }}>
-          <span className="rule" />
-          <span className="tick" style={{ top: 0 }} />
-          <span className="tick" style={{ bottom: 0 }} />
-          <span className="val">7 400</span>
-        </div>
-        <span className="xreg" style={{ left: '30%', top: '36%' }} />
-        <span className="xreg" style={{ left: '62%', top: '68%' }} />
-        <span className="xreg" style={{ left: '86%', top: '30%' }} />
-
-        <div aria-hidden="true" style={{ position: 'absolute', right: 'clamp(14px,2.4vw,36px)', bottom: 'clamp(14px,3vh,38px)', zIndex: 7, border: '1px solid #1a1a18', background: '#fff', display: 'grid' }}>
+        <div id="mTitle" aria-hidden="true" style={{ position: 'absolute', right: 'clamp(14px,2.4vw,36px)', bottom: 'clamp(14px,3vh,38px)', zIndex: 7, border: '1px solid #1a1a18', background: '#fff', display: 'grid' }}>
           <span style={{ padding: '4px 12px', borderBottom: '1px solid #1a1a18', fontSize: 'clamp(14px,1.1vw,18px)', letterSpacing: '.14em', textTransform: 'uppercase' }}>Maehlo — pond, plan</span>
           <span style={{ padding: '4px 12px', borderBottom: '1px solid #1a1a18', fontSize: 'clamp(14px,1.05vw,17px)', letterSpacing: '.06em', whiteSpace: 'nowrap' }}><span style={{ color: '#8b1a1a' }}>■</span> marked pads are doors — click one</span>
           <span style={{ display: 'flex', gap: 'clamp(10px,1.4vw,22px)', padding: '5px 12px', whiteSpace: 'nowrap', fontSize: 'clamp(13px,1vw,16px)', letterSpacing: '.08em', fontVariantNumeric: 'tabular-nums', color: '#4a4842' }}>
             <span style={{ whiteSpace: 'nowrap' }}>scale 1:50</span><span style={{ whiteSpace: 'nowrap' }}>dwg. 01</span><span style={{ whiteSpace: 'nowrap' }}>rev. c</span>
           </span>
-        </div>
-
-        <div aria-hidden="true" style={{ position: 'absolute', right: 'clamp(14px,2.4vw,36px)', bottom: 'clamp(150px,24vh,200px)', zIndex: 7, display: 'grid', gap: 5, justifyItems: 'center', opacity: .7 }}>
-          <svg viewBox="0 0 24 34" style={{ width: 'clamp(15px,1.5vw,22px)', height: 'auto' }} aria-hidden="true">
-            <path d="M12 1 L19 26 L12 21 L5 26 Z" fill="none" stroke="#1a1a18" strokeWidth="1.2" strokeLinejoin="round" />
-            <path d="M12 1 L12 21 L5 26 Z" fill="#1a1a18" />
-          </svg>
-          <span style={{ fontSize: 'clamp(8px,.75vw,11px)', letterSpacing: '.2em' }}>N</span>
         </div>
 
         {MARKS.map((_, i) => (

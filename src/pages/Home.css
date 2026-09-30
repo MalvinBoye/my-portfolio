@@ -58,18 +58,18 @@ html::-webkit-scrollbar { display: none; }
 .ripple { display: none !important; }
 .pellet { position: absolute; left: 0; top: 0; width: 6px; height: 6px; border-radius: 0; background: #1a1a18; z-index: 5; opacity: 0; pointer-events: none; will-change: transform; }
 .ripple { position: absolute; left: 0; top: 0; width: 12px; height: 12px; border: 1px solid #1a1a18; border-radius: 50%; z-index: 2; opacity: 0; pointer-events: none; will-change: transform; }
-/* drafting furniture: dimension runs, ticks, scale bar, title block */
-.dim { position: absolute; z-index: 1; pointer-events: none; color: #1a1a18; opacity: .62; }
-.dim .rule { position: absolute; inset: 0; border-top: 1px solid #1a1a18; }
-.dim.v .rule { inset: 0; border-top: 0; border-left: 1px solid #1a1a18; }
-.dim .tick { position: absolute; width: 1px; height: 11px; background: #1a1a18; top: -5px; }
-.dim.v .tick { width: 11px; height: 1px; left: -5px; top: auto; }
-.dim > .val {
-  position: absolute; left: 50%; top: 0; transform: translate(-50%, -50%); background: #fff; padding: 0 7px;
-  white-space: nowrap; font-size: clamp(9px, .85vw, 13px); letter-spacing: .08em; font-variant-numeric: tabular-nums;
-}
-.dim.v > .val { left: 0; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); }
-.xreg { position: absolute; z-index: 1; width: 13px; height: 13px; opacity: .45; pointer-events: none; }
-.xreg::before, .xreg::after { content: ""; position: absolute; background: #1a1a18; }
-.xreg::before { left: 6px; top: 0; width: 1px; height: 13px; }
-.xreg::after { top: 6px; left: 0; height: 1px; width: 13px; }
+/* rev. 3: the dimension runs, tick marks, xreg crosses and north arrow are
+   gone from the markup entirely (not just hidden), so the .dim/.xreg rules
+   that styled them are dropped too — nothing references those classes any
+   more. #mNorth's own display:none survives in the source purely as dead
+   CSS for an element that no longer exists; not worth porting.
+   #mTitle repositions the title block to sit under the topbar, shrinks its
+   text and hides its third row (scale/dwg/rev). This was already present
+   in the source's CSS as far back as rev. 1 — missed in the original port,
+   caught while touching this area for rev. 3. Flagged, not silently added:
+   it also means the rev. 2 handoff's "keep #mTitle exactly as it is" was
+   inaccurate against its own prototype file, which already carried this
+   rule. */
+#mTitle { bottom: auto !important; top: calc(clamp(58px, 9vh, 84px) + 2px) !important; right: 12px !important; max-width: 210px; }
+#mTitle > span { white-space: normal !important; font-size: 14px !important; padding: 3px 9px !important; }
+#mTitle > span:last-child { display: none !important; }
